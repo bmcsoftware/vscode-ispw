@@ -1,47 +1,43 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import * as cp from 'child_process';
-import * as path from 'path';
-import * as fs from 'fs';
-import { Utils } from "./Utils";
+import * as IspwCliCommand from "./commands/CliCommand";
+import { clearCredentials } from './commands/CredentialModifier';
+import { YamlUtils } from './utils/YamlUtils';
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
+	if ((uri: vscode.Uri) => {
+		console.log("I made it here");
+		return YamlUtils.hasYaml(uri);
+	}) {
+		vscode.commands.executeCommand('setContext', 'myContext', 'true');
+	}
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "ispw" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('ispw.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from ISPW!');
+	let build = vscode.commands.registerCommand('ispw.build', (selectedFile: vscode.Uri) => {
+		IspwCliCommand.runCommand('build', selectedFile);
 	});
+	context.subscriptions.push(build);
 
-	let generate = vscode.commands.registerCommand('ispw.generate', (e) => {
-		let fspath = e.fsPath;
-		let filepath = path.basename(fspath);
-
-		vscode.window.showInformationMessage('The ISPW Generate process has started');
-		//vscode.window.showInformationMessage(filepath);
-		commandHandler(filepath);
+	let generate = vscode.commands.registerCommand('ispw.generate', (selectedFile: vscode.Uri) => {
+		IspwCliCommand.runCommand('generate', selectedFile);
 	});
-		
-		
-
-	context.subscriptions.push(disposable);
 	context.subscriptions.push(generate);
+
+	let load = vscode.commands.registerCommand('ispw.load', (selectedFile: vscode.Uri) => {
+		IspwCliCommand.runCommand('load', selectedFile);
+	});
+	context.subscriptions.push(load);
+
+	let clearCreds = vscode.commands.registerCommand('ispw.clearCreds', (e) => {
+		clearCredentials();
+	});
+	context.subscriptions.push(clearCreds);
 }
 
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
-
-async function commandHandler(item: string): Promise<void> {
-        await Utils.executeISPWCommand(item);   
-}
+export function deactivate() { }

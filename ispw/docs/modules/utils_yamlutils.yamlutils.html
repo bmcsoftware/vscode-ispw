@@ -1,0 +1,388 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>YamlUtils | ispw</title>
+	<meta name="description" content="Documentation for ispw">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">ispw</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">ispw</a>
+				</li>
+				<li>
+					<a href="utils_yamlutils.html">utils/YamlUtils</a>
+				</li>
+				<li>
+					<a href="utils_yamlutils.yamlutils.html">YamlUtils</a>
+				</li>
+			</ul>
+			<h1>Namespace YamlUtils</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Utility namespace for functions related to yaml processing</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_yamlutils.yamlutils.html#doesyamlhavetype" class="tsd-kind-icon">does<wbr>Yaml<wbr>Have<wbr>Type</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_yamlutils.yamlutils.html#gettypefromyaml" class="tsd-kind-icon">get<wbr>Type<wbr>From<wbr>Yaml</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_yamlutils.yamlutils.html#getyamllocationabspath" class="tsd-kind-icon">get<wbr>Yaml<wbr>Location<wbr>Abs<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_yamlutils.yamlutils.html#getyamllocationrelpath" class="tsd-kind-icon">get<wbr>Yaml<wbr>Location<wbr>Rel<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_yamlutils.yamlutils.html#hasyaml" class="tsd-kind-icon">has<wbr>Yaml</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_yamlutils.yamlutils.html#loadyaml" class="tsd-kind-icon">load<wbr>Yaml</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
+					<a name="doesyamlhavetype" class="tsd-anchor"></a>
+					<h3>does<wbr>Yaml<wbr>Have<wbr>Type</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
+						<li class="tsd-signature tsd-kind-icon">does<wbr>Yaml<wbr>Have<wbr>Type<span class="tsd-signature-symbol">(</span>selectedFile<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in utils/YamlUtils.ts:41</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks whether a yaml file is defined, loads the yaml and tries to find an ISPW type that matches the selectedFile.
+									This method will return true if a type is found, false if not type is found.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>selectedFile: <span class="tsd-signature-type">vscode.Uri</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
+					<a name="gettypefromyaml" class="tsd-anchor"></a>
+					<h3>get<wbr>Type<wbr>From<wbr>Yaml</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Type<wbr>From<wbr>Yaml<span class="tsd-signature-symbol">(</span>selectedFile<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/types_ispwtypemapping.ispwtype.html" class="tsd-signature-type" data-tsd-kind="Interface">IspwType</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in utils/YamlUtils.ts:51</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>selectedFile: <span class="tsd-signature-type">vscode.Uri</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/types_ispwtypemapping.ispwtype.html" class="tsd-signature-type" data-tsd-kind="Interface">IspwType</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
+					<a name="getyamllocationabspath" class="tsd-anchor"></a>
+					<h3>get<wbr>Yaml<wbr>Location<wbr>Abs<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Yaml<wbr>Location<wbr>Abs<wbr>Path<span class="tsd-signature-symbol">(</span>selectedFile<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in utils/YamlUtils.ts:83</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Reads the yaml path from the workspace settings and returns the absolute path to the yaml.
+									If no path is defined in the settings, the path is defaulted to a file named ispwconfig.yml at the root of the workspace folder.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>selectedFile: <span class="tsd-signature-type">vscode.Uri</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The file to get the associated yaml for.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
+					<a name="getyamllocationrelpath" class="tsd-anchor"></a>
+					<h3>get<wbr>Yaml<wbr>Location<wbr>Rel<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Yaml<wbr>Location<wbr>Rel<wbr>Path<span class="tsd-signature-symbol">(</span>selectedFile<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in utils/YamlUtils.ts:98</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Reads the yaml path from the workspace settings and returns the relative path to the yaml if it can be found.
+										If no path is defined in the settings, the path is defaulted to a file named ispwconfig.yml at the root of the workspace folder.
+									The path returned will be relative to the workspace folder if it is in the folder, otherwise the absolute path will be returned.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>selectedFile: <span class="tsd-signature-type">vscode.Uri</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The file to get the associated yaml for.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
+					<a name="hasyaml" class="tsd-anchor"></a>
+					<h3>has<wbr>Yaml</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
+						<li class="tsd-signature tsd-kind-icon">has<wbr>Yaml<span class="tsd-signature-symbol">(</span>selectedFile<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in utils/YamlUtils.ts:31</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks whether the yaml location is defined in the settings and whether the file exists on the file system.
+										If the location is not defined in settings, the path is defaulted to an ispwconfig.yml file at the root of the project.
+									This method will return false if the path is defined but the file does not exist locally.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>selectedFile: <span class="tsd-signature-type">vscode.Uri</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The file selected to find an associated yaml for</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
+					<a name="loadyaml" class="tsd-anchor"></a>
+					<h3>load<wbr>Yaml</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
+						<li class="tsd-signature tsd-kind-icon">load<wbr>Yaml<span class="tsd-signature-symbol">(</span>selectedFile<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/types_ispwtypemapping.ispwroot.html" class="tsd-signature-type" data-tsd-kind="Interface">IspwRoot</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in utils/YamlUtils.ts:111</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves the yaml file location and reads in the contents as an IspwRoot object.
+										This function will throw an error if the yaml file does not contain valid yaml.
+									This function assumes that the yaml file exists! hasYaml should be called before this function.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>selectedFile: <span class="tsd-signature-type">vscode.Uri</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The file to get the associated yaml for.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/types_ispwtypemapping.ispwroot.html" class="tsd-signature-type" data-tsd-kind="Interface">IspwRoot</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="commands_clicommand.html">commands/<wbr>Cli<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="commands_credentialmodifier.html">commands/<wbr>Credential<wbr>Modifier</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="extension.html">extension</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="test_runtest.html">test/run<wbr>Test</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="test_suite.html">test/suite</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="test_suite_extension_test.html">test/suite/extension.test</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="types_cliargs.html">types/<wbr>Cli<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="types_credentialscache.html">types/<wbr>Credentials<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="types_ispwtypemapping.html">types/<wbr>Ispw<wbr>Type<wbr>Mapping</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="utils_cliutils.html">utils/<wbr>Cli<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="utils_credentialsutils.html">utils/<wbr>Credentials<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="utils_messageutils.html">utils/<wbr>Message<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="utils_outpututils.html">utils/<wbr>Output<wbr>Utils</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="utils_yamlutils.html">utils/<wbr>Yaml<wbr>Utils</a>
+						<ul>
+							<li class="current tsd-kind-namespace tsd-parent-kind-module">
+								<a href="utils_yamlutils.yamlutils.html">Yaml<wbr>Utils</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-function tsd-parent-kind-namespace">
+						<a href="utils_yamlutils.yamlutils.html#doesyamlhavetype" class="tsd-kind-icon">does<wbr>Yaml<wbr>Have<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-namespace">
+						<a href="utils_yamlutils.yamlutils.html#gettypefromyaml" class="tsd-kind-icon">get<wbr>Type<wbr>From<wbr>Yaml</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-namespace">
+						<a href="utils_yamlutils.yamlutils.html#getyamllocationabspath" class="tsd-kind-icon">get<wbr>Yaml<wbr>Location<wbr>Abs<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-namespace">
+						<a href="utils_yamlutils.yamlutils.html#getyamllocationrelpath" class="tsd-kind-icon">get<wbr>Yaml<wbr>Location<wbr>Rel<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-namespace">
+						<a href="utils_yamlutils.yamlutils.html#hasyaml" class="tsd-kind-icon">has<wbr>Yaml</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-namespace">
+						<a href="utils_yamlutils.yamlutils.html#loadyaml" class="tsd-kind-icon">load<wbr>Yaml</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
