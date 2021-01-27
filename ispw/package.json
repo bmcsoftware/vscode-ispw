@@ -20,45 +20,32 @@
 		"configuration": {
 			"title": "ISPW",
 			"properties": {
-				"ispw.yamlLocation": {
-					"type": "string",
-					"default": "\\ispwconfig.yml",
-					"scope": "resource",
-					"description": "File path of the .yml mapping file."
-				},
-				"ispw.buildLevel": {
-					"type": "string",
-					"default": null,
-					"scope": "machine",
-					"description": "The level to use in the ISPW life cycle."
-				},
-				"ispw.assignmentDescription": {
+				"ispw.Assignment Description": {
 					"type": "string",
 					"default": null,
 					"scope": "machine",
 					"description": "The description to give assignments created by ISPW actions."
 				},
-				"ispw.cliLocation": {
+				"ispw.Level": {
+					"type": "string",
+					"default": null,
+					"scope": "machine",
+					"description": "The level to use in the ISPW life cycle."
+				},
+				"ispw.Topaz CLI Installation Path": {
 					"type": "string",
 					"default": null,
 					"scope": "user",
-					"description": "The location where the Topaz Workbench CLI is installed"
+					"description": "File path of the Topaz CLI Installation folder."
+				},
+				"ispw.YAML Mapping File": {
+					"type": "string",
+					"default": "\\ispwconfig.yml",
+					"scope": "resource",
+					"description": "File path of the .yml mapping file."
 				}
 			}
 		},
-		"languages": [
-			{
-				"id": "cobol",
-				"extensions": [
-					".cob",
-					".copy"
-				],
-				"aliases": [
-					"COB",
-					"Copybook"
-				]
-			}
-		],
 		"commands": [
 			{
 				"command": "ispw.build",
@@ -81,15 +68,15 @@
 			"commandPalette": [
 				{
 					"command": "ispw.build",
-					"when": "true"
+					"when": "editorTextFocus && !editorReadonly"
 				},
 				{
 					"command": "ispw.generate",
-					"when": "true"
+					"when": "editorTextFocus && !editorReadonly"
 				},
 				{
 					"command": "ispw.load",
-					"when": "true"
+					"when": "editorTextFocus && !editorReadonly"
 				},
 				{
 					"command": "ispw.clearCreds",
@@ -113,15 +100,15 @@
 			"editor/context": [
 				{
 					"command": "ispw.build",
-					"when": "textInputFocus"
+					"when": "editorTextFocus && !editorReadonly"
 				},
 				{
 					"command": "ispw.generate",
-					"when": "textInputFocus"
+					"when": "editorTextFocus && !editorReadonly"
 				},
 				{
 					"command": "ispw.load",
-					"when": "textInputFocus"
+					"when": "editorTextFocus && !editorReadonly"
 				}
 			]
 		}
@@ -129,11 +116,13 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
-		"test": "mocha **/*test.js --recursive",
-		"posttest": "npx typedoc src"
+		"test": "mocha ./out/test/**/*.test.js --recursive --check-leaks",
+		"posttest": "npx typedoc src",
+		"coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.2.14",

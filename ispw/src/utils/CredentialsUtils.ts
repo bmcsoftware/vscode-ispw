@@ -52,8 +52,6 @@ export namespace CredentialsUtils {
      * @param credentials The credentials to validate
      */
     export function validateCredentials(credentials: Credentials) {
-        console.debug('username ' + credentials.username !== undefined);
-        console.debug('password ' + credentials.password !== undefined);
         return credentials.username !== undefined && credentials.password !== undefined;
     }
 }
