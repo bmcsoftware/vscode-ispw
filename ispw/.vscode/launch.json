@@ -6,7 +6,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Run Extension",
+			"name": "Run Extension without Demo",
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
@@ -16,6 +16,31 @@
 				"${workspaceFolder}/out/**/*.js"
 			],
 			"preLaunchTask": "${defaultBuildTask}"
-		}
+		},
+		{
+			"name": "Run Extension with Demo",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+			  "${workspaceFolder}/src/test/demo-workspace/demo.code-workspace",
+			  "--extensionDevelopmentPath=${workspaceFolder}"
+			],
+			"outFiles": ["${workspaceFolder}/out/**/*.js"],
+			"preLaunchTask": "${defaultBuildTask}"
+		  },
+		  {
+			"name": "Extension Tests with Demo",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+			  "${workspaceFolder}/src/test/demo-workspace/demo.code-workspace",
+			  "--extensionDevelopmentPath=${workspaceFolder}",
+			  "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+			],
+			"outFiles": ["${workspaceFolder}/out/test/**/*.js"],
+			"preLaunchTask": "${defaultBuildTask}"
+		  }
 	]
 }

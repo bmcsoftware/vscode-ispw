@@ -144,11 +144,10 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
-		"test": "mocha ./out/test/**/*.test.js --recursive --check-leaks",
+		"test": "node ./out/test/runTest.js",
 		"posttest": "npx typedoc src",
 		"coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
 	},
