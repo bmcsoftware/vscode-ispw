@@ -1,0 +1,24 @@
+/* REXX
+ *
+ * Execute Generate Verification Samples
+ *
+ * Preparation:
+ * ============
+ *
+ *
+ * Run Sample Programs:
+ * ====================
+ *
+ * Test the programs by executing this REXX with the ISPW EX command.
+ *
+ */
+  LOADLIB = "SALESSUP.$MOD.PRD.CWCC.BTCHLOAD"
+  address tso "ALLOC F(SYSPRINT) DA(*) SHR REUSE"
+
+  /* Test ASM   */
+  say " "
+  say "Testing ASSEMBLER program CLASMM04"
+  address tso call "'"loadlib"("clasmm04")'"
+  say "ASSEMBLER test completed with RC="rc
+
+exit

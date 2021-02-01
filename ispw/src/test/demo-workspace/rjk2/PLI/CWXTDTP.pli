@@ -1,0 +1,97 @@
+ CWXTDTP: PROC(PARAMETER_PTR);
+
+  DCL PARAMETER_PTR  POINTER;
+
+  DCL 1 PARAMETER_STR BASED(PARAMETER_PTR),
+        5  EOM_SW           BIT(1),
+        5  YRS_OF_SERVICE   PIC'99',
+        5  PRUN_DATE        PIC'999999',
+        5  PHIRE_DATE       PIC'999999';
+   DCL  1  RUN_DATE,
+           10  RUN_YY        PIC'99',
+           10  RUN_MM        PIC'99',
+           10  RUN_DD        PIC'99';
+   DCL  1  HIRE_DATE,
+           10  HIRE_YY       PIC'99',
+           10  HIRE_MM       PIC'99',
+           10  HIRE_DD       PIC'99';
+   STRING(RUN_DATE) = PRUN_DATE;
+   STRING(HIRE_DATE) = PHIRE_DATE;
+   DCL  1  DATE_TABLE,
+           5  FILLER1                PIC'9999'   INIT(0131),
+           5  FILLER2                PIC'9999'   INIT(0228),
+           5  FILLER3                PIC'9999'   INIT(0331),
+           5  FILLER4                PIC'9999'   INIT(0430),
+           5  FILLER5                PIC'9999'   INIT(0531),
+           5  FILLER6                PIC'9999'   INIT(0630),
+           5  FILLER7                PIC'9999'   INIT(0731),
+           5  FILLER8                PIC'9999'   INIT(0831),
+           5  FILLER9                PIC'9999'   INIT(0930),
+           5  FILLER10               PIC'9999'   INIT(1031),
+           5  FILLER11               PIC'9999'   INIT(1130),
+           5  FILLER12               PIC'9999'   INIT(1231);
+   DCL  DATE_TABLE_PTR  POINTER;
+   DATE_TABLE_PTR = ADDR(DATE_TABLE);
+   DCL  1  DATE_TABLE_REDEFINED BASED(DATE_TABLE_PTR),
+           5  DATE_FIELDS(12),
+               10  DATE_MONTH         PIC'99',
+               10  DATE_DAYS          PIC'99';
+   DCL  1  WORK_AREAS,
+            5  YEARS_OF_SERVICE       FIXED DEC(2) INIT(0),
+            5  HOLD_YEARS             FIXED DEC(2) INIT(0),
+            5  EXTRA_YEARS            FIXED DEC(2) INIT(0);
+   DCL  1  CHECKED_FOR_EOM_SW   STATIC  BIT(1)     INIT('0'B);
+
+   DCL (MOD,ADDR,STRING) BUILTIN;
+
+   ON ERROR
+     BEGIN;
+        ON ERROR SYSTEM;
+        PUT LIST('*** ERROR ENCOUNTERED IN PROGRAM CWXTDTP ***');
+     END;
+
+  /*       MAINLINE  CODE     */
+
+  IF CHECKED_FOR_EOM_SW = '0'B
+       THEN DO;
+            CALL P2000_CALC_END_OF_MONTH;
+            CHECKED_FOR_EOM_SW = '1'B;
+            END;
+  ELSE
+       CALL P1000_CALC_YEARS_OF_SERVICE;
+
+  P1000_CALC_YEARS_OF_SERVICE:  PROC;
+  /* CHANGES START HERE */
+      IF HIRE_YY > RUN_YY
+         THEN YRS_OF_SERVICE = (RUN_YY + 100) - HIRE_YY;
+      ELSE
+         YRS_OF_SERVICE = RUN_YY - HIRE_YY;
+  /* CHANGES END HERE */
+      IF HIRE_MM > RUN_MM
+         THEN YRS_OF_SERVICE = YRS_OF_SERVICE - 1;
+      ELSE
+          IF HIRE_MM = RUN_MM
+             THEN IF HIRE_DD > RUN_DD
+                  THEN YRS_OF_SERVICE = YRS_OF_SERVICE - 1;
+  END P1000_CALC_YEARS_OF_SERVICE;
+
+  P2000_CALC_END_OF_MONTH:  PROC;
+      IF RUN_MM = 02
+          THEN CALL P3000_CALC_LEAP_YEAR;
+      ELSE
+          IF DATE_DAYS(RUN_MM) = RUN_DD
+             THEN EOM_SW = '1'B;
+  END P2000_CALC_END_OF_MONTH;
+
+  P3000_CALC_LEAP_YEAR:  PROC;
+      HOLD_YEARS  = RUN_YY/4;
+      EXTRA_YEARS = MOD(RUN_YY,4);
+      IF EXTRA_YEARS = 0
+         THEN IF RUN_DD = 29
+                 THEN EOM_SW = '1'B;
+      IF EXTRA_YEARS > 0
+         THEN IF RUN_DD  = 28
+                 THEN EOM_SW = '1'B;
+  END P3000_CALC_LEAP_YEAR;
+
+ END CWXTDTP;

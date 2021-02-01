@@ -1,0 +1,698 @@
+ CWXTPLI: PROC(PARM_DATA) OPTIONS(MAIN);
+
+    DCL PARM_DATA CHAR(100) VARYING;
+
+    DCL EMPFILE INPUT RECORD FILE;
+    DCL RPTFILE OUTPUT RECORD FILE
+                       ENV(FB RECSIZE (80) BLKSIZE (6160));
+    DCL 1  EMPLOYEE_RECORD            CHAR(80);
+    DCL 1  REPORT_RECORD              CHAR(80);
+
+    DCL CWXTDTP EXTERNAL ENTRY;
+    DCL CWXTSBP EXTERNAL ENTRY;
+
+    DCL (DATE,ADDR,LENGTH,STRING,SUBSTR) BUILTIN;
+
+
+    DCL PARAMETER_PTR POINTER;
+
+    DCL 1 PARAMETER_STR BASED(PARAMETER_PTR),
+           5  EOM_SW           BIT(1),
+           5  YRS_OF_SERVICE   PIC'99',
+           5  RUN_DATE         CHAR(6),
+           5  HIRE_DATE        CHAR(6);
+
+    DCL 1  SWITCHES,
+           5  JUMP_SW                BIT(1)       INIT('0'B),
+           5  EOF_SW                 BIT(1)       INIT('0'B),
+           5  REGION_ERROR_SW        BIT(1)       INIT('0'B),
+           5  PARM_ERROR_SW          BIT(1)       INIT('0'B),
+           5  ANNIVERSARY_IND        BIT(1)       INIT('0'B);
+    DCL 1  COUNTERS,
+           05  PAGE_COUNT             PIC'999'     INIT(1),
+           05  EMP_LINE_COUNT         PIC'S99'     INIT(+56),
+           05  REG_LINE_COUNT         PIC'S99'     INIT(+56),
+           05  START_NUMBER           PIC'999',
+           05  RECORDS_READ           PIC'999'     INIT(0),
+           05  NORTH_COUNT            PIC'99'      INIT(0),
+           05  SOUTH_COUNT            PIC'99'      INIT(0),
+           05  EAST_COUNT             PIC'99'      INIT(0),
+           05  WEST_COUNT             PIC'99'      INIT(0);
+
+    DCL 1  REGION_SUB                 PIC'9'       INIT(0);
+    DCL 1  TODAYS_DATE                CHAR(6);
+    DCL 1  TODAYS_PTR                 POINTER;
+    TODAYS_PTR = ADDR(TODAYS_DATE);
+    DCL 1  TODAYS_DATEB BASED(TODAYS_PTR),
+           5  DATE_YEAR    PIC'99',
+           5  DATE_MONTH   PIC'99',
+           5  DATE_DAY     PIC'99';
+
+   DCL  REG_IX                        FIXED BIN(15);
+   DCL  HOLD_IX                       FIXED BIN(15);
+  /*                                                                 */
+  /*      FIELDS USED BY CALLED PROGRAM CWXTSBP TO CALCULATE         */
+  /*      COMMISSION BASED ON SALES AMOUNT                           */
+  /*                                                                 */
+   DCL 1  EMP_TYPE              CHAR(1);
+   DCL 1  CALC_SALES            PIC'999999' INIT('0000000');
+   DCL 1  CALC_COMMISSION       FIXED DEC(7,2) INIT(0);
+
+   DCL  1 HOLD_TABLE,
+          5  HOLD_AREA(4),
+             10  HOLD_LINE(20),
+                 15  HOLD_NAME         CHAR(15),
+                 15  HOLD_REGION       CHAR(5),
+                 15  HOLD_TYPE         CHAR(1),
+                 15  HOLD_YEARS        PIC'99',
+                 15  HOLD_HIRE_DATE,
+                     20  HOLD_HIRE_YY  PIC'99',
+                     20  HOLD_HIRE_MM  PIC'99',
+                     20  HOLD_HIRE_DD  PIC'99',
+                 15  HOLD_WAGES        PIC'99999V99',
+                 15  HOLD_OT           PIC'99999V99',
+                 15  HOLD_COMM         PIC'99999V99',
+                 15  HOLD_TOTAL        PIC'99999V99';
+  /*                                         */
+  /*      STORES THE NAME OF EACH REGION     */
+  /*                                         */
+   DCL 01  REGION_NAME_TABLE,
+           05  FILLER1           CHAR(5)     INIT('NORTH'),
+           05  FILLER2           CHAR(5)     INIT('SOUTH'),
+           05  FILLER3           CHAR(5)     INIT('EAST '),
+           05  FILLER4           CHAR(5)     INIT('WEST ');
+   DCL REGION_PTR                POINTER;
+   REGION_PTR = ADDR(REGION_NAME_TABLE);
+   DCL 01  REGION_TABLE  BASED(REGION_PTR),
+           05  REGION_ID(4)      CHAR(5);
+  /*                                                                 */
+  /*      STORES REGIONAL INFORMATION THAT IS USED TO PRINT THE      */
+  /*      REGIONAL SALES REPORT.  REGION SALES IS A SUM OF ALL SALES */
+  /*      FOR THE REGION AND IS USED TO CALCULATE MANAGER COMMISSION.*/
+  /*      THE COMMENT FIELD IS USED TO FLAG A REGION IF AN EMPLOYEE  */
+  /*      IN THE REGION HAS 0 SALES.                                 */
+  /*                                                                 */
+  DCL   1  REGION_SALES_TABLE,
+           5  REGION_DATA(4),
+               10  REGION_NAME       CHAR(5),
+               10  REGION_MANAGER    CHAR(15),
+               10  REGION_SALARY     PIC'9999V99',
+               10  REGION_SALES      PIC'999999V99',
+               10  REGION_COMMENT    CHAR(5);
+  /*                                                                 */
+  /*      ACCUMULATORS USED FOR CALCULATING HOURLY EMPLOYEE WAGES.   */
+  /*      TOTAL EMPLOYEE COMPENSATION (SALARY PLUS COMMISSION OR     */
+  /*      HOURLY EMPLOYEE WAGES PLUS OVERTIME), AND TOTAL MANAGEMENT */
+  /*      COMPENSATION (SALARY PLUS COMMISSION BASED ON TOTAL SALES  */
+  /*      FOR THE REGION)                                            */
+  /*                                                                 */
+  DCL  1  TOTAL_FIELDS,
+          5  EMP_WAGES             FIXED DEC(7,2),
+          5  EMP_COMPENSATION      FIXED DEC(7,2),
+          5  MGMT_COMPENSATION     FIXED DEC(7,2);
+  /*                                                                 */
+  /*      TOTAL COMPENSATION GIVEN TO ALL EMPLOYEES (HOURLY AND SALES*/
+  /*      OR MANAGEMENT.  EACH SUM IS PRINTED AT THE END OF THEIR    */
+  /*      RESPECTIVE REPORTS.                                        */
+  /*                                                                 */
+  DCL  1  GRAND_TOTAL_FIELDS,
+          5  GRAND_TOTAL_EMP       FIXED DEC(9,2) INIT(0),
+          5  GRAND_TOTAL_MGMT      FIXED DEC(9,2) INIT(0);
+  /*                                                                 */
+  /*      USED FOR CALCULATING OVERTIME FOR ANY HOURLY EMPLOYEE      */
+  /*      WHOSE HOURS EXCEEDS 40.                                    */
+  /*                                                                 */
+  DCL  1  OVERTIME_FIELDS,
+          5  OT_AMOUNT             FIXED DEC(7,2),
+          5  OT_HOURS              PIC'99';
+  /*                                                               */
+  /*      EMPLOYEE RECORD WORK_AREA.  EMPLOYEE DATA IS REDEFINED   */
+  /*      BASED ON ONE OF THE 3 EMPLOYEE TYPES, HOURLY, SALES OR   */
+  /*      MANAGEMENT.                                              */
+  /*                                                               */
+  DCL 1  EMPLOYEE_WORK_AREA,
+         5  WA_EMP_NUM            PIC'99999',
+         5  WA_EMP_TYPE           CHAR(1),
+         5  WA_EMP_REGION         PIC'9',
+         5  WA_EMP_NAME           CHAR(15),
+         5  WA_EMP_ADDRESS,
+            10  WA_EMP_STREET     CHAR(15),
+            10  WA_EMP_CITY       CHAR(8),
+            10  WA_EMP_STATE      CHAR(2),
+            10  WA_EMP_ZIP        CHAR(9),
+         5  WA_HOURLY_EMPLOYEE_DATA,
+            10  WA_EMP_HOURS      PIC'99',
+            10  WA_EMP_RATE       FIXED DEC(5,2),
+            10  FILLER            CHAR(8),
+         5  WA_EMP_HIRE_DATE,
+             10  WA_EMP_HIRE_YY    PIC'99',
+             10  WA_EMP_HIRE_MM    PIC'99',
+             10  WA_EMP_HIRE_DD    PIC'99',
+        5  FILLER                  CHAR(5);
+   DCL PTR1 POINTER;
+   PTR1 = ADDR(WA_HOURLY_EMPLOYEE_DATA);
+   DCL 1 WA_SALES_EMPLOYEE_DATA BASED(PTR1),
+            10  WA_SALES_SALARY   FIXED DEC(7,2),
+            10  WA_SALES_AMOUNT   PIC'99999V99',
+            10  FILLER            CHAR(2);
+   DCL 1 WA_MGMT_EMPLOYEE_DATA  BASED(PTR1),
+            10  WA_MGMT_SALARY    FIXED DEC(7,2),
+            10  FILLER            CHAR(9);
+  /*                                           */
+  /*       EMPLOYEE COMPENSATION REPORT        */
+  /*                                           */
+  DCL 1  EMPLOYEE_HDR1,
+          5  FILLER1        CHAR(2)      INIT(''),
+          5  FILLER2        CHAR(10)     INIT('RUN DATE'),
+          5  EMP_RUN_MONTH  PIC'99',
+          5  FILLER3        CHAR(1)      INIT('/'),
+          5  EMP_RUN_DAY    PIC'99',
+          5  FILLER4        CHAR(1)      INIT('/'),
+          5  EMP_RUN_YEAR   PIC'99',
+          5  FILLER5        CHAR(6)      INIT(''),
+          5  FILLER6        CHAR(28)
+                              INIT('EMPLOYEE COMPENSATION REPORT'),
+          5  FILLER7        CHAR(18)     INIT(''),
+          5  FILLER8        CHAR(4)      INIT('PAGE '),
+          5  EMP_PAGE       PIC'ZZ9',
+          5  FILLER9        CHAR(1)      INIT('');
+  DCL 1  EMPLOYEE_HDR2,
+          5  FILLER1     CHAR(31)      INIT(''),
+          5  FILLER2     CHAR(04)      INIT('HIRE'),
+          5  FILLER3     CHAR(02)      INIT(''),
+          5  FILLER4     CHAR(06)      INIT('YRS OF'),
+          5  FILLER5     CHAR(37)      INIT('');
+  DCL  1  EMPLOYEE_HDR3,
+          5  FILLER1     CHAR(1)       INIT(''),
+          5  FILLER2     CHAR(13)      INIT('EMPLOYEE NAME'),
+          5  FILLER3     CHAR(3)       INIT(''),
+          5  FILLER4     CHAR(6)       INIT('REGION'),
+          5  FILLER5     CHAR(1)       INIT(''),
+          5  FILLER6     CHAR(4)       INIT('TYPE'),
+          5  FILLER7     CHAR(3)       INIT(''),
+          5  FILLER8     CHAR(4)       INIT('DATE'),
+          5  FILLER9     CHAR(2)       INIT(''),
+          5  FILLER10    CHAR(7)       INIT('SERVICE'),
+          5  FILLER11    CHAR(1)       INIT(''),
+          5  FILLER12    CHAR(6)       INIT('SALARY'),
+          5  FILLER13    CHAR(3)       INIT(''),
+          5  FILLER14    CHAR(3)       INIT('O/T'),
+          5  FILLER15    CHAR(3)       INIT(''),
+          5  FILLER16    CHAR(10)      INIT('COMMISSION'),
+          5  FILLER17    CHAR(4)       INIT(''),
+          5  FILLER18    CHAR(5)       INIT('TOTAL'),
+          5  FILLER19    CHAR(1)       INIT('');
+  DCL  1  EMPLOYEE_DTL,
+          5  FILLER1           CHAR(1)       INIT(''),
+          5  EMP_DTL_NAME      CHAR(15),
+          5  FILLER2           CHAR(1)       INIT(''),
+          5  EMP_DTL_REGION    CHAR(5),
+          5  FILLER3           CHAR(3)       INIT(''),
+          5  EMP_DTL_TYPE      CHAR(1),
+          5  FILLER4           CHAR(3)       INIT(''),
+          5  EMP_DTL_HIRE_MM   PIC'99',
+          5  EMP_DTL_SLASH1    CHAR(1)       INIT('/'),
+          5  EMP_DTL_HIRE_DD   PIC'99',
+          5  EMP_DTL_SLASH2    CHAR(1)       INIT('/'),
+          5  EMP_DTL_HIRE_YY   PIC'99',
+          5  FILLER4A          CHAR(3)       INIT(''),
+          5  EMP_DTL_YRS_OF_SERVICE PIC'99',
+          5  FILLER4B          CHAR(1)       INIT(''),
+          5  EMP_DTL_WAGES     PIC'ZZZZ9V.99',
+          5  FILLER5           CHAR(1)       INIT(''),
+          5  EMP_DTL_OT        PIC'ZZZZ9V.99',
+          5  FILLER6           CHAR(1)       INIT(''),
+          5  EMP_DTL_COMM      PIC'ZZZZ9V.99',
+          5  FILLER7           CHAR(2)       INIT(''),
+          5  EMP_DTL_TOTAL     PIC'ZZZZ9V.99',
+          5  FILLER8           CHAR(1)       INIT('');
+  DCL  1  EMP_TOTAL_DTL,
+          5  FILLER1           CHAR(4)       INIT(''),
+          5  FILLER2           CHAR(5)       INIT('TOTAL'),
+          5  FILLER3           CHAR(60)      INIT(''),
+          5  EMP_GRAND_TOTAL   PIC'ZZZZZZ9V.99',
+          5  FILLER4           CHAR(1)       INIT('');
+  /*                                 */
+  /*       REGIONAL SALES REPORT     */
+  /*                                 */
+  DCL  1  REGION_HDR1,
+          5  FILLER1       CHAR(2)    INIT(''),
+          5  FILLER2       CHAR(10)   INIT('RUN DATE  '),
+          5  REG_RUN_MONTH PIC'99',
+          5  FILLER3       CHAR(1)    INIT('/'),
+          5  REG_RUN_DAY   PIC'99',
+          5  FILLER4       CHAR(1)    INIT('/'),
+          5  REG_RUN_YEAR  PIC'99',
+          5  FILLER5       CHAR(10)   INIT(''),
+          5  FILLER6       CHAR(21)   INIT('REGIONAL SALES REPORT'),
+          5  FILLER7       CHAR(21)   INIT(''),
+          5  FILLER8       CHAR(04)   INIT('PAGE '),
+          5  REG_PAGE      PIC'ZZ9',
+          5  FILLER9       CHAR(01)   INIT('');
+  DCL  1  REGION_HDR2,
+          5  FILLER1     CHAR(2)    INIT(''),
+          5  FILLER2     CHAR(7)    INIT('MANAGER'),
+          5  FILLER3     CHAR(8)    INIT(''),
+          5  FILLER4     CHAR(6)    INIT('REGION'),
+          5  FILLER5     CHAR(3)    INIT(''),
+          5  FILLER6     CHAR(11)   INIT('TOTAL SALES'),
+          5  FILLER7     CHAR(5)    INIT(''),
+          5  FILLER8     CHAR(6)    INIT('SALARY'),
+          5  FILLER9     CHAR(5)    INIT(''),
+          5  FILLER10    CHAR(10)   INIT('COMMISSION'),
+          5  FILLER11    CHAR(3)    INIT(''),
+          5  FILLER12    CHAR(5)    INIT('TOTAL'),
+          5  FILLER13    CHAR(9)    INIT('');
+  DCL  1  REGION_DETAIL,
+          5  FILLER1            CHAR(1)       INIT(''),
+          5  REG_DTL_MANAGER    CHAR(15),
+          5  FILLER2            CHAR(1)       INIT(''),
+          5  REG_DTL_REGION     CHAR(5),
+          5  FILLER3            CHAR(5)       INIT(''),
+          5  REG_DTL_SALES      PIC'ZZZZZ9V.99',
+          5  FILLER4            CHAR(5)       INIT(''),
+          5  REG_DTL_SALARY     PIC'ZZZ9V.99',
+          5  FILLER5            CHAR(5)       INIT(''),
+          5  REG_DTL_COMM       PIC'ZZZZ9V.99',
+          5  FILLER6            CHAR(3)       INIT(''),
+          5  REG_DTL_TOTAL      PIC'ZZZZ9V.99',
+          5  FILLER7            CHAR(1)       INIT(''),
+          5  REG_DTL_COMMENT    CHAR(5),
+          5  FILLER8            CHAR(2)       INIT('');
+  DCL  1  MGMT_TOTAL_DTL,
+          5  FILLER1            CHAR(4)       INIT(''),
+          5  FILLER2            CHAR(5)       INIT('TOTAL'),
+          5  FILLER3            CHAR(53)      INIT(''),
+          5  MGMT_GRAND_TOTAL   PIC'ZZZZZZ9V.99',
+          5  FILLER4            CHAR(8)       INIT('');
+  /*                             */
+  /*       ERROR MESSAGE LINE    */
+  /*                             */
+  DCL   1  ERROR_LINE             CHAR(80);
+  /*                                                */
+  /*       BLANK LINE TO CONTROL SPACING OF REPORTS */
+  /*                                                */
+  DCL   1  BLANK_LINE             CHAR(80)   INIT('');
+  /*                                                                 */
+  /*       PARM IS AN OPTIONAL FIELD USED TO START PROCESSING        */
+  /*       AT A PARTICULAR RECORD IN THE EMPLOYEE FILE,  VALID       */
+  /*       INITS FOR PARM_DATA ARE:                                  */
+  /*                                                                 */
+  /*             INIT            FUNCTION                            */
+  /*          - SPACES OR 00001  BEGIN PROCESSING FROM FIRST RECORD, */
+  /*                             CAUSES S0C7 ABEND BECAUSE FIRST     */
+  /*                             RECORD CONTAINS INVALID DATA.       */
+  /*          - 00003 THRU 00019 BEGIN PROCESSING AT SPECIFIED RECORD*/
+  /*                             UNTIL END_OF_FILE,  BYPASSES S0C7   */
+  /*                             CAUSED BY RECORD 00001.             */
+  /*          - 00016 THRU 00019 PROCESS MANAGEMENT RECORDS AND PRINT*/
+  /*                             REGIONAL SALES REPORT ONLY.  IF     */
+  /*                             PARM > 16, ONE OR MORE MANAGER NAMES*/
+  /*                             WILL NOT APPEAR ON THE REPORT.      */
+  /*          - 00020 OR ABOVE   PRINTS MANAGEMENT REPORT WITHOUT    */
+  /*                             MANAGER NAMES AND ZERO INITS.       */
+  /*          - NON NUMERIC OR   PRINTS ERROR MESSAGE AND SKIPS ALL  */
+  /*            00002       OR   PROCESSING.                         */
+  /*            < 5 CHARACTERS                                       */
+  /*                                                                 */
+
+   ON ERROR
+      BEGIN;
+        ON ERROR SYSTEM;
+        PUT LIST ('*** ERROR ENCOUNTERED IN PROGRAM CWXTPLI ***');
+        PUT DATA (WA_EMP_NUM, WA_EMP_NAME);
+      END;
+
+   ON ENDFILE(EMPFILE)
+       BEGIN;
+         EOF_SW = '1'B;
+       END;
+
+   CALL P9000_OPEN;
+   CALL P9100_CHECK_PARM;
+   IF ^PARM_ERROR_SW
+      THEN DO;
+            CALL P9200_INIT;
+            DO WHILE(RECORDS_READ < START_NUMBER & ^EOF_SW);
+                  CALL P8000_READ_INPUT;
+            END;
+            DO WHILE(^EOF_SW);
+                  CALL P1000_PROCESS_DATA;
+            END;
+            CALL P6000_PRINT_EMPLOYEE_REPORT;
+            IF EOM_SW
+                 THEN DO REGION_SUB = 1 TO 4;
+                        CALL P7000_PRINT_REGION_REPORT;
+                      END;
+           END;
+  CALL P9900_CLOSE;
+  /*                                                                 */
+  /*   DIFFERENT PROCESSING OCCURS BASED ON EMPLOYEE TYPE.  THERE    */
+  /*   ARE 3 VALID EMPLOYEE TYPES.  IF A RECORD IS READ CONTAINING   */
+  /*   A RECORD TYPE OTHER THAN H, S OR M, AN ERROR MESSAGE IS       */
+  /*   WRITTEN AND PROCESSING CONTINUES.                             */
+  /*                                                                 */
+   P1000_PROCESS_DATA:  PROC;
+     SELECT(WA_EMP_TYPE);
+       WHEN('H')             CALL P2000_PROCESS_HOURLY;
+       WHEN('S')             CALL P3000_PROCESS_SALES;
+       WHEN('M')             CALL P4000_PROCESS_MANAGEMENT;
+       OTHERWISE
+          DO;
+            ERROR_LINE = ' INVALID EMPLOYEE TYPE ';
+            WRITE FILE(RPTFILE) FROM(ERROR_LINE);
+          END;
+     END;
+     CALL P8000_READ_INPUT;
+  END P1000_PROCESS_DATA;
+  /*                                                                 */
+  /*   CALCULATE TYPE H (HOURLY) EMPLOYEE COMPENSATION.  ANY         */
+  /*   EMPLOYEE WITH MORE THAN 40 HOURS RECEIVES OVERTIME COMPUTED   */
+  /*   AT 1.5 TIMES THEIR HOURLY RATE,  ONCE EMPLOYEE COMPENSATION   */
+  /*   IS CALCULATED, IT IS STORED IN A HOLD TABLE.  THE DATA IN     */
+  /*   THE HOLD TABLE IS USED FOR PRINTING THE EMPLOYEE COMPENSATION */
+  /*   REPORT.                                                       */
+  /*                                                                 */
+  P2000_PROCESS_HOURLY: PROC;
+      OT_AMOUNT = 0;
+      IF WA_EMP_HOURS > 40
+       THEN DO;
+               EMP_WAGES = WA_EMP_RATE * 40;
+               OT_HOURS  = WA_EMP_HOURS - 40;
+               OT_AMOUNT = OT_HOURS * (WA_EMP_RATE * 1.5);
+            END;
+       ELSE
+          DO;
+               EMP_WAGES = WA_EMP_HOURS * WA_EMP_RATE;
+          END;
+      EMP_COMPENSATION = EMP_WAGES + OT_AMOUNT;
+      GRAND_TOTAL_EMP = GRAND_TOTAL_EMP +  EMP_COMPENSATION;
+      HIRE_DATE = STRING(WA_EMP_HIRE_DATE);
+      CALL CWXTDTP(PARAMETER_PTR);
+      CALL P5000_STORE_EMPLOYEE_DETAIL;
+      HOLD_IX = HOLD_IX + 1;
+  END P2000_PROCESS_HOURLY;
+  /*                                                                 */
+  /*  CALCULATE TYPE S (SALES) EMPLOYEE COMPENSATION.  THE TOTAL     */
+  /*  SALES FOR THE EMPLOYEE IS PASSED TO THE CALLED PROGRAM WHICH   */
+  /*  CALCULATES COMMISSION.  ONCE EMPLOYEE COMPENSATION IS          */
+  /*  RETURNED FROM CWXTSBP, IT IS STORED IN A HOLD_TABLE.   THE     */
+  /*  DATA IN THE HOLD_TABLE IS USED FOR PRINTING THE EMPLOYEE       */
+  /*  COMPENSATION REPORT.                                           */
+  /*                                                                 */
+  P3000_PROCESS_SALES: PROC;
+      IF WA_SALES_AMOUNT > 0
+         THEN DO;
+              REGION_SALES(WA_EMP_REGION) = WA_SALES_AMOUNT +
+                                       REGION_SALES (WA_EMP_REGION);
+              CALC_SALES = WA_SALES_AMOUNT;
+              CALC_COMMISSION = 0;
+              EMP_TYPE = 'S';
+              CALL CWXTSBP(EMP_TYPE,
+                           CALC_SALES,
+                           CALC_COMMISSION);
+              END;
+           ELSE
+              DO;
+                REGION_COMMENT (WA_EMP_REGION) = 'UH-OH';
+              END;
+           EMP_COMPENSATION = WA_SALES_SALARY + CALC_COMMISSION;
+           GRAND_TOTAL_EMP = GRAND_TOTAL_EMP + EMP_COMPENSATION;
+           HIRE_DATE = STRING(WA_EMP_HIRE_DATE);
+           CALL CWXTDTP(PARAMETER_PTR);
+           CALL P5000_STORE_EMPLOYEE_DETAIL;
+           HOLD_IX = HOLD_IX + 1;
+  END P3000_PROCESS_SALES;
+  /*                                                                  */
+  /*       PROCESS TYPE M (MANAGEMENT) RECORDS.  THE MANAGER NAME AND */
+  /*       SALARY ARE STORED IN A TABLE FOR USE DURING PRINTING OF THE*/
+  /*       REGIONAL SALES REPORT.                                     */
+  /*                                                                  */
+  P4000_PROCESS_MANAGEMENT: PROC;
+           REGION_MANAGER (WA_EMP_REGION) =  WA_EMP_NAME;
+           REGION_SALARY (WA_EMP_REGION) = WA_MGMT_SALARY;
+  END P4000_PROCESS_MANAGEMENT;
+  /*                                                                  */
+  /*     SALES AND HOURLY EMPLOYEE DATA IS STORED IN A HOLD TABLE FOR */
+  /*     PRINTING OF EMPLOYEE COMPENSATION REPORT.  THE HOLD TABLE IS */
+  /*     A TWO_DIMENSIONAL TABLE AND HOLDS DATA FOR A MAXIMUM OF 20   */
+  /*     EMPLOYEES.                                                   */
+  /*                                                                  */
+  P5000_STORE_EMPLOYEE_DETAIL: PROC;
+     CALL P5100_SET_INDEX;
+      IF REGION_ERROR_SW = '0'B
+        THEN DO;
+          HOLD_REGION (REG_IX,HOLD_IX) = REGION_ID(WA_EMP_REGION);
+          HOLD_TYPE   (REG_IX,HOLD_IX) = WA_EMP_TYPE;
+          HOLD_NAME   (REG_IX,HOLD_IX) = WA_EMP_NAME;
+          HOLD_HIRE_DATE (REG_IX, HOLD_IX) = WA_EMP_HIRE_DATE;
+          HOLD_TOTAL  (REG_IX,HOLD_IX) = EMP_COMPENSATION;
+          HOLD_YEARS  (REG_IX,HOLD_IX) = YRS_OF_SERVICE;
+          IF WA_EMP_TYPE = 'H'
+              THEN DO;
+                   HOLD_WAGES (REG_IX,HOLD_IX) = EMP_WAGES;
+                   HOLD_OT    (REG_IX,HOLD_IX) = OT_AMOUNT;
+                   HOLD_COMM  (REG_IX,HOLD_IX) = 0;
+                   END;
+              ELSE DO;
+                   HOLD_WAGES (REG_IX,HOLD_IX) = WA_SALES_SALARY;
+                   HOLD_COMM  (REG_IX,HOLD_IX) = CALC_COMMISSION;
+                   HOLD_OT    (REG_IX,HOLD_IX) = 0;
+                   END;
+          END;
+  END P5000_STORE_EMPLOYEE_DETAIL;
+  /*                                                                 */
+  /*       SET THE REGION INDEX BASED ON EMPLOYEE REGION ID AND      */
+  /*       SEQUENTIALLY INCREMENT HOLD INDEX WITHIN EACH REGION.     */
+  /*       THE EMPLOYEE COMPENSATION REPORT WILL BE GROUPED BY       */
+  /*       REGION.  IF AN INVALID REGION IS FOUND, AN ERROR MESSAGE  */
+  /*       IS WRITTEN AND PROCESSING CONTINUES.                      */
+  /*                                                                 */
+  P5100_SET_INDEX: PROC;
+         REGION_ERROR_SW = '0'B;
+         SELECT(WA_EMP_REGION);
+           WHEN(1)
+               DO;
+                NORTH_COUNT = NORTH_COUNT + 1;
+                HOLD_IX = NORTH_COUNT;
+               END;
+           WHEN(2)
+               DO;
+                SOUTH_COUNT = SOUTH_COUNT + 1;
+                HOLD_IX = SOUTH_COUNT;
+               END;
+           WHEN(3)
+               DO;
+                EAST_COUNT = EAST_COUNT + 1;
+                HOLD_IX = EAST_COUNT;
+               END;
+           WHEN(4)
+               DO;
+                WEST_COUNT = WEST_COUNT + 1;
+                HOLD_IX = WEST_COUNT;
+               END;
+              OTHERWISE     REGION_ERROR_SW = '1'B;
+            END;
+           IF REGION_ERROR_SW = '0'B THEN
+               REG_IX =  WA_EMP_REGION;
+  END P5100_SET_INDEX;
+  /*                                                                  */
+  /*   COMPENSATION DATA FOR HOURLY AND SALES EMPLOYEES ARE PRINTED   */
+  /*   TO THE EMPLOYEE COMPENSATION REPORT FROM THE HOLD TABLE.       */
+  /*                                                                  */
+  P6000_PRINT_EMPLOYEE_REPORT: PROC;
+           REG_IX = 1;
+           DO HOLD_IX = 1 TO NORTH_COUNT;
+                CALL P6100_PRINT_EMPLOYEE_DETAIL;
+           END;
+           REG_IX = 2;
+           DO HOLD_IX = 1 TO SOUTH_COUNT;
+               CALL P6100_PRINT_EMPLOYEE_DETAIL;
+           END;
+           REG_IX = 3;
+           DO HOLD_IX = 1 TO EAST_COUNT;
+               CALL P6100_PRINT_EMPLOYEE_DETAIL;
+           END;
+           REG_IX = 4;
+           DO HOLD_IX = 1 TO WEST_COUNT;
+               CALL P6100_PRINT_EMPLOYEE_DETAIL;
+           END;
+           WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+           EMP_GRAND_TOTAL = GRAND_TOTAL_EMP;
+           WRITE FILE(RPTFILE) FROM(EMP_TOTAL_DTL);
+  END P6000_PRINT_EMPLOYEE_REPORT;
+  /*                                                                */
+  /*       PRINT DETAIL LINES FOR EMPLOYEE COMPENSATION REPORT      */
+  /*                                                                */
+  P6100_PRINT_EMPLOYEE_DETAIL: PROC;
+           IF EMP_LINE_COUNT > 55
+              THEN  CALL P6200_PRINT_EMPLOYEE_HEADERS;
+           EMP_DTL_NAME      =  HOLD_NAME   (REG_IX, HOLD_IX);
+           EMP_DTL_REGION    =  HOLD_REGION (REG_IX, HOLD_IX);
+           EMP_DTL_TYPE      =  HOLD_TYPE   (REG_IX, HOLD_IX);
+           EMP_DTL_HIRE_MM   =  HOLD_HIRE_MM(REG_IX, HOLD_IX);
+           EMP_DTL_SLASH1    =  '/';
+           EMP_DTL_HIRE_DD   =  HOLD_HIRE_DD(REG_IX, HOLD_IX);
+           EMP_DTL_SLASH2    =  '/';
+           EMP_DTL_HIRE_YY   =  HOLD_HIRE_YY(REG_IX, HOLD_IX);
+           EMP_DTL_YRS_OF_SERVICE = HOLD_YEARS(REG_IX, HOLD_IX);
+           EMP_DTL_WAGES     =  HOLD_WAGES  (REG_IX, HOLD_IX);
+           EMP_DTL_OT        =  HOLD_OT     (REG_IX, HOLD_IX);
+           EMP_DTL_COMM      =  HOLD_COMM   (REG_IX, HOLD_IX);
+           EMP_DTL_TOTAL     =  HOLD_TOTAL  (REG_IX, HOLD_IX);
+           WRITE FILE(RPTFILE) FROM(EMPLOYEE_DTL);
+           EMP_LINE_COUNT = EMP_LINE_COUNT + 1;
+           EMPLOYEE_DTL = '';
+  END P6100_PRINT_EMPLOYEE_DETAIL;
+  /*                                                             */
+  /*       PRINT HEADERS FOR EMPLOYEE COMPENSATION REPORT        */
+  /*                                                             */
+  P6200_PRINT_EMPLOYEE_HEADERS: PROC;
+               EMP_PAGE = PAGE_COUNT;
+               EMP_RUN_YEAR = DATE_YEAR;
+               EMP_RUN_MONTH = DATE_MONTH;
+               EMP_RUN_DAY = DATE_DAY;
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(EMPLOYEE_HDR1);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(EMPLOYEE_HDR2);
+               WRITE FILE(RPTFILE) FROM(EMPLOYEE_HDR3);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               PAGE_COUNT = PAGE_COUNT + 1;
+               EMP_LINE_COUNT = 2;
+  END P6200_PRINT_EMPLOYEE_HEADERS;
+  /*                                                                 */
+  /*     COMPENSATION DATA FOR MANAGEMENT EMPLOYEES IS PRINTED       */
+  /*     TO THE REGIONAL SALES REPORT.  THE TOTAL SALES FOR THE      */
+  /*     REGION IS PASSED TO THE CALLED PROGRAM WHICH CALCULATES     */
+  /*     COMMISSION.  THIS REPORT IS GENERATED AT END_OF_MONTH.      */
+  /*                                                                 */
+  P7000_PRINT_REGION_REPORT: PROC;
+           IF REG_LINE_COUNT > 55
+             THEN CALL P7100_PRINT_REGION_HEADERS;
+           REGION_DETAIL   = '';
+           REG_DTL_REGION  = REGION_NAME    (REGION_SUB);
+           REG_DTL_MANAGER = REGION_MANAGER (REGION_SUB);
+           REG_DTL_SALARY  = REGION_SALARY  (REGION_SUB);
+           REG_DTL_SALES   = REGION_SALES   (REGION_SUB);
+           CALC_SALES      = REGION_SALES   (REGION_SUB);
+           REG_DTL_COMMENT = REGION_COMMENT (REGION_SUB);
+           EMP_TYPE = 'M';
+           CALL CWXTSBP(EMP_TYPE,
+                        CALC_SALES,
+                        CALC_COMMISSION);
+           REG_DTL_COMM = CALC_COMMISSION;
+           MGMT_COMPENSATION = CALC_COMMISSION +
+                               REGION_SALARY(REGION_SUB);
+           GRAND_TOTAL_MGMT = GRAND_TOTAL_MGMT + MGMT_COMPENSATION;
+           REG_DTL_TOTAL = MGMT_COMPENSATION;
+           WRITE FILE(RPTFILE) FROM(REGION_DETAIL);
+           IF REGION_SUB = 4
+              THEN DO;
+              WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+              MGMT_GRAND_TOTAL = GRAND_TOTAL_MGMT;
+              WRITE FILE(RPTFILE) FROM(MGMT_TOTAL_DTL);
+              END;
+           REG_LINE_COUNT = REG_LINE_COUNT + 1;
+  END P7000_PRINT_REGION_REPORT;
+  /*                                                            */
+  /*       PRINT HEADERS FOR REGIONAL SALES REPORT              */
+  /*                                                            */
+  P7100_PRINT_REGION_HEADERS: PROC;
+               REG_PAGE = PAGE_COUNT;
+               REG_RUN_YEAR = DATE_YEAR;
+               REG_RUN_MONTH = DATE_MONTH;
+               REG_RUN_DAY = DATE_DAY;
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(REGION_HDR1);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               WRITE FILE(RPTFILE) FROM(REGION_HDR2);
+               WRITE FILE(RPTFILE) FROM(BLANK_LINE);
+               PAGE_COUNT = PAGE_COUNT + 1;
+               REG_LINE_COUNT = 10;
+  END P7100_PRINT_REGION_HEADERS;
+  /*                                                       */
+  /*                                                       */
+  P8000_READ_INPUT: PROC;
+           READ FILE(EMPFILE) INTO(EMPLOYEE_WORK_AREA);
+           RECORDS_READ = RECORDS_READ + 1;
+           IF RECORDS_READ =  2
+             THEN DO;
+                  READ FILE(EMPFILE)  INTO(EMPLOYEE_WORK_AREA);
+                  RECORDS_READ = RECORDS_READ + 1;
+                  END;
+  END P8000_READ_INPUT;
+  /*                                                        */
+  /*                                                        */
+  P9000_OPEN: PROC;
+           OPEN FILE(EMPFILE);
+           OPEN FILE(RPTFILE);
+  END P9000_OPEN;
+  /*                                                        */
+  /*       VALID PARMS ARE BLANK OR 5 DIGIT NUMBER          */
+  /*                                                        */
+  P9100_CHECK_PARM: PROC;
+           IF LENGTH(PARM_DATA) = 5
+           THEN
+               IF PARM_DATA >= '00000' &
+                  PARM_DATA <= '99999'
+                  THEN
+                   START_NUMBER = PARM_DATA;
+                  ELSE
+                   CALL   P9800_BAD_PARM;
+           ELSE
+               IF LENGTH(PARM_DATA) = 0 THEN
+                   START_NUMBER = 1;
+               ELSE
+                   CALL P9800_BAD_PARM;
+           IF PARM_DATA = '00002'
+               THEN CALL P9800_BAD_PARM;
+
+  END P9100_CHECK_PARM;
+  /*                                                        */
+  /*                                                        */
+  P9200_INIT: PROC;
+           REGION_NAME (1) = 'NORTH';
+           REGION_NAME (2) = 'SOUTH';
+           REGION_NAME (3) = 'EAST';
+           REGION_NAME (4) = 'WEST';
+           DO REGION_SUB = 1 TO 4;
+              CALL P9300_INITIALIZE_REGION_TABLE;
+           END;
+           HOLD_IX = 1;
+
+           ALLOCATE PARAMETER_STR SET(PARAMETER_PTR);
+
+           TODAYS_DATE = DATE;
+           RUN_DATE = TODAYS_DATE;
+           HIRE_DATE = STRING(WA_EMP_HIRE_DATE);
+           CALL CWXTDTP(PARAMETER_PTR);
+  END P9200_INIT;
+  /*                                                        */
+  /*                                                        */
+  P9300_INITIALIZE_REGION_TABLE: PROC;
+           REGION_MANAGER (REGION_SUB) = '';
+           REGION_COMMENT (REGION_SUB) = '';
+           REGION_SALARY (REGION_SUB) = 0;
+           REGION_SALES  (REGION_SUB) = 0;
+  END P9300_INITIALIZE_REGION_TABLE;
+  /*                                                        */
+  /*                                                        */
+  P9800_BAD_PARM: PROC;
+           PARM_ERROR_SW = '1'B;
+           ERROR_LINE = '   PARAMETER LENGTH OR DATA IS INCORRECT   ';
+           WRITE FILE(RPTFILE) FROM(ERROR_LINE);
+  END P9800_BAD_PARM;
+  /*                                                        */
+  /*                                                        */
+    P9900_CLOSE: PROC;
+           CLOSE FILE(EMPFILE);
+           CLOSE FILE(RPTFILE);
+    END P9900_CLOSE;
+ END CWXTPLI;
