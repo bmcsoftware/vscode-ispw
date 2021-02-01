@@ -3,3 +3,4 @@ ispw/out/*
 ispw/.vscode-test/*
 ispw/.vscode/workspace.code-workspace
 ispw/package-lock.json
+/.project
