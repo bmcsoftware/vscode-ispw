@@ -24,17 +24,16 @@ import { Credentials, CredentialsCache } from "../types/CredentialsCache";
  */
 export namespace CliUtils {
 
-
   /**
    * Asynchronous function to assemble all the arguments for the CLI and call the CLI.
    * @param operation The ISPW operation to be executed ('build', 'generate', 'load')
-   * @param selectedFile The file selected to run the operation on
+   * @param selectedFiles The files selected to run the operation on
    */
-  export async function runCliCommandForOperation(operation: string, selectedFile: vscode.Uri) {
+  export async function runCliCommandForOperation(operation: string, selectedFiles: vscode.Uri[]) {
     console.debug("Starting runCliCommandForOperation for operation " + operation);
-    if (!validateSettings(selectedFile)) { return; }
+    if (!validateSettings(selectedFiles)) { return; }
 
-    let yamlLocation: string = YamlUtils.getYamlLocationRelPath(selectedFile);
+    let yamlLocation: string = YamlUtils.getYamlLocationRelPath(selectedFiles[0]);
     let credCache = CredentialsCache.getInstance();
     let credentials: Credentials = credCache.getCredentials();
     if (!CredentialsUtils.validateCredentials(credentials)) {
@@ -56,12 +55,12 @@ export namespace CliUtils {
       ispwConfigPath: yamlLocation,
       username: credentials.username || '',
       password: credentials.password || '',
-      componentFiles: vscode.workspace.asRelativePath(selectedFile),
+      componentFiles: getComponentFileNames(selectedFiles),
       ispwMappingLevel: getLoadLevel() || '',
       ispwGitAssignDesc: getAssignmentDescription() || ''
     });
 
-    executeCliCommand(cliLocation + '\\IspwCLI.bat', args, selectedFile);
+    executeCliCommand(cliLocation + '\\IspwCLI.bat', args, selectedFiles);
 
   }
 
@@ -69,14 +68,16 @@ export namespace CliUtils {
    * Creates a child process and calls the CLI
    * @param command The string CLI command to execute (the path to the ISpwCLI.bat file)
    * @param args The arguments passed to the CLI (operation, username, password, componentFiles, etc)
-   * @param selectedFile The file selected to run ISPW action against
+   * @param selectedFiles The files selected to run ISPW action against
    */
-  function executeCliCommand(command: string, args: string[], selectedFile: vscode.Uri): void {
-    let operationIndex = args.indexOf(' -operation ') + 1;
+  function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]): void {
+    let operationToShow: string = args[args.indexOf(' -operation ') + 1];
+    let fileNameToShow: string = selectedFiles.length === 1 ? path.basename(selectedFiles[0].fsPath) : selectedFiles.length + " files";
+
     // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
     const child = cp.spawn(command, args, {
       shell: true,
-      cwd: vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath
+      cwd: vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.uri.fsPath
     });
 
     // add listener for when data is written to stdout
@@ -93,14 +94,27 @@ export namespace CliUtils {
     child.on('close', code => {
       if (code === 0) {
         // pass
-        MessageUtils.showInfoMessage("The " + args[operationIndex] + " process completed for " + path.basename(selectedFile.fsPath));
-
+        MessageUtils.showInfoMessage("The " + operationToShow + " process completed for " + fileNameToShow);
       }
       else {
-        //fail
-        MessageUtils.showErrorMessage("The " + args[operationIndex] + " process failed for " + path.basename(selectedFile.fsPath) + ". Check the ISPW Output channel for more information.");
+        // fail
+        MessageUtils.showErrorMessage("The " + operationToShow + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
       }
     });
+  }
+
+  /**
+    * Concatenates the given URIs into a string of relative paths separated by a ":"
+    * @param selectedFiles The selected file URIs to get paths for
+    */
+  function getComponentFileNames(selectedFiles: vscode.Uri[]): string {
+    let componentNameStr: string = "";
+    selectedFiles.forEach(componentUri => {
+      componentNameStr = componentNameStr + ":" + vscode.workspace.asRelativePath(componentUri);
+    });
+    componentNameStr = componentNameStr.substring(1);
+
+    return componentNameStr;
   }
 
   /**
@@ -172,13 +186,14 @@ export namespace CliUtils {
 
   /**
    * Validates that there are settings for the necessary properties including yaml location, cli location, and build level. 
-   * If any settings are not defined, a warning message is shown to the user and this function returns false.
-   * @param selectedFile The selected file to check for settings for.
+   * If any settings are not defined, a warning message is shown to the user and this function returns false. This method assumes
+   * that all the given file URIs are part of the same workspace folder.
+   * @param selectedFiles The selected files to check for settings for.
    */
-  function validateSettings(selectedFile: vscode.Uri): boolean {
+  function validateSettings(selectedFiles: vscode.Uri[]): boolean {
 
-    let workspaceFolder: string | undefined = vscode.workspace.getWorkspaceFolder(selectedFile)?.name;
-    let validYaml: boolean = YamlUtils.hasYaml(selectedFile);
+    let workspaceFolder: string | undefined = vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.name;
+    let validYaml: boolean = YamlUtils.hasYaml(selectedFiles[0]);
     let validCli: boolean = true;
     let validLevel: boolean = true;
 
