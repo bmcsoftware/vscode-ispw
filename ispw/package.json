@@ -26,26 +26,22 @@
 			"properties": {
 				"ispw.Assignment Description": {
 					"type": "string",
-					"default": null,
-					"scope": "machine",
+					"default": "${user}-${project_name}",
 					"description": "The description to give assignments created by ISPW actions."
 				},
 				"ispw.Level": {
 					"type": "string",
-					"default": null,
-					"scope": "machine",
+					"default": "DEV1",
 					"description": "The level to use in the ISPW life cycle."
 				},
 				"ispw.Topaz CLI Installation Path": {
 					"type": "string",
 					"default": null,
-					"scope": "user",
 					"description": "File path of the Topaz CLI Installation folder."
 				},
 				"ispw.YAML Mapping File": {
 					"type": "string",
 					"default": "\\ispwconfig.yml",
-					"scope": "resource",
 					"description": "File path of the .yml mapping file."
 				}
 			}
@@ -83,14 +79,25 @@
 		"menus": {
 			"commandPalette": [
 				{
+<<<<<<< Upstream, based on origin/master
 					"command": "ispw.buildExplorer",
 					"when": "false"
+=======
+					"command": "ispw.build",
+					"when": "true"
+>>>>>>> 615f8e5 init version
 				},
 				{
+<<<<<<< Upstream, based on origin/master
 					"command": "ispw.generateExplorer",
 					"when": "false"
+=======
+					"command": "ispw.generate",
+					"when": "true"
+>>>>>>> 615f8e5 init version
 				},
 				{
+<<<<<<< Upstream, based on origin/master
 					"command": "ispw.loadExplorer",
 					"when": "false"
 				},
@@ -104,6 +111,9 @@
 				},
 				{
 					"command": "ispw.loadEditor",
+=======
+					"command": "ispw.load",
+>>>>>>> 615f8e5 init version
 					"when": "true"
 				},
 				{

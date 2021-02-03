@@ -120,7 +120,7 @@ export namespace CliUtils {
   /**
    * Gets the CLI location saved in the User Settings. This may or may not be defined.
    */
-  function getCliLocation(): string | undefined {
+  export function getCliLocation(): string | undefined {
     let cliLocation: string | undefined = vscode.workspace.getConfiguration().get<string>('ispw.Topaz CLI Installation Path');
     console.debug("CLI location: " + cliLocation);
     return cliLocation;
@@ -129,7 +129,7 @@ export namespace CliUtils {
   /**
    * Gets the build level stored in the Resource Settings. This may or may not be defined.
    */
-  function getLoadLevel(): string | undefined {
+  export function getLoadLevel(): string | undefined {
     let loadLevel: string | undefined = vscode.workspace.getConfiguration().get<string>('ispw.Level');
 
     return loadLevel;
@@ -138,7 +138,7 @@ export namespace CliUtils {
   /**
    * Gets the assignment description stored in the Resource Settings. This may or may not be defined.
    */
-  function getAssignmentDescription(): string | undefined {
+  export function getAssignmentDescription(): string | undefined {
     let assignmentDescription: string | undefined = vscode.workspace.getConfiguration().get<string>('ispw.Assignment Description');
 
     return assignmentDescription;
