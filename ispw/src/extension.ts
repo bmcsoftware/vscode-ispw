@@ -1,43 +1,99 @@
 import * as vscode from 'vscode';
 import * as IspwCliCommand from "./commands/CliCommand";
 import { clearCredentials } from './commands/CredentialModifier';
-import { YamlUtils } from './utils/YamlUtils';
+import { MessageUtils } from './utils/MessageUtils';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+// this method is called once when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
 
-	if ((uri: vscode.Uri) => {
-		console.log("I made it here");
-		return YamlUtils.hasYaml(uri);
-	}) {
-		vscode.commands.executeCommand('setContext', 'myContext', 'true');
-	}
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "ispw" is now active!');
 
-	let build = vscode.commands.registerCommand('ispw.build', (selectedFile: vscode.Uri) => {
-		IspwCliCommand.runCommand('build', selectedFile);
+	// build commands
+	let buildExplorer = vscode.commands.registerCommand('ispw.buildExplorer', async (selectedFile: vscode.Uri) => {
+		let selectedFileUris: vscode.Uri[] = await getSelectedFileUris();
+		if (validateSelectFilesWorkspaceFolder(selectedFileUris)) {
+			IspwCliCommand.runCommand('build', selectedFileUris);
+		}
 	});
-	context.subscriptions.push(build);
-
-	let generate = vscode.commands.registerCommand('ispw.generate', (selectedFile: vscode.Uri) => {
-		IspwCliCommand.runCommand('generate', selectedFile);
+	context.subscriptions.push(buildExplorer);
+	let buildEditor = vscode.commands.registerCommand('ispw.buildEditor', (selectedFile: vscode.Uri) => {
+		IspwCliCommand.runCommand('build', undefined);
 	});
-	context.subscriptions.push(generate);
+	context.subscriptions.push(buildEditor);
 
-	let load = vscode.commands.registerCommand('ispw.load', (selectedFile: vscode.Uri) => {
-		IspwCliCommand.runCommand('load', selectedFile);
+	// generate commands
+	let generateExplorer = vscode.commands.registerCommand('ispw.generateExplorer', async (selectedFile: vscode.Uri) => {
+		let selectedFileUris: vscode.Uri[] = await getSelectedFileUris();
+		if (validateSelectFilesWorkspaceFolder(selectedFileUris)) {
+			IspwCliCommand.runCommand('generate', selectedFileUris);
+		}
 	});
-	context.subscriptions.push(load);
+	context.subscriptions.push(generateExplorer);
+	let generateEditor = vscode.commands.registerCommand('ispw.generateEditor', (selectedFile: vscode.Uri) => {
+		IspwCliCommand.runCommand('generate', undefined);
+	});
+	context.subscriptions.push(generateEditor);
 
+	// load commands
+	let loadExplorer = vscode.commands.registerCommand('ispw.loadExplorer', async (selectedFile: vscode.Uri) => {
+		let selectedFileUris: vscode.Uri[] = await getSelectedFileUris();
+		if (validateSelectFilesWorkspaceFolder(selectedFileUris) === true) {
+			IspwCliCommand.runCommand('load', selectedFileUris);
+		}
+	});
+	context.subscriptions.push(loadExplorer);
+	let loadEditor = vscode.commands.registerCommand('ispw.loadEditor', (selectedFile: vscode.Uri) => {
+		IspwCliCommand.runCommand('load', undefined);
+	});
+	context.subscriptions.push(loadEditor);
+
+	// clear credentials
 	let clearCreds = vscode.commands.registerCommand('ispw.clearCreds', (e) => {
 		clearCredentials();
 	});
 	context.subscriptions.push(clearCreds);
 }
 
+/**
+ * Gets the file URIs of the files selected in the File Explorer view
+ */
+async function getSelectedFileUris(): Promise<vscode.Uri[]> {
+	// get what's currently on the clipboard
+	let prevText: string = await vscode.env.clipboard.readText();
+	// copy selected file paths to clipboard and read
+	await vscode.commands.executeCommand('copyFilePath');
+	let selectedFilesStr: string = await vscode.env.clipboard.readText();
+	// put old contents back on clipboard
+	await vscode.env.clipboard.writeText(prevText);
+
+	// convert string paths into file URIs
+	let selectedFilesArr: string[] = selectedFilesStr.split(/\r\n/);
+	console.debug("selectedFiles length: " + selectedFilesArr.length);
+	let selectedFileUris: vscode.Uri[] = [];
+	selectedFilesArr.forEach(filePath => {
+		selectedFileUris.push(vscode.Uri.file(filePath));
+	});
+	return selectedFileUris;
+}
+
+/**
+ * Validates that all the given file URIs are part of the same workspace folder. ISPW actions can only be performed on files within the same workspace folder.
+ * If the files are not in the same folder then an error message is shown to the user and this method returns false.
+ * @param selectedFiles The file URIs to validate
+ */
+function validateSelectFilesWorkspaceFolder(selectedFiles: vscode.Uri[]): boolean {
+	let folder: vscode.WorkspaceFolder | undefined = vscode.workspace.getWorkspaceFolder(selectedFiles[0]);
+
+	for (let i = 0; i < selectedFiles.length; i++) {
+		if (folder !== vscode.workspace.getWorkspaceFolder(selectedFiles[i])) {
+			MessageUtils.showErrorMessage("ISPW commands can only be executed on files within the same workspace folder.");
+			return false;
+		}
+		folder = vscode.workspace.getWorkspaceFolder(selectedFiles[i]);
+	}
+
+	return true;
+}
 
 // this method is called when your extension is deactivated
 export function deactivate() { }

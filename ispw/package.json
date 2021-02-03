@@ -10,9 +10,12 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:ispw.build",
-		"onCommand:ispw.generate",
-		"onCommand:ispw.load",
+		"onCommand:ispw.buildExplorer",
+		"onCommand:ispw.generateExplorer",
+		"onCommand:ispw.loadExplorer",
+		"onCommand:ispw.buildEditor",
+		"onCommand:ispw.generateEditor",
+		"onCommand:ispw.loadEditor",
 		"onCommand:ispw.clearCreds"
 	],
 	"main": "./out/extension.js",
@@ -48,15 +51,27 @@
 		},
 		"commands": [
 			{
-				"command": "ispw.build",
+				"command": "ispw.buildExplorer",
 				"title": "ISPW: Build"
 			},
 			{
-				"command": "ispw.generate",
+				"command": "ispw.generateExplorer",
 				"title": "ISPW: Generate"
 			},
 			{
-				"command": "ispw.load",
+				"command": "ispw.loadExplorer",
+				"title": "ISPW: Load"
+			},
+			{
+				"command": "ispw.buildEditor",
+				"title": "ISPW: Build"
+			},
+			{
+				"command": "ispw.generateEditor",
+				"title": "ISPW: Generate"
+			},
+			{
+				"command": "ispw.loadEditor",
 				"title": "ISPW: Load"
 			},
 			{
@@ -67,16 +82,28 @@
 		"menus": {
 			"commandPalette": [
 				{
-					"command": "ispw.build",
-					"when": "editorTextFocus && !editorReadonly"
+					"command": "ispw.buildExplorer",
+					"when": "false"
 				},
 				{
-					"command": "ispw.generate",
-					"when": "editorTextFocus && !editorReadonly"
+					"command": "ispw.generateExplorer",
+					"when": "false"
 				},
 				{
-					"command": "ispw.load",
-					"when": "editorTextFocus && !editorReadonly"
+					"command": "ispw.loadExplorer",
+					"when": "false"
+				},
+				{
+					"command": "ispw.buildEditor",
+					"when": "true"
+				},
+				{
+					"command": "ispw.generateEditor",
+					"when": "true"
+				},
+				{
+					"command": "ispw.loadEditor",
+					"when": "true"
 				},
 				{
 					"command": "ispw.clearCreds",
@@ -85,29 +112,29 @@
 			],
 			"explorer/context": [
 				{
-					"command": "ispw.build",
+					"command": "ispw.buildExplorer",
 					"when": "!explorerResourceIsFolder"
 				},
 				{
-					"command": "ispw.generate",
+					"command": "ispw.generateExplorer",
 					"when": "!explorerResourceIsFolder"
 				},
 				{
-					"command": "ispw.load",
+					"command": "ispw.loadExplorer",
 					"when": "!explorerResourceIsFolder"
 				}
 			],
 			"editor/context": [
 				{
-					"command": "ispw.build",
+					"command": "ispw.buildEditor",
 					"when": "editorTextFocus && !editorReadonly"
 				},
 				{
-					"command": "ispw.generate",
+					"command": "ispw.generateEditor",
 					"when": "editorTextFocus && !editorReadonly"
 				},
 				{
-					"command": "ispw.load",
+					"command": "ispw.loadEditor",
 					"when": "editorTextFocus && !editorReadonly"
 				}
 			]
@@ -145,6 +172,7 @@
 		"ts-node": "^9.1.1",
 		"typedoc": "^0.20.16",
 		"typescript": "^4.1.3",
+		"vsce": "^1.85.0",
 		"vscode-test": "^1.4.1",
 		"ws": "^7.4.2"
 	},
