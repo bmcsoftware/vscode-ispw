@@ -79,25 +79,14 @@
 		"menus": {
 			"commandPalette": [
 				{
-<<<<<<< Upstream, based on origin/master
 					"command": "ispw.buildExplorer",
 					"when": "false"
-=======
-					"command": "ispw.build",
-					"when": "true"
->>>>>>> 615f8e5 init version
 				},
 				{
-<<<<<<< Upstream, based on origin/master
 					"command": "ispw.generateExplorer",
 					"when": "false"
-=======
-					"command": "ispw.generate",
-					"when": "true"
->>>>>>> 615f8e5 init version
 				},
 				{
-<<<<<<< Upstream, based on origin/master
 					"command": "ispw.loadExplorer",
 					"when": "false"
 				},
@@ -111,9 +100,6 @@
 				},
 				{
 					"command": "ispw.loadEditor",
-=======
-					"command": "ispw.load",
->>>>>>> 615f8e5 init version
 					"when": "true"
 				},
 				{
@@ -158,7 +144,6 @@
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
-		"posttest": "npx typedoc src",
 		"coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
 	},
 	"devDependencies": {
@@ -172,7 +157,7 @@
 		"@typescript-eslint/eslint-plugin": "^4.9.0",
 		"@typescript-eslint/parser": "^4.9.0",
 		"chai": "^4.2.0",
-		"eslint": "^7.15.0",
+		"eslint": "^7.19.0",
 		"glob": "^7.1.6",
 		"js-yaml": "^4.0.0",
 		"mocha": "^8.2.1",

@@ -206,7 +206,7 @@ suite('Extension Test Suite', function () {
 		const document = await vscode.workspace.openTextDocument('rjk2/COB/TPROG03.cbl');
 		await vscode.window.showTextDocument(document);
 		//vscode.commands.executeCommand('ispw.load');
-		IspwCliCommand.runCommand('load', vscode.window.activeTextEditor?.document.uri);
+		//IspwCliCommand.runCommand('load', vscode.window.activeTextEditor?.document.uri);
 	});
 
 	//vscode.window.showInformationMessage('End all tests.');
