@@ -12,7 +12,6 @@ import fs = require('fs');
 import yaml = require('js-yaml');
 import * as path from 'path';
 import { IspwRoot } from '../types/IspwTypeMapping';
-import { IspwApplication } from '../types/IspwTypeMapping';
 import { IspwPath } from '../types/IspwTypeMapping';
 import { IspwType } from '../types/IspwTypeMapping';
 import * as vscode from "vscode";
