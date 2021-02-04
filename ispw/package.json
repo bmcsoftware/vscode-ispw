@@ -3,6 +3,7 @@
 	"displayName": "ISPW",
 	"description": "ISPW - Visual Studio Code Extension ",
 	"version": "0.0.1",
+	"publisher": "BMC",
 	"engines": {
 		"vscode": "^1.52.0"
 	},
