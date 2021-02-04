@@ -2,6 +2,7 @@ import * as assert from 'assert';
 import * as IspwCliCommand from '../../commands/CliCommand';
 import { CredentialsCache } from '../../types/CredentialsCache';
 import { IspwType, IspwRoot, IspwPath, IspwApplication } from '../../types/IspwTypeMapping';
+import { CliArgs } from '../../types/CliArgs';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
@@ -100,17 +101,81 @@ suite('Extension Test Suite', function () {
 
 		let ispwTypeCob1 = ispwRoot.ispwApplication.pathMappings.ispwPathCob.types.ispwTypeCob;
 		assert.strictEqual(ispwTypeCob === ispwTypeCob1, true);
-		assert.strictEqual(ispwTypeCob1 == ispwTypeCobExpect, false);
+		assert.strictEqual(ispwTypeCob1 === ispwTypeCobExpect, false);
 		compareObject(ispwTypeCob1, ispwTypeCobExpect);
 
 		let ispwTypeClst1 = ispwRoot.ispwApplication.pathMappings.ispwPathClst.types.ispwTypeClst;
 		assert.strictEqual(ispwTypeClst1 === ispwTypeClst, true);
-		assert.strictEqual(ispwTypeClst1 == ispwTypeClstExpect, false);
+		assert.strictEqual(ispwTypeClst1 === ispwTypeClstExpect, false);
 		compareObject(ispwTypeClst1, ispwTypeClstExpect);
 
 	});
 
+	test('test cli arguments type', () => {
+		let cliArgs = {
+			codePage: 'codepage',
+			help: 'help',
+			host: 'host',
+			password: 'password',
+			port: 123,
+			timeout: 456,
+			username: 'username',
+			protocol: 'protocol',
+			targetFolder: 'targetfolder',
+			serverConfig: 'serverconfig',
+			operation: 'operation',
+			gitRepoUrl: 'gitrepourl',
+			gitUsername: 'gitusername',
+			gitPassword: 'gitpassword',
+			gitBranch: 'gitbranch',
+			gitCommit: 'gitcommit',
+			gitFromHash: 'gitfromhash',
+			stream: 'stream',
+			application: 'application',
+			checkoutLevel: 'checkoutlevel',
+			containerCreation: 'containercreation',
+			customDescription: 'customerdescription',
+			gitLocalPath: 'gitlocalpath',
+			ispwConfigPath: 'ispwconfigpath',
+			gitCommitFile: 'gitcommitfile',
+			vscSetting: 'vscsetting',
+			componentFiles: 'componentfile',
+			ispwGitAssignDesc: 'ispwgitassigndesc',
+			ispwMappingLevel: 'ispwmappinglevel',
+			typeOverride: 'typeoverride'
+		}
 
+		assert.strictEqual(cliArgs.codePage, 'codepage');
+		assert.strictEqual(cliArgs.help, 'help');
+		assert.strictEqual(cliArgs.host, 'host');
+		assert.strictEqual(cliArgs.password, 'password');
+		assert.strictEqual(cliArgs.port, 123);
+		assert.strictEqual(cliArgs.timeout, 456);
+		assert.strictEqual(cliArgs.username, 'username');
+		assert.strictEqual(cliArgs.protocol, 'protocol');
+		assert.strictEqual(cliArgs.targetFolder, 'targetfolder');
+		assert.strictEqual(cliArgs.serverConfig, 'serverconfig');
+		assert.strictEqual(cliArgs.operation, 'operation');
+		assert.strictEqual(cliArgs.gitRepoUrl, 'gitrepourl');
+		assert.strictEqual(cliArgs.gitUsername, 'gitusername');
+		assert.strictEqual(cliArgs.gitPassword, 'gitpassword');
+		assert.strictEqual(cliArgs.gitBranch, 'gitbranch');
+		assert.strictEqual(cliArgs.gitCommit, 'gitcommit');
+		assert.strictEqual(cliArgs.gitFromHash, 'gitfromhash');
+		assert.strictEqual(cliArgs.stream, 'stream');
+		assert.strictEqual(cliArgs.application, 'application');
+		assert.strictEqual(cliArgs.checkoutLevel, 'checkoutlevel');
+		assert.strictEqual(cliArgs.containerCreation, 'containercreation');
+		assert.strictEqual(cliArgs.customDescription, 'customerdescription');
+		assert.strictEqual(cliArgs.gitLocalPath, 'gitlocalpath');
+		assert.strictEqual(cliArgs.ispwConfigPath, 'ispwconfigpath');
+		assert.strictEqual(cliArgs.gitCommitFile, 'gitcommitfile');
+		assert.strictEqual(cliArgs.vscSetting, 'vscsetting');
+		assert.strictEqual(cliArgs.componentFiles, 'componentfile');
+		assert.strictEqual(cliArgs.ispwGitAssignDesc, 'ispwgitassigndesc');
+		assert.strictEqual(cliArgs.ispwMappingLevel, 'ispwmappinglevel');
+		assert.strictEqual(cliArgs.typeOverride, 'typeoverride');
+	});
 
 
 	test('Sample test', () => {
