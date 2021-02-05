@@ -80,12 +80,24 @@ export namespace YamlUtils {
      * @param selectedFile The file to get the associated yaml for.
      */
     export function getYamlLocationAbsPath(selectedFile: vscode.Uri): string {
-        let yamlLocation: string = vscode.workspace.getConfiguration('ispw.YAML Mapping File', selectedFile).get<string>('ispw.YAML Mapping File', vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + "\\ispwconfig.yml");
-        if (!path.isAbsolute(yamlLocation)) {
-            yamlLocation = vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + yamlLocation;
-        }
-        console.log("getYamlLocationAbsPath: " + yamlLocation);
-        return yamlLocation;
+
+        console.log(__dirname);
+
+ //       if (!isInMocha()) {
+            let yamlLocation: string = vscode.workspace.getConfiguration('ispw.YAML Mapping File', selectedFile).get<string>('ispw.YAML Mapping File', vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + "\\ispwconfig.yml");
+            if (!path.isAbsolute(yamlLocation)) {
+                yamlLocation = vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + yamlLocation;
+            }
+            console.log("getYamlLocationAbsPath: " + yamlLocation);
+            return yamlLocation;
+ /*       } else {
+            let yamlLocation = vscode.workspace.getConfiguration().get<string>('ispw.YAML Mapping File', vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + "\\ispwconfig.yml");
+            if (!path.isAbsolute(yamlLocation)) {
+                yamlLocation = vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + yamlLocation;
+            }
+            console.log("getYamlLocationAbsPath in Mocha test: " + yamlLocation);
+            return yamlLocation;
+        }*/
     }
 
     /**
@@ -115,5 +127,12 @@ export namespace YamlUtils {
         if (typeof loadedData !== 'object') { throw new Error(yamlLocation + ' does not contain valid yaml'); }
         ispwRoot = (loadedData as unknown) as IspwRoot;
         return ispwRoot;
+    }
+
+    export function isInMocha() {
+        var context = require('global-var');
+        return ['suite', 'test'].every(function (functionName) {
+            return context[functionName] instanceof Function;
+        })
     }
 }

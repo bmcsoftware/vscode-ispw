@@ -26,12 +26,12 @@
 			"properties": {
 				"ispw.Assignment Description": {
 					"type": "string",
-					"default": "${user}-${project_name}",
+					"default": null,
 					"description": "The description to give assignments created by ISPW actions."
 				},
 				"ispw.Level": {
 					"type": "string",
-					"default": "DEV1",
+					"default": null,
 					"description": "The level to use in the ISPW life cycle."
 				},
 				"ispw.Topaz CLI Installation Path": {
@@ -42,6 +42,7 @@
 				"ispw.YAML Mapping File": {
 					"type": "string",
 					"default": "\\ispwconfig.yml",
+					"scope": "resource",
 					"description": "File path of the .yml mapping file."
 				}
 			}
