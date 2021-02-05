@@ -24,7 +24,7 @@ suite('Extension Test Suite', function () {
 	/**
 	 * Test CredentialsCache
 	 */
-	test('test credentials cache', () => {
+	test('Test credentials cache', () => {
 		let cc = CredentialsCache.getInstance();
 
 		let user1 = 'user1';
@@ -54,7 +54,7 @@ suite('Extension Test Suite', function () {
 	/**
 	 * Test IspwTypeMapping
 	 */
-	test('test ispw yaml type', () => {
+	test('Test ispw yaml type', () => {
 		let ispwTypeCob = {
 			ispwType: 'COB', fileExtension: 'cbl', genSeq: 'V', progType: 'Yes',
 			sql: 'No', cics: 'No', ims: 'No', flag1: 'N', flag2: 'I', flag3: 'C', flag4: 'E', genParms: 'ISPWCUTE'
@@ -113,7 +113,7 @@ suite('Extension Test Suite', function () {
 
 	});
 
-	test('test cli arguments type', () => {
+	test('Test cli arguments type', () => {
 		let cliArgs = {
 			codePage: 'codepage',
 			help: 'help',
@@ -179,44 +179,38 @@ suite('Extension Test Suite', function () {
 		assert.strictEqual(cliArgs.typeOverride, 'typeoverride');
 	});
 
-	test('test YAML utils', () => {
+	test('Test YAML utils', () => {
 		let rjk2 = getRjk2();
 
-		if(rjk2 === undefined)
-			assert.fail('failed to find rjk2 test project')
+		if (rjk2 === undefined)
+			assert.fail('Failed to find rjk2 test project')
 		else {
-			console.log(rjk2.path, rjk2.fsPath);
-			let tprog3 = vscode.Uri.file(rjk2.fsPath + '\\COB\TPROG03.cbl');
-			let yamlpath = YamlUtils.getYamlLocationAbsPath(tprog3);
-			vscode.workspace.getConfiguration('ispw.YAML Mapping File', tprog3).update('ispw.YAML Mapping File', '\\ispwconfig.yml', vscode.ConfigurationTarget.WorkspaceFolder);
-			console.log(yamlpath);
+			let tprog03 = vscode.Uri.file(rjk2.fsPath + '\\COB\\TPROG03.cbl');
 
-			let loc = YamlUtils.getYamlLocationAbsPath(tprog3);
-			console.log('loc=', loc)
+			let ispwConfigPath = YamlUtils.getYamlLocationAbsPath(tprog03);
+			console.log('ispwConfigPath=', ispwConfigPath);
+			assert.strictEqual(ispwConfigPath.endsWith('demo-workspace\\rjk2\\ispwconfig.yml'), true);
+
+			assert.strictEqual(YamlUtils.hasYaml(tprog03), true);
+			assert.strictEqual(YamlUtils.getYamlLocationRelPath(tprog03), "ispwconfig.yml");
 		}
 	});
 
-	test('test', async () => {
-		/*let rjk2 = getRjk2();
+	test('Test vscode settings', () => {
+		let cliLocation: string | undefined = CliUtils.getCliLocation();
+		assert.strictEqual(cliLocation !== undefined && cliLocation !== '', true);
+		console.log('cliLocation=', cliLocation);
 
-		if(rjk2 === undefined)
-			assert.fail('failed to find rjk2 test project')
-		else {
-			let tprog3 = vscode.Uri.file(rjk2.fsPath + '\\COB\TPROG03.cbl');*/
+		let loadLevel: string | undefined = CliUtils.getLoadLevel();
+		assert.strictEqual(loadLevel, 'DEV1');
+		console.log('loadLevel=', loadLevel);
 
-			vscode.workspace.getConfiguration().update('ispw.Level', 'DEV1', vscode.ConfigurationTarget.Global);
-
-			let cliLocation: string | undefined = CliUtils.getCliLocation();
-			let loadLevel: string | undefined = CliUtils.getLoadLevel();
-			let assignmentDesc: string | undefined = CliUtils.getAssignmentDescription();
-
-			console.log(cliLocation, loadLevel, assignmentDesc);
-		//}
-
-		//await vscode.commands.executeCommand('ispw.clearCreds');
+		let assignmentDesc: string | undefined = CliUtils.getAssignmentDescription();
+		assert.strictEqual(assignmentDesc, '${user}-${project_name}');
+		console.log('assignmentDesc=', assignmentDesc);
 	});
 
-	test('test', async () => {
+	test('Test open doc', async () => {
 		//await subscribeToTsConfigChanges();
 		const document = await vscode.workspace.openTextDocument('rjk2/COB/TPROG03.cbl');
 		await vscode.window.showTextDocument(document);
@@ -224,11 +218,14 @@ suite('Extension Test Suite', function () {
 		//IspwCliCommand.runCommand('load', vscode.window.activeTextEditor?.document.uri);
 	});
 
-	//vscode.window.showInformationMessage('End all tests.');
-
 });
 
-
+/**
+ * Compare two objects using reflection
+ * 
+ * @param object1 object 1
+ * @param object2 object 2
+ */
 function compareObject(object1: Object, object2: Object) {
 	let props = Object.getOwnPropertyNames(object1);
 	props.forEach(prop => {
@@ -237,10 +234,12 @@ function compareObject(object1: Object, object2: Object) {
 	});
 }
 
-
+/**
+ * Get rjk2 project
+ */
 function getRjk2(): vscode.Uri | undefined {
 	let wfs = vscode.workspace.workspaceFolders;
-	let rjk2 : vscode.Uri | undefined = undefined;
+	let rjk2: vscode.Uri | undefined = undefined;
 
 	wfs?.forEach(x => {
 		if (x.name === 'rjk2') {
@@ -249,18 +248,4 @@ function getRjk2(): vscode.Uri | undefined {
 	})
 
 	return rjk2;
-}
-
-function subscribeToTsConfigChanges(): vscode.Disposable[] {
-	const disposables: vscode.Disposable[] = [];
-	for (const workfolder of vscode.workspace.workspaceFolders || []) {
-		const pattern = new vscode.RelativePattern(workfolder, "[tj]sconfig.json");
-		const fileWatcher = vscode.workspace.createFileSystemWatcher(pattern);
-		fileWatcher.onDidChange(() => invalidateCache(workfolder));
-		disposables.push(fileWatcher);
-	}
-	return disposables;
-}
-
-function invalidateCache(workfolder: vscode.WorkspaceFolder) {
 }

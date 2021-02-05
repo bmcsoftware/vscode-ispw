@@ -36,6 +36,7 @@ export namespace YamlUtils {
      * Checks whether a yaml file is defined, loads the yaml and tries to find an ISPW type that matches the selectedFile.
      * This method will return true if a type is found, false if not type is found.
      * @param selectedFile 
+     * @deprecated
      */
     export function doesYamlHaveType(selectedFile: vscode.Uri): boolean {
         let hasType: boolean = hasYaml(selectedFile);
@@ -47,6 +48,11 @@ export namespace YamlUtils {
         return hasType;
     }
 
+    /**
+     * Not used
+     * @param selectedFile 
+     * @deprecated
+     */
     export function getTypeFromYaml(selectedFile: vscode.Uri): IspwType | undefined {
         let mostPathCount: number = 0;
         let returnType: IspwType | undefined = undefined;
@@ -118,6 +124,7 @@ export namespace YamlUtils {
      * This function will throw an error if the yaml file does not contain valid yaml.
      * This function assumes that the yaml file exists! hasYaml should be called before this function.
      * @param selectedFile The file to get the associated yaml for.
+     * @deprecated
      */
     export function loadYaml(selectedFile: vscode.Uri): IspwRoot | undefined {
         let ispwRoot: IspwRoot | undefined = undefined;
@@ -129,6 +136,9 @@ export namespace YamlUtils {
         return ispwRoot;
     }
 
+    /**
+     * Detect if running inside Mocha
+     */
     export function isInMocha() {
         var context = require('global-var');
         return ['suite', 'test'].every(function (functionName) {

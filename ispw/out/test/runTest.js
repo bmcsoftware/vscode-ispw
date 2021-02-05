@@ -39,8 +39,20 @@ function main() {
             // The path to test runner
             // Passed to --extensionTestsPath
             const extensionTestsPath = path.resolve(__dirname, './suite/index');
+            const testOptions = {
+                // The folder containing the Extension Manifest package.json
+                // Passed to `--extensionDevelopmentPath`
+                extensionDevelopmentPath: path.resolve(__dirname, "../../"),
+                // The path to test runner
+                // Passed to --extensionTestsPath
+                extensionTestsPath: path.resolve(__dirname, "./suite/index"),
+                launchArgs: [
+                    `${path.resolve("./src/test/demo-workspace/demo.code-workspace")}`,
+                    "--disable-extensions"
+                ]
+            };
             // Download VS Code, unzip it and run the integration test
-            yield vscode_test_1.runTests({ extensionDevelopmentPath, extensionTestsPath });
+            yield vscode_test_1.runTests(testOptions);
         }
         catch (err) {
             console.error('Failed to run tests');
