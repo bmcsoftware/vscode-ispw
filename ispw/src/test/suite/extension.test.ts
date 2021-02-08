@@ -11,15 +11,26 @@ import * as vscode from 'vscode';
 // import * as myExtension from '../../extension';
 
 import { CliUtils } from '../../utils/CliUtils';
+import { watchFile } from 'fs';
+import { expect } from 'chai';
+import { resolve } from 'dns';
 
 suite('Extension Test Suite', function () {
 	vscode.window.showInformationMessage('Start all tests.');
 
-	this.beforeAll(() => {
+	this.beforeAll(() => { });
+
+	this.beforeEach(() => {
+		let cc = CredentialsCache.getInstance();
+		cc.saveCredentials('xdevreg', 'regress');
 	});
-	this.beforeEach(() => { });
+
 	this.afterAll(() => { });
-	this.afterEach(() => { });
+
+	this.afterEach(() => {
+		let cc = CredentialsCache.getInstance();
+		cc.clearCredentials();
+	});
 
 	/**
 	 * Test CredentialsCache
@@ -113,6 +124,9 @@ suite('Extension Test Suite', function () {
 
 	});
 
+	/**
+	 * Test cli arguments type
+	 */
 	test('Test cli arguments type', () => {
 		let cliArgs = {
 			codePage: 'codepage',
@@ -179,6 +193,9 @@ suite('Extension Test Suite', function () {
 		assert.strictEqual(cliArgs.typeOverride, 'typeoverride');
 	});
 
+	/**
+	 * Test yaml utils, functions depreciated will not be tested
+	 */
 	test('Test YAML utils', () => {
 		let rjk2 = getRjk2();
 
@@ -196,6 +213,9 @@ suite('Extension Test Suite', function () {
 		}
 	});
 
+	/**
+	 * Test vscode settings
+	 */
 	test('Test vscode settings', () => {
 		let cliLocation: string | undefined = CliUtils.getCliLocation();
 		assert.strictEqual(cliLocation !== undefined && cliLocation !== '', true);
@@ -210,13 +230,57 @@ suite('Extension Test Suite', function () {
 		console.log('assignmentDesc=', assignmentDesc);
 	});
 
+	/**
+	 * Test open a specific cobol fle
+	 */
 	test('Test open doc', async () => {
-		//await subscribeToTsConfigChanges();
+
 		const document = await vscode.workspace.openTextDocument('rjk2/COB/TPROG03.cbl');
-		await vscode.window.showTextDocument(document);
-		//vscode.commands.executeCommand('ispw.load');
-		//IspwCliCommand.runCommand('load', vscode.window.activeTextEditor?.document.uri);
-	});
+		//await vscode.window.showTextDocument(document);
+
+		let rjk2 = getRjk2();
+		if (rjk2 === undefined) {
+			assert.fail('Failed to find rjk2 test project');
+		}
+
+		let tprog03 = vscode.Uri.file(rjk2.fsPath + '\\COB\\TPROG03.cbl');
+		let progs: vscode.Uri[] = [tprog03];
+
+		let cp = await IspwCliCommand.runCommand('load', progs);
+
+		//console.log(x?.stdout.toString());
+
+		
+		return new Promise((done) => {
+			if (cp !== undefined) {
+				cp.on('close', code => {
+					done();
+				});
+			} else {
+				done();
+			}
+		})/*.then(() => { assert.strictEqual(true, true) })*/;
+
+		//console.log('hello, done!');
+		/*await new Promise(() =>
+			setTimeout((done) => {
+				done();
+			}, 15000)
+		);*/
+
+		//IspwCliCommand.runCommand('generate', progs);
+
+		//IspwCliCommand.runCommand('load', progs);
+
+		/*console.log('waiting 30 seconds');
+		return new Promise((done) => {
+			setTimeout(() => {
+				console.log('waiting done');
+				done();
+			}, 30000);
+		});*/
+
+	}).timeout(60000);
 
 });
 

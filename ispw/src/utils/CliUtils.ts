@@ -18,6 +18,7 @@ import { CredentialsUtils } from "./CredentialsUtils";
 import * as vscode from "vscode";
 import { YamlUtils } from "./YamlUtils";
 import { Credentials, CredentialsCache } from "../types/CredentialsCache";
+import { promises } from "fs";
 
 /**
  * Utility namespace for CLI operations.
@@ -60,7 +61,7 @@ export namespace CliUtils {
       ispwGitAssignDesc: getAssignmentDescription() || ''
     });
 
-    executeCliCommand(cliLocation + '\\IspwCLI.bat', args, selectedFiles);
+    return executeCliCommand(cliLocation + '\\IspwCLI.bat', args, selectedFiles);
 
   }
 
@@ -70,9 +71,47 @@ export namespace CliUtils {
    * @param args The arguments passed to the CLI (operation, username, password, componentFiles, etc)
    * @param selectedFiles The files selected to run ISPW action against
    */
-  function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]): void {
+  async function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]) {
     let operationToShow: string = args[args.indexOf(' -operation ') + 1];
     let fileNameToShow: string = selectedFiles.length === 1 ? path.basename(selectedFiles[0].fsPath) : selectedFiles.length + " files";
+
+    /*
+    return new Promise<void>(function(done) {
+
+      var stdout = '', stderr = '';
+
+      // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
+      const child = cp.spawn(command, args, {
+        shell: true,
+        cwd: vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.uri.fsPath
+      });
+
+      
+      // add listener for when data is written to stdout
+      child.stdout.on('data', (stdout) => {
+        OutputUtils.getOutputChannel().append(stdout.toString());
+      });
+
+      // add listener for when data is written to stderr
+      child.stderr.on('data', (stderr) => {
+        OutputUtils.getOutputChannel().append(stderr.toString());
+      });
+
+      // add listener for when the CLI process completes
+      child.on('close', code => {
+        if (code === 0) {
+          // pass
+          MessageUtils.showInfoMessage("The " + operationToShow + " process completed for " + fileNameToShow);
+        }
+        else {
+          // fail
+          MessageUtils.showErrorMessage("The " + operationToShow + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
+        }
+        done();
+      });
+    });
+*/
+
 
     // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
     const child = cp.spawn(command, args, {
@@ -80,6 +119,7 @@ export namespace CliUtils {
       cwd: vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.uri.fsPath
     });
 
+    
     // add listener for when data is written to stdout
     child.stdout.on('data', (stdout) => {
       OutputUtils.getOutputChannel().append(stdout.toString());
@@ -91,6 +131,7 @@ export namespace CliUtils {
     });
 
     // add listener for when the CLI process completes
+    /*
     child.on('close', code => {
       if (code === 0) {
         // pass
@@ -101,6 +142,11 @@ export namespace CliUtils {
         MessageUtils.showErrorMessage("The " + operationToShow + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
       }
     });
+*/
+    return child;
+
+
+
   }
 
   /**
