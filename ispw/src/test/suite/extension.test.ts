@@ -287,6 +287,8 @@ async function testOperation(operation: string) {
 	let child = await CliUtils.runCliCommandForOperation(operation, progs);
 	let fileNameToShow = CliUtils.getFileNameToShow(progs);
 
+	MessageUtils.showInfoMessage("Start " + operation + " test...");
+
 	return new Promise<void>((done) => {
 		if (child !== undefined) {
 			child.on('close', code => {
