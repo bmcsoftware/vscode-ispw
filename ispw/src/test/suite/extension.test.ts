@@ -255,14 +255,14 @@ suite('Extension Test Suite', function () {
 	 */
 	test('Test generate', async () => {
 		return testOperation('generate');
-	}).timeout(60000);
+	}).timeout(90000);
 
 	/**
 	 * Test build a specific cobol fle
 	 */
 	test('Test build', async () => {
 		return testOperation('build');
-	}).timeout(60000);
+	}).timeout(90000);
 
 });
 
