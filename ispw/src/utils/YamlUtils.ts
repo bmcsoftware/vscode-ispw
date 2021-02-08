@@ -132,6 +132,6 @@ export namespace YamlUtils {
         var context = require('global-var');
         return ['suite', 'test'].every(function (functionName) {
             return context[functionName] instanceof Function;
-        })
+        });
     }
 }
