@@ -19,7 +19,7 @@ export interface CliArgs {
     host?: string;
     password: string;
     port?: number;
-    timeout?: string;
+    timeout?: number;
     username: string;
     protocol?: string;
     targetFolder?: string;

@@ -10,7 +10,6 @@
 */
 
 import * as assert from 'assert';
-import * as IspwCliCommand from '../../commands/CliCommand';
 import { CredentialsCache } from '../../types/CredentialsCache';
 import { IspwType, IspwRoot, IspwPath, IspwApplication } from '../../types/IspwTypeMapping';
 import { CliArgs } from '../../types/CliArgs';
@@ -22,10 +21,6 @@ import { CliUtils } from '../../utils/CliUtils';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 // import * as myExtension from '../../extension';
-
-import { watchFile } from 'fs';
-import { expect } from 'chai';
-import { resolve } from 'dns';
 
 suite('Extension Test Suite', function () {
 	vscode.window.showInformationMessage('Start all tests.');
@@ -78,42 +73,42 @@ suite('Extension Test Suite', function () {
 	 * Test IspwTypeMapping
 	 */
 	test('Test ispw yaml type', () => {
-		let ispwTypeCob = {
+		let ispwTypeCob: IspwType = {
 			ispwType: 'COB', fileExtension: 'cbl', genSeq: 'V', progType: 'Yes',
 			sql: 'No', cics: 'No', ims: 'No', flag1: 'N', flag2: 'I', flag3: 'C', flag4: 'E', genParms: 'ISPWCUTE'
-		}
+		};
 
-		let ispwTypeCobExpect = {
+		let ispwTypeCobExpect: IspwType = {
 			ispwType: 'COB', fileExtension: 'cbl', genSeq: 'V', progType: 'Yes',
 			sql: 'No', cics: 'No', ims: 'No', flag1: 'N', flag2: 'I', flag3: 'C', flag4: 'E', genParms: 'ISPWCUTE'
-		}
+		};
 
-		let ispwTypeClst = {
+		let ispwTypeClst: IspwType = {
 			ispwType: 'CLST', fileExtension: 'clst'
 		}
 
-		let ispwTypeClstExpect = {
+		let ispwTypeClstExpect: IspwType = {
 			ispwType: 'CLST', fileExtension: 'clst'
 		}
 
-		let ispwPathCob = {
-			path: '\\COB', types: { ispwTypeCob }
+		let ispwPathCob: IspwPath = {
+			path: '\\COB', types: [ispwTypeCob]
 		}
 
-		let ispwPathClst = {
-			path: '\\CLST', types: { ispwTypeClst }
+		let ispwPathClst: IspwPath = {
+			path: '\\CLST', types: [ispwTypeClst]
 		}
 
-		let ispwApplication = {
+		let ispwApplication: IspwApplication = {
 			stream: 'PLAY-S',
 			application: 'PLAY-A',
 			host: 'CW09',
 			port: 47623,
 			runtimeConfig: 'TPZP',
-			pathMappings: { ispwPathCob, ispwPathClst }
+			pathMappings: [ispwPathCob, ispwPathClst]
 		}
 
-		let ispwRoot = {
+		let ispwRoot: IspwRoot = {
 			ispwApplication: ispwApplication
 		}
 
@@ -121,15 +116,15 @@ suite('Extension Test Suite', function () {
 		assert.strictEqual(ispwRoot.ispwApplication.stream, 'PLAY-S');
 		assert.strictEqual(ispwRoot.ispwApplication.port, 47623);
 		assert.strictEqual(ispwRoot.ispwApplication.runtimeConfig, 'TPZP');
-		assert.strictEqual(ispwRoot.ispwApplication.pathMappings.ispwPathCob.path, '\\COB');
-		assert.strictEqual(ispwRoot.ispwApplication.pathMappings.ispwPathClst.path, '\\CLST');
+		assert.strictEqual(ispwRoot.ispwApplication.pathMappings[0].path, '\\COB');
+		assert.strictEqual(ispwRoot.ispwApplication.pathMappings[1].path, '\\CLST');
 
-		let ispwTypeCob1 = ispwRoot.ispwApplication.pathMappings.ispwPathCob.types.ispwTypeCob;
+		let ispwTypeCob1 = ispwRoot.ispwApplication.pathMappings[0].types[0];
 		assert.strictEqual(ispwTypeCob === ispwTypeCob1, true);
 		assert.strictEqual(ispwTypeCob1 === ispwTypeCobExpect, false);
 		compareObject(ispwTypeCob1, ispwTypeCobExpect);
 
-		let ispwTypeClst1 = ispwRoot.ispwApplication.pathMappings.ispwPathClst.types.ispwTypeClst;
+		let ispwTypeClst1 = ispwRoot.ispwApplication.pathMappings[1].types[0];
 		assert.strictEqual(ispwTypeClst1 === ispwTypeClst, true);
 		assert.strictEqual(ispwTypeClst1 === ispwTypeClstExpect, false);
 		compareObject(ispwTypeClst1, ispwTypeClstExpect);
@@ -140,7 +135,7 @@ suite('Extension Test Suite', function () {
 	 * Test cli arguments type
 	 */
 	test('Test cli arguments type', () => {
-		let cliArgs = {
+		let cliArgs: CliArgs = {
 			codePage: 'codepage',
 			help: 'help',
 			host: 'host',
@@ -246,22 +241,21 @@ suite('Extension Test Suite', function () {
 	 * Test load a specific cobol fle
 	 */
 	test('Test load', async () => {
-
-		return testOperation('load');
+		return testOperation('load', 'TPROG01.cbl');
 	}).timeout(60000);
 
 	/**
 	 * Test generate a specific cobol fle
 	 */
 	test('Test generate', async () => {
-		return testOperation('generate');
+		return testOperation('generate', 'TPROG03.cbl');
 	}).timeout(90000);
 
 	/**
 	 * Test build a specific cobol fle
 	 */
 	test('Test build', async () => {
-		return testOperation('build');
+		return testOperation('build', 'TPROG01.cbl');
 	}).timeout(90000);
 
 });
@@ -271,7 +265,7 @@ suite('Extension Test Suite', function () {
  * 
  * @param operation the operation to be performed
  */
-async function testOperation(operation: string) {
+async function testOperation(operation: string, program: string) {
 
 	const document = await vscode.workspace.openTextDocument('rjk2/COB/TPROG03.cbl');
 	//await vscode.window.showTextDocument(document);
@@ -281,13 +275,13 @@ async function testOperation(operation: string) {
 		assert.fail('Failed to find rjk2 test project');
 	}
 
-	let tprog03 = vscode.Uri.file(rjk2.fsPath + '\\COB\\TPROG03.cbl');
-	let progs: vscode.Uri[] = [tprog03];
+	let tprog = vscode.Uri.file(rjk2.fsPath + '\\COB\\' + program);
+	let progs: vscode.Uri[] = [tprog];
 
 	let child = await CliUtils.runCliCommandForOperation(operation, progs);
 	let fileNameToShow = CliUtils.getFileNameToShow(progs);
 
-	MessageUtils.showInfoMessage("Start " + operation + " test...");
+	MessageUtils.showInfoMessage("Start " + operation + " test on program - " + program + "...");
 
 	return new Promise<void>((done) => {
 		if (child !== undefined) {

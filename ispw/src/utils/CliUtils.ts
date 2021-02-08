@@ -199,7 +199,7 @@ export namespace CliUtils {
     if (args.port) { strArgs = strArgs.concat([' -port ', args.port + '']); }
     if (args.protocol) { strArgs = strArgs.concat([' -protocol ', args.protocol]); }
     if (args.targetFolder) { strArgs = strArgs.concat([' -targetFolder ', '"' + args.targetFolder + '"']); }
-    if (args.timeout) { strArgs = strArgs.concat([' -timeout ', args.timeout]); }
+    if (args.timeout) { strArgs = strArgs.concat([' -timeout ', args.timeout.toString()]); }
     if (args.typeOverride) { strArgs = strArgs.concat([' -typeOverride ', args.typeOverride]); }
     if (args.vscSetting) { strArgs = strArgs.concat([' -vscSetting ', args.vscSetting]); }
 
