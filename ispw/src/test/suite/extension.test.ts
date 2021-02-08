@@ -13,7 +13,7 @@ import * as assert from 'assert';
 import { CredentialsCache } from '../../types/CredentialsCache';
 import { IspwType, IspwRoot, IspwPath, IspwApplication } from '../../types/IspwTypeMapping';
 import { CliArgs } from '../../types/CliArgs';
-import { YamlUtils } from '../../utils/YamlUtils'
+import { YamlUtils } from '../../utils/YamlUtils';
 import { MessageUtils } from "../../utils/MessageUtils";
 import { CliUtils } from '../../utils/CliUtils';
 
@@ -85,19 +85,19 @@ suite('Extension Test Suite', function () {
 
 		let ispwTypeClst: IspwType = {
 			ispwType: 'CLST', fileExtension: 'clst'
-		}
+		};
 
 		let ispwTypeClstExpect: IspwType = {
 			ispwType: 'CLST', fileExtension: 'clst'
-		}
+		};
 
 		let ispwPathCob: IspwPath = {
 			path: '\\COB', types: [ispwTypeCob]
-		}
+		};
 
 		let ispwPathClst: IspwPath = {
 			path: '\\CLST', types: [ispwTypeClst]
-		}
+		};
 
 		let ispwApplication: IspwApplication = {
 			stream: 'PLAY-S',
@@ -106,11 +106,11 @@ suite('Extension Test Suite', function () {
 			port: 47623,
 			runtimeConfig: 'TPZP',
 			pathMappings: [ispwPathCob, ispwPathClst]
-		}
+		};
 
 		let ispwRoot: IspwRoot = {
 			ispwApplication: ispwApplication
-		}
+		};
 
 		assert.strictEqual(ispwRoot.ispwApplication.application, 'PLAY-A');
 		assert.strictEqual(ispwRoot.ispwApplication.stream, 'PLAY-S');
@@ -166,7 +166,7 @@ suite('Extension Test Suite', function () {
 			ispwGitAssignDesc: 'ispwgitassigndesc',
 			ispwMappingLevel: 'ispwmappinglevel',
 			typeOverride: 'typeoverride'
-		}
+		};
 
 		assert.strictEqual(cliArgs.codePage, 'codepage');
 		assert.strictEqual(cliArgs.help, 'help');
@@ -206,9 +206,9 @@ suite('Extension Test Suite', function () {
 	test('Test YAML utils', () => {
 		let rjk2 = getRjk2();
 
-		if (rjk2 === undefined)
-			assert.fail('Failed to find rjk2 test project')
-		else {
+		if (rjk2 === undefined) {
+			assert.fail('Failed to find rjk2 test project');
+		} else {
 			let tprog03 = vscode.Uri.file(rjk2.fsPath + '\\COB\\TPROG03.cbl');
 
 			let ispwConfigPath = YamlUtils.getYamlLocationAbsPath(tprog03);
@@ -330,7 +330,7 @@ function getRjk2(): vscode.Uri | undefined {
 		if (x.name === 'rjk2') {
 			rjk2 = x.uri;
 		}
-	})
+	});
 
 	return rjk2;
 }
