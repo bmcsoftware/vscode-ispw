@@ -7,7 +7,7 @@
 	"settings": {
 		"ispw.Topaz CLI Installation Path": "C:\\tmp\\cli200502",
 		"ispw.Level": "DEV1",
-		"ispw.Assignment Description": "${user}-${project_name}",
+		"ispw.Assignment Description": "{user}-{project_name}",
 		"ispw.YAML Mapping File": "\\ispwconfig.yml"
 	}
 }

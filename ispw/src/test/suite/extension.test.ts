@@ -226,7 +226,7 @@ suite('Extension Test Suite', function () {
 		console.log('loadLevel=', loadLevel);
 
 		let assignmentDesc: string | undefined = CliUtils.getAssignmentDescription();
-		assert.strictEqual(assignmentDesc, '${user}-${project_name}');
+		assert.strictEqual(assignmentDesc, '{user}-{project_name}');
 		console.log('assignmentDesc=', assignmentDesc);
 	});
 
