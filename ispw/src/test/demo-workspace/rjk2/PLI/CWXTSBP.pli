@@ -1,0 +1,93 @@
+ CWXTSBP: PROC(EMP_TYPE,SALES_AMOUNT,COMM_TOTAL);
+
+   DCL  1  MGMT_RANGE           PIC'999999';
+   DCL  1  MGMT_RATE_TABLE,
+            5  FILLER1          FIXED DEC(4,3) INIT(.020),
+            5  FILLER2          FIXED DEC(4,3) INIT(.025),
+            5  FILLER3          FIXED DEC(4,3) INIT(.030),
+            5  FILLER4          FIXED DEC(4,3) INIT(.035),
+            5  FILLER5          FIXED DEC(4,3) INIT(.040);
+
+   DCL MGMT_PTR   POINTER;
+   MGMT_PTR = ADDR(MGMT_RATE_TABLE);
+
+   DCL  1  MGMT_RATE_REDEFINED BASED(MGMT_PTR),
+            5  MGMT_RATE_OCCURS(5),
+               10  MGMT_RATE    FIXED DEC(4,3);
+
+   DCL  1  SALES_RANGE          PIC'999999';
+   DCL  1  SALES_RATE_TABLE,
+            5  FILLER1          FIXED DEC(3,2) INIT(.02),
+            5  FILLER2          FIXED DEC(3,2) INIT(.04),
+            5  FILLER3          FIXED DEC(3,2) INIT(.06),
+            5  FILLER4          FIXED DEC(3,2) INIT(.08),
+            5  FILLER5          FIXED DEC(3,2) INIT(.10);
+   DCL SALES_PTR POINTER;
+   SALES_PTR = ADDR(SALES_RATE_TABLE);
+   DCL  1  SALES_RATE_REDEFINED BASED(SALES_PTR),
+            5  SALES_RATE_OCCURS(5),
+               10  SALES_RATE   FIXED DEC(3,2);
+
+   DCL MGMT_IX                  FIXED BIN(15) INIT(0);
+   DCL SALES_IX                 FIXED BIN(15) INIT(0);
+
+   DCL 1 EMP_TYPE               CHAR(1);
+   DCL 1 SALES_AMOUNT           PIC'999999';
+   DCL 1 COMM_TOTAL             FIXED DEC(7,2);
+
+   ON ERROR
+     BEGIN;
+         ON ERROR SYSTEM;
+         PUT DATA;
+    END;
+
+
+  /*        MAINLINE   CODE        */
+
+   SELECT(EMP_TYPE);
+      WHEN('S')             CALL P1000_PROCESS_SALES;
+      WHEN('M')             CALL P2000_PROCESS_MANAGEMENT;
+      OTHERWISE;
+   END;
+
+  P1000_PROCESS_SALES:  PROC;
+        SALES_RANGE = SALES_AMOUNT;
+        SELECT;
+           WHEN(SALES_RANGE >= '00001' & SALES_RANGE <= '20000')
+                                     SALES_IX = 1;
+           WHEN(SALES_RANGE >= '20001'  & SALES_RANGE <= '40000')
+                                     SALES_IX = 2;
+           WHEN(SALES_RANGE >= '40001'  & SALES_RANGE <= '60000')
+                                     SALES_IX = 3;
+           WHEN(SALES_RANGE >= '60001'  & SALES_RANGE <= '80000')
+                                     SALES_IX = 4;
+           WHEN(SALES_RANGE >= '80001'  & SALES_RANGE <= '100000')
+                                     SALES_IX = 5;
+           OTHERWISE SALES_IX = 5;
+        END;
+
+      COMM_TOTAL = SALES_RANGE * SALES_RATE(SALES_IX);
+  END P1000_PROCESS_SALES;
+
+
+  P2000_PROCESS_MANAGEMENT: PROC;
+           MGMT_RANGE = SALES_AMOUNT;
+           SELECT;
+              WHEN(MGMT_RANGE >= 1 & MGMT_RANGE <= 100000)
+                                        MGMT_IX = 1;
+              WHEN(MGMT_RANGE >= 100001 & MGMT_RANGE <= 200000)
+                                        MGMT_IX = 2;
+              WHEN(MGMT_RANGE >= 200001 & MGMT_RANGE <= 300000)
+                                        MGMT_IX = 3;
+              WHEN(MGMT_RANGE >= 300001 & MGMT_RANGE <= 400000)
+                                        MGMT_IX = 4;
+              WHEN(MGMT_RANGE >= 400001 & MGMT_RANGE <= 500000)
+                                        MGMT_IX = 5;
+              OTHERWISE MGMT_IX = 5;
+           END;
+
+
+              COMM_TOTAL = MGMT_RANGE * MGMT_RATE(MGMT_IX);
+  END P2000_PROCESS_MANAGEMENT;
+
+ END CWXTSBP;

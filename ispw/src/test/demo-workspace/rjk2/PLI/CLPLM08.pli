@@ -1,0 +1,7 @@
+  clplm08: proc options(main);
+    dcl clpls08 entry;
+    put skip list(' CLPLM08 Starting');
+    %include clinc08;
+    call clpls08;
+    put skip list(' CLPLM08 Ending');
+ end clplm08;

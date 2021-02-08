@@ -1,0 +1,7 @@
+  clplm01: proc options(main);
+    dcl clpls01 entry;
+    put skip list(' CLPLM01 Starting');
+    %include clinc01;
+    call clpls01;
+    put skip list(' CLPLM01 Ending');
+ end clplm01;

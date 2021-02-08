@@ -1,0 +1,78 @@
+node {
+
+    stage('Git to ISPW Synchronization') {
+
+/* Windows Jenkins test - localhost dev machine */
+git branch: 'master', credentialsId: 'e807f779-c03e-4ae2-b9fe-9ae5db24b1c1', 
+poll: false, url: 'https://Sam.Zhou%40compuware.com@evolve.compuware.com/scm/~sam.zhou_compuware.com/rjk2.git'
+
+gitToIspwIntegration app: 'PLAY', 
+branchMapping: '''master => DEV1, per-commit
+''', 
+connectionId: 'dee6d423-abdb-48a8-8b6a-49387314c834', 
+credentialsId: 'd29bcce5-7027-4055-b2da-e4b1156d9356', 
+gitCredentialsId: 'e807f779-c03e-4ae2-b9fe-9ae5db24b1c1', 
+gitRepoUrl: 'https://Sam.Zhou%40compuware.com@evolve.compuware.com/scm/~sam.zhou_compuware.com/rjk2.git', 
+runtimeConfig: 'TPZP', 
+stream: 'PLAY',
+ispwConfigPath: 'ispwconfig.yml'
+
+
+
+/* Windows Jenkins test - demo machine */
+/*
+git branch: 'master', credentialsId: '97bae329-9b9d-40dc-bade-5d80842defbe', 
+poll: false, url: 'https://Sam.Zhou%40compuware.com@evolve.compuware.com/scm/~sam.zhou_compuware.com/rjk2.git'
+
+gitToIspwIntegration app: 'PLAY', 
+branchMapping: '''master => DEV1, per-commit
+''', 
+connectionId: '34c2ecf9-fa74-4b9a-b5cd-21218edc2af5', 
+credentialsId: 'd29bcce5-7027-4055-b2da-e4b1156d9356', 
+gitCredentialsId: '97bae329-9b9d-40dc-bade-5d80842defbe', 
+gitRepoUrl: 'https://Sam.Zhou%40compuware.com@evolve.compuware.com/scm/~sam.zhou_compuware.com/rjk2.git', 
+runtimeConfig: 'TPZP', 
+stream: 'PLAY',
+ispwConfigPath: 'ispwconfig.yml'
+*/
+        
+/* Ubuntu Linux test */
+/*
+git branch: 'master', credentialsId: '8d60bd0f-060b-44be-9be1-fb2e5ce9c331', 
+poll: false, url: 'https://Sam.Zhou%40compuware.com@evolve.compuware.com/scm/~sam.zhou_compuware.com/rjk2.git'
+
+gitToIspwIntegration app: 'PLAY', 
+branchMapping: '''master => DEV1, per-commit
+''', 
+connectionId: '0dcc0999-e132-4aa7-b65d-3ce400323952', 
+credentialsId: '2ba1bd8f-d095-4848-9214-571e00aae84a', 
+gitCredentialsId: '8d60bd0f-060b-44be-9be1-fb2e5ce9c331', 
+gitRepoUrl: 'https://Sam.Zhou%40compuware.com@evolve.compuware.com/scm/~sam.zhou_compuware.com/rjk2.git', 
+runtimeConfig: 'TPZP', 
+stream: 'PLAY',
+ispwConfigPath: 'myconfig/config.yml'
+*/
+    }
+    
+stage ('Build ISPW task')
+ {
+ 
+ /* localhost dev machine - build */
+ispwOperation connectionId: 'dee6d423-abdb-48a8-8b6a-49387314c834',  
+consoleLogResponseBody: true, 
+credentialsId: '760015f5-500d-48f8-9415-30677d24c8ec', 
+ispwAction: 'BuildTask', 
+ispwRequestBody: 'buildAutomatically = true'
+ 
+/* demo machine - build */
+/*
+ispwOperation connectionId: 'dee6d423-abdb-48a8-8b6a-49387314c834',  
+consoleLogResponseBody: true, 
+credentialsId: '183015b8-9f01-415d-9d55-d5ce9002aa8d', 
+ispwAction: 'BuildTask', 
+ispwRequestBody: 'buildAutomatically = true'
+*/
+	
+ }
+ 
+}

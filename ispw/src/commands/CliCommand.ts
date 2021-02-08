@@ -17,7 +17,7 @@ import * as vscode from "vscode";
  * @param operation The cli operation to call ('build', 'generate', 'load')
  * @param selectedFiles The file URI to pass to the CLI. This will be undefined if the command is issued from the command palette or the editor.
  */
-export function runCommand(operation: string, selectedFiles: vscode.Uri[] | undefined) {
+export async function runCommand(operation: string, selectedFiles: vscode.Uri[] | undefined) {
 
     if (selectedFiles === undefined || selectedFiles.length === 0) { // command came from command palette or editor menu
         console.debug("SelectedFiles was undefined, attempting to use editor file");
@@ -34,5 +34,7 @@ export function runCommand(operation: string, selectedFiles: vscode.Uri[] | unde
     }
 
     console.debug("Starting CLI command. File URI: " + selectedFiles);
-    CliUtils.runCliCommandForOperation(operation, selectedFiles);
+    
+    let child = await CliUtils.runCliCommandForOperation(operation, selectedFiles);
+    CliUtils.addCloseListener(child, operation, CliUtils.getFileNameToShow(selectedFiles));
 }

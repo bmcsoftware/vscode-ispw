@@ -27,19 +27,16 @@
 				"ispw.Assignment Description": {
 					"type": "string",
 					"default": null,
-					"scope": "machine",
 					"description": "The description to give assignments created by ISPW actions."
 				},
 				"ispw.Level": {
 					"type": "string",
 					"default": null,
-					"scope": "machine",
 					"description": "The level to use in the ISPW life cycle."
 				},
 				"ispw.Topaz CLI Installation Path": {
 					"type": "string",
 					"default": null,
-					"scope": "user",
 					"description": "File path of the Topaz CLI Installation folder."
 				},
 				"ispw.YAML Mapping File": {
@@ -144,12 +141,10 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
-		"test": "mocha ./out/test/**/*.test.js --recursive --check-leaks",
-		"posttest": "npx typedoc src",
+		"test": "node ./out/test/runTest.js",
 		"coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
 	},
 	"devDependencies": {
@@ -163,7 +158,7 @@
 		"@typescript-eslint/eslint-plugin": "^4.9.0",
 		"@typescript-eslint/parser": "^4.9.0",
 		"chai": "^4.2.0",
-		"eslint": "^7.15.0",
+		"eslint": "^7.19.0",
 		"glob": "^7.1.6",
 		"js-yaml": "^4.0.0",
 		"mocha": "^8.2.1",

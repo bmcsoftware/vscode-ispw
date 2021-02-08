@@ -18,6 +18,7 @@ import { CredentialsUtils } from "./CredentialsUtils";
 import * as vscode from "vscode";
 import { YamlUtils } from "./YamlUtils";
 import { Credentials, CredentialsCache } from "../types/CredentialsCache";
+import { promises } from "fs";
 
 /**
  * Utility namespace for CLI operations.
@@ -60,8 +61,39 @@ export namespace CliUtils {
       ispwGitAssignDesc: getAssignmentDescription() || ''
     });
 
-    executeCliCommand(cliLocation + '\\IspwCLI.bat', args, selectedFiles);
+    return executeCliCommand(cliLocation + '\\IspwCLI.bat', args, selectedFiles);
 
+  }
+
+  /**
+   * Constructor a string representation of files to operate on
+   * @param selectedFiles the selected files to operate on
+   */
+  export function getFileNameToShow(selectedFiles: vscode.Uri[]): string {
+    let fileNameToShow: string = selectedFiles.length === 1 ? path.basename(selectedFiles[0].fsPath) : selectedFiles.length + " files";
+    return fileNameToShow;
+  }
+
+  /**
+   * Add close listener to the spawn child process
+   * 
+   * @param child the child process
+   * @param operationToShow the operation message
+   * @param fileNameToShow the file list
+   */
+  export function addCloseListener(child: cp.ChildProcessWithoutNullStreams | undefined, operationToShow: string, fileNameToShow: string) {
+    if (child !== undefined) {
+      child.on('close', code => {
+        if (code === 0) {
+          // pass
+          MessageUtils.showInfoMessage("The " + operationToShow + " process completed for " + fileNameToShow);
+        }
+        else {
+          // fail
+          MessageUtils.showErrorMessage("The " + operationToShow + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
+        }
+      });
+    }
   }
 
   /**
@@ -70,15 +102,15 @@ export namespace CliUtils {
    * @param args The arguments passed to the CLI (operation, username, password, componentFiles, etc)
    * @param selectedFiles The files selected to run ISPW action against
    */
-  function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]): void {
-    let operationToShow: string = args[args.indexOf(' -operation ') + 1];
-    let fileNameToShow: string = selectedFiles.length === 1 ? path.basename(selectedFiles[0].fsPath) : selectedFiles.length + " files";
+  async function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]) {
+
 
     // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
     const child = cp.spawn(command, args, {
       shell: true,
       cwd: vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.uri.fsPath
     });
+
 
     // add listener for when data is written to stdout
     child.stdout.on('data', (stdout) => {
@@ -90,17 +122,7 @@ export namespace CliUtils {
       OutputUtils.getOutputChannel().append(stderr.toString());
     });
 
-    // add listener for when the CLI process completes
-    child.on('close', code => {
-      if (code === 0) {
-        // pass
-        MessageUtils.showInfoMessage("The " + operationToShow + " process completed for " + fileNameToShow);
-      }
-      else {
-        // fail
-        MessageUtils.showErrorMessage("The " + operationToShow + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
-      }
-    });
+    return child;
   }
 
   /**
@@ -120,7 +142,7 @@ export namespace CliUtils {
   /**
    * Gets the CLI location saved in the User Settings. This may or may not be defined.
    */
-  function getCliLocation(): string | undefined {
+  export function getCliLocation(): string | undefined {
     let cliLocation: string | undefined = vscode.workspace.getConfiguration().get<string>('ispw.Topaz CLI Installation Path');
     console.debug("CLI location: " + cliLocation);
     return cliLocation;
@@ -129,7 +151,7 @@ export namespace CliUtils {
   /**
    * Gets the build level stored in the Resource Settings. This may or may not be defined.
    */
-  function getLoadLevel(): string | undefined {
+  export function getLoadLevel(): string | undefined {
     let loadLevel: string | undefined = vscode.workspace.getConfiguration().get<string>('ispw.Level');
 
     return loadLevel;
@@ -138,7 +160,7 @@ export namespace CliUtils {
   /**
    * Gets the assignment description stored in the Resource Settings. This may or may not be defined.
    */
-  function getAssignmentDescription(): string | undefined {
+  export function getAssignmentDescription(): string | undefined {
     let assignmentDescription: string | undefined = vscode.workspace.getConfiguration().get<string>('ispw.Assignment Description');
 
     return assignmentDescription;
@@ -177,7 +199,7 @@ export namespace CliUtils {
     if (args.port) { strArgs = strArgs.concat([' -port ', args.port + '']); }
     if (args.protocol) { strArgs = strArgs.concat([' -protocol ', args.protocol]); }
     if (args.targetFolder) { strArgs = strArgs.concat([' -targetFolder ', '"' + args.targetFolder + '"']); }
-    if (args.timeout) { strArgs = strArgs.concat([' -timeout ', args.timeout]); }
+    if (args.timeout) { strArgs = strArgs.concat([' -timeout ', args.timeout.toString()]); }
     if (args.typeOverride) { strArgs = strArgs.concat([' -typeOverride ', args.typeOverride]); }
     if (args.vscSetting) { strArgs = strArgs.concat([' -vscSetting ', args.vscSetting]); }
 

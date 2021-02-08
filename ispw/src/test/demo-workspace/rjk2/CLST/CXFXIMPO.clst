@@ -1,0 +1,130 @@
+/* REXX */
+
+PARSE SOURCE . . REXX_name_short .
+REXX_name_long = "CSS Utility REXX"
+Update_date = "30 Aug 2018 *TESTING ONLY*"
+Update_date = "30 Aug 2018"
+Update_date = "30 Aug 2018 *Coding in progress*"
+/* See "Change Log" at the end */
+
+SIGNAL ON NOVALUE                       /* Enable the conditions and  */
+SIGNAL ON SYNTAX                        /* point at reasonable        */
+SIGNAL ON FAILURE                       /* condition handling         */
+SIGNAL ON HALT
+
+/*
+
+This REXX program calls the CSS Utility, CWFXSDUT to import listings from
+a sequential export file.  It is intended to be used as a simple example
+for calling the CSS Utility from a REXX program.
+
+  THIS CODE IS DISTRIBUTED ON AN  "AS IS"  BASIS,  WITHOUT
+  WARRANTIES WHETHER WRITTEN, ORAL, EXPRESSED  OR IMPLIED,
+  INCLUDING,   WITHOUT  LIMITING  THE  GENERALITY  OF  THE
+  FOREGOING,  WARRANTIES OF THE MERCHANTABILITY OR FITNESS
+  FOR A PARTICULAR PURPOSE.
+
+  IMPLEMENTATION  OF  ANY  OF THE  TECHNIQUES DESCRIBED OR
+  USED HEREIN IS A CUSTOMER  RESPONSIBILITY AND DEPENDS ON
+  THE  CUSTOMER'S  OPERATIONAL ENVIRONMENT.  THIS CODE HAS
+  BEEN TESTED IN A SPECIFIC  ENVIRONMENT,  HOWEVER,  THERE
+  IS  NO GUARANTEE THAT THE  SAME RESULTS WILL BE OBTAINED
+  ELSEWHERE.
+
+  USERS ATTEMPTING TO ADAPT THESE  TECHNIQUES TO THEIR OWN
+  ENVIRONMENTS DO SO AT THEIR OWN RISK.
+
+COPYRIGHT (C) 1976, 2014, COMPUWARE CORPORATION. UNPUBLISHED -
+RIGHTS RESERVED UNDER THE COPYRIGHT LAWS OF THE UNITED STATES.
+
+*/
+
+ARG parm .
+
+/* Initialize stems for numeric fields and logical switches */
+ctr. = 0; sw. = 0
+
+SAY
+SAY REXX_name_short
+SAY REXX_name_long
+SAY 'Updated:' Update_date
+SAY
+
+/* Execute the Compuware Shared Services (CSS) utility */
+"Alloc Fi(ABNLPARM) New Lrecl(80) blksize(0) Reuse"
+Queue "DIRS DDNAME=ABNLFROM"
+Queue "IMPORT TODD=ABNLTO,FROMDD=ABNLFROM,"
+Queue "     TOOBJECT=SHRDIR"
+Queue ""
+"ExecIO * DiskW ABNLPARM (Finis"
+"Alloc Fi(ABNLREPT)  New spa(15,15)",
+   "Tracks recfm(f b a) lrecl(133) blksize(0) reuse"
+"alloc f(ABNLFROM) da('"dsn_from"') shr reuse"
+"alloc f(ABNLTO) da('"dsn_to"') shr reuse"
+"Call *(CWFXSDUT)"
+SAY 'CSS Utility Return Code' RC
+CALL A110_Util_Msgs
+
+A099_Exit:
+exit ctr.rc
+
+/* Process the messages from the language processor */
+A110_Util_Msgs:
+Address TSO
+"ExecIO * DiskR CWPERRM (Stem errec. Finis)"
+
+Do loop = 1 To errec.0 by 1
+    rec=substr(errec.loop,2,79)
+    say rec
+end
+RETURN
+
+/*
+  Condition handling
+
+  Taken from "What's wrong with Rexx?" by Walter Pachl, IBM Retiree
+  Downloaded from www.rexxla.org/events/2004/walterp.pdf
+
+*/
+NOVALUE:
+SAY 'Novalue raised in line' SIGL   /* line in error number       */
+SAY SOURCELINE(SIGL)                /* and text                   */
+SAY 'Variable' CONDITION('D')       /* the bad variable reference */
+SIGNAL Lookaround                   /* common interactive code    */
+
+FAILURE:
+SAY 'Failure raised in line' SIGL   /* line in error number       */
+SAY SOURCELINE(SIGL)                /* and text                   */
+SAY 'rc='rc                         /* the error code             */
+SIGNAL Lookaround                   /* common interactive code    */
+
+SYNTAX:
+SAY 'Syntax raised in line' SIGL    /* line in error number       */
+SAY SOURCELINE(SIGL)                /* and text                   */
+SAY 'rc='rc '('errortext(rc)')'     /* the error code and message */
+
+HALT:
+Lookaround:
+SAY 'You can look around now.'      /* tell user what he can do   */
+TRACE ?R                            /* start interactive trace    */
+NOP                                 /* and cause the first prompt */
+Signal A099_Exit
+
+
+/* Note: this label is strictly for navigational purposes */
+Z999_Change_log:
+
+/*
+
+Change Log
+
+30 Aug 2018
+Initial development
+
+*/
+
+/*
+TRACE ?A /* testing - Display all clauses before execution */
+TRACE ?R /* testing - Display final results */
+TRACE ?I /* testing - Display intermediate results */
+*/
