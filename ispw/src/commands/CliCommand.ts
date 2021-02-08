@@ -34,5 +34,7 @@ export async function runCommand(operation: string, selectedFiles: vscode.Uri[] 
     }
 
     console.debug("Starting CLI command. File URI: " + selectedFiles);
-    return CliUtils.runCliCommandForOperation(operation, selectedFiles);
+    
+    let child = await CliUtils.runCliCommandForOperation(operation, selectedFiles);
+    CliUtils.addCloseListener(child, operation, CliUtils.getFileNameToShow(selectedFiles));
 }

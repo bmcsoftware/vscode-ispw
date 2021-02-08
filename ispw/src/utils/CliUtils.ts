@@ -66,38 +66,23 @@ export namespace CliUtils {
   }
 
   /**
-   * Creates a child process and calls the CLI
-   * @param command The string CLI command to execute (the path to the ISpwCLI.bat file)
-   * @param args The arguments passed to the CLI (operation, username, password, componentFiles, etc)
-   * @param selectedFiles The files selected to run ISPW action against
+   * Constructor a string representation of files to operate on
+   * @param selectedFiles the selected files to operate on
    */
-  async function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]) {
-    let operationToShow: string = args[args.indexOf(' -operation ') + 1];
+  export function getFileNameToShow(selectedFiles: vscode.Uri[]): string {
     let fileNameToShow: string = selectedFiles.length === 1 ? path.basename(selectedFiles[0].fsPath) : selectedFiles.length + " files";
+    return fileNameToShow;
+  }
 
-    /*
-    return new Promise<void>(function(done) {
-
-      var stdout = '', stderr = '';
-
-      // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
-      const child = cp.spawn(command, args, {
-        shell: true,
-        cwd: vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.uri.fsPath
-      });
-
-      
-      // add listener for when data is written to stdout
-      child.stdout.on('data', (stdout) => {
-        OutputUtils.getOutputChannel().append(stdout.toString());
-      });
-
-      // add listener for when data is written to stderr
-      child.stderr.on('data', (stderr) => {
-        OutputUtils.getOutputChannel().append(stderr.toString());
-      });
-
-      // add listener for when the CLI process completes
+  /**
+   * Add close listener to the spawn child process
+   * 
+   * @param child the child process
+   * @param operationToShow the operation message
+   * @param fileNameToShow the file list
+   */
+  export function addCloseListener(child: cp.ChildProcessWithoutNullStreams | undefined, operationToShow: string, fileNameToShow: string) {
+    if (child !== undefined) {
       child.on('close', code => {
         if (code === 0) {
           // pass
@@ -107,10 +92,17 @@ export namespace CliUtils {
           // fail
           MessageUtils.showErrorMessage("The " + operationToShow + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
         }
-        done();
       });
-    });
-*/
+    }
+  }
+
+  /**
+   * Creates a child process and calls the CLI
+   * @param command The string CLI command to execute (the path to the ISpwCLI.bat file)
+   * @param args The arguments passed to the CLI (operation, username, password, componentFiles, etc)
+   * @param selectedFiles The files selected to run ISPW action against
+   */
+  async function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]) {
 
 
     // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
@@ -119,7 +111,7 @@ export namespace CliUtils {
       cwd: vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.uri.fsPath
     });
 
-    
+
     // add listener for when data is written to stdout
     child.stdout.on('data', (stdout) => {
       OutputUtils.getOutputChannel().append(stdout.toString());
@@ -130,23 +122,7 @@ export namespace CliUtils {
       OutputUtils.getOutputChannel().append(stderr.toString());
     });
 
-    // add listener for when the CLI process completes
-    /*
-    child.on('close', code => {
-      if (code === 0) {
-        // pass
-        MessageUtils.showInfoMessage("The " + operationToShow + " process completed for " + fileNameToShow);
-      }
-      else {
-        // fail
-        MessageUtils.showErrorMessage("The " + operationToShow + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
-      }
-    });
-*/
     return child;
-
-
-
   }
 
   /**

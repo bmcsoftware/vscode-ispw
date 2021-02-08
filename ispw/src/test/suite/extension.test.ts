@@ -1,16 +1,28 @@
+/**
+* THESE MATERIALS CONTAIN CONFIDENTIAL INFORMATION AND TRADE SECRETS OF BMC SOFTWARE, INC. YOU SHALL MAINTAIN THE MATERIALS AS
+* CONFIDENTIAL AND SHALL NOT DISCLOSE ITS CONTENTS TO ANY THIRD PARTY EXCEPT AS MAY BE REQUIRED BY LAW OR REGULATION. USE,
+* DISCLOSURE, OR REPRODUCTION IS PROHIBITED WITHOUT THE PRIOR EXPRESS WRITTEN PERMISSION OF BMC SOFTWARE, INC.
+*
+* ALL BMC SOFTWARE PRODUCTS LISTED WITHIN THE MATERIALS ARE TRADEMARKS OF BMC SOFTWARE, INC. ALL OTHER COMPANY PRODUCT NAMES
+* ARE TRADEMARKS OF THEIR RESPECTIVE OWNERS.
+*
+* (c) Copyright 2021 BMC Software, Inc.
+*/
+
 import * as assert from 'assert';
 import * as IspwCliCommand from '../../commands/CliCommand';
 import { CredentialsCache } from '../../types/CredentialsCache';
 import { IspwType, IspwRoot, IspwPath, IspwApplication } from '../../types/IspwTypeMapping';
 import { CliArgs } from '../../types/CliArgs';
 import { YamlUtils } from '../../utils/YamlUtils'
+import { MessageUtils } from "../../utils/MessageUtils";
+import { CliUtils } from '../../utils/CliUtils';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 // import * as myExtension from '../../extension';
 
-import { CliUtils } from '../../utils/CliUtils';
 import { watchFile } from 'fs';
 import { expect } from 'chai';
 import { resolve } from 'dns';
@@ -231,58 +243,71 @@ suite('Extension Test Suite', function () {
 	});
 
 	/**
-	 * Test open a specific cobol fle
+	 * Test load a specific cobol fle
 	 */
-	test('Test open doc', async () => {
+	test('Test load', async () => {
 
-		const document = await vscode.workspace.openTextDocument('rjk2/COB/TPROG03.cbl');
-		//await vscode.window.showTextDocument(document);
+		return testOperation('load');
+	}).timeout(60000);
 
-		let rjk2 = getRjk2();
-		if (rjk2 === undefined) {
-			assert.fail('Failed to find rjk2 test project');
-		}
+	/**
+	 * Test generate a specific cobol fle
+	 */
+	test('Test generate', async () => {
+		return testOperation('generate');
+	}).timeout(60000);
 
-		let tprog03 = vscode.Uri.file(rjk2.fsPath + '\\COB\\TPROG03.cbl');
-		let progs: vscode.Uri[] = [tprog03];
-
-		let cp = await IspwCliCommand.runCommand('load', progs);
-
-		//console.log(x?.stdout.toString());
-
-		
-		return new Promise((done) => {
-			if (cp !== undefined) {
-				cp.on('close', code => {
-					done();
-				});
-			} else {
-				done();
-			}
-		})/*.then(() => { assert.strictEqual(true, true) })*/;
-
-		//console.log('hello, done!');
-		/*await new Promise(() =>
-			setTimeout((done) => {
-				done();
-			}, 15000)
-		);*/
-
-		//IspwCliCommand.runCommand('generate', progs);
-
-		//IspwCliCommand.runCommand('load', progs);
-
-		/*console.log('waiting 30 seconds');
-		return new Promise((done) => {
-			setTimeout(() => {
-				console.log('waiting done');
-				done();
-			}, 30000);
-		});*/
-
+	/**
+	 * Test build a specific cobol fle
+	 */
+	test('Test build', async () => {
+		return testOperation('build');
 	}).timeout(60000);
 
 });
+
+/**
+ * Integration test for operation
+ * 
+ * @param operation the operation to be performed
+ */
+async function testOperation(operation: string) {
+
+	const document = await vscode.workspace.openTextDocument('rjk2/COB/TPROG03.cbl');
+	//await vscode.window.showTextDocument(document);
+
+	let rjk2 = getRjk2();
+	if (rjk2 === undefined) {
+		assert.fail('Failed to find rjk2 test project');
+	}
+
+	let tprog03 = vscode.Uri.file(rjk2.fsPath + '\\COB\\TPROG03.cbl');
+	let progs: vscode.Uri[] = [tprog03];
+
+	let child = await CliUtils.runCliCommandForOperation(operation, progs);
+	let fileNameToShow = CliUtils.getFileNameToShow(progs);
+
+	return new Promise<void>((done) => {
+		if (child !== undefined) {
+			child.on('close', code => {
+				if (code === 0) {
+					// pass
+					MessageUtils.showInfoMessage("The " + operation + " process completed for " + fileNameToShow);
+					assert.ok(operation + ' passed');
+				}
+				else {
+					// fail
+					MessageUtils.showErrorMessage("The " + operation + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
+					assert.fail(operation + ' failed');
+				}
+
+				done();
+			});
+		} else {
+			assert.fail('failed to create ' + operation + ' child process');
+		}
+	});
+}
 
 /**
  * Compare two objects using reflection
