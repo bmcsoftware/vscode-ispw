@@ -113,7 +113,6 @@ export namespace YamlUtils {
      * This function will throw an error if the yaml file does not contain valid yaml.
      * This function assumes that the yaml file exists! hasYaml should be called before this function.
      * @param selectedFile The file to get the associated yaml for.
-     * @deprecated
      */
     export function loadYaml(selectedFile: vscode.Uri): IspwRoot | undefined {
         let ispwRoot: IspwRoot | undefined = undefined;
