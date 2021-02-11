@@ -1,0 +1,59 @@
+ispwApplication:
+  application: PLAY
+  encryptionProtocol: None
+  host: cw09
+  hostCodePage: '1047'
+  pathMappings:
+  - path: \AMAC
+    types:
+    - fileExtension: amac
+      ispwType: AMAC
+  - path: \C
+    types:
+    - fileExtension: c
+      ispwType: C
+  - path: \CLST
+    types:
+    - fileExtension: clst
+      ispwType: CLST
+  - path: \COB
+    types:
+    - fileExtension: cbl	  
+      cics: 'No'
+      flag1: N
+      flag2: I
+      flag3: C
+      flag4: E
+      genParms: ISPWCUTE
+      ims: 'No'
+      ispwType: COB
+      progType: 'Yes'
+      sql: 'No'
+  - path: \H
+    types:
+    - fileExtension: h
+      ispwType: H
+  - path: \COPY
+    types:
+    - fileExtension: cpy
+      ispwType: COPY
+  - path: \ASM
+    types:
+    - fileExtension: asm
+      ispwType: ASM
+  - path: \INCL
+    types:
+    - fileExtension: incl
+      ispwType: INCL
+  - path: \JOB
+    types:
+    - fileExtension: jcl
+      ispwType: JOB
+  - path: \PLI
+    types:
+    - fileExtension: pli
+      ispwType: PLI
+  port: 47623
+  stream: PLAY
+  readWriteTimeout: 90
+  runtimeConfig: TPZP

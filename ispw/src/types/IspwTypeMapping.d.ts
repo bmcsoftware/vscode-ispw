@@ -29,6 +29,10 @@ export interface IspwApplication {
     host: string;
     port: number;
     runtimeConfig: string;
+    hostCodePage?: number;
+    readWriteTimeout?: number;
+    encryptionProtocol?: string;
+    
     pathMappings: IspwPath[];
 }
 

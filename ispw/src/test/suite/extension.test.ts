@@ -217,6 +217,15 @@ suite('Extension Test Suite', function () {
 
 			assert.strictEqual(YamlUtils.hasYaml(tprog03), true);
 			assert.strictEqual(YamlUtils.getYamlLocationRelPath(tprog03), "ispwconfig.yml");
+			
+			/*
+			let ispwRoot = YamlUtils.loadYaml(tprog03);
+			assert.strictEqual(ispwRoot !== undefined, true);
+
+			assert.strictEqual(ispwRoot?.ispwApplication.encryptionProtocol, 'None');
+			assert.strictEqual(ispwRoot?.ispwApplication.hostCodePage, '1047');
+			assert.strictEqual(ispwRoot?.ispwApplication.readWriteTimeout, 90);
+			*/
 		}
 	});
 
