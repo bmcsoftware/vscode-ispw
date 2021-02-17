@@ -9,6 +9,7 @@
 * (c) Copyright 2021 BMC Software, Inc.
 */
 
+import fs = require('fs');
 import { CliArgs } from "../types/CliArgs";
 import * as cp from "child_process";
 import * as path from 'path';
@@ -102,8 +103,9 @@ export namespace CliUtils {
    * @param args The arguments passed to the CLI (operation, username, password, componentFiles, etc)
    * @param selectedFiles The files selected to run ISPW action against
    */
+  let processNumber: number = 1;
   async function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]) {
-
+    let procNumString: string = (processNumber + "").padStart(4, "0");
 
     // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
     const child = cp.spawn(command, args, {
@@ -111,16 +113,21 @@ export namespace CliUtils {
       cwd: vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.uri.fsPath
     });
 
-
     // add listener for when data is written to stdout
     child.stdout.on('data', (stdout) => {
-      OutputUtils.getOutputChannel().append(stdout.toString());
+      OutputUtils.getOutputChannel().append(procNumString + ': ' + stdout.toString());
     });
 
     // add listener for when data is written to stderr
     child.stderr.on('data', (stderr) => {
-      OutputUtils.getOutputChannel().append(stderr.toString());
+      OutputUtils.getOutputChannel().append(procNumString + ': ' + stderr.toString());
     });
+    if (processNumber < 9999) {
+      processNumber++;
+    }
+    else { 
+      processNumber = 1;
+    }
 
     return child;
   }
@@ -143,7 +150,7 @@ export namespace CliUtils {
    * Gets the CLI location saved in the User Settings. This may or may not be defined.
    */
   export function getCliLocation(): string | undefined {
-    let cliLocation: string | undefined = vscode.workspace.getConfiguration().get<string>('ispw.Topaz CLI Installation Path');
+    let cliLocation: string | undefined = vscode.workspace.getConfiguration().get<string>('ISPW.Topaz CLI Installation Path');
     console.debug("CLI location: " + cliLocation);
     return cliLocation;
   }
@@ -152,7 +159,7 @@ export namespace CliUtils {
    * Gets the build level stored in the Resource Settings. This may or may not be defined.
    */
   export function getLoadLevel(): string | undefined {
-    let loadLevel: string | undefined = vscode.workspace.getConfiguration().get<string>('ispw.Level');
+    let loadLevel: string | undefined = vscode.workspace.getConfiguration().get<string>('ISPW.Level');
 
     return loadLevel;
   }
@@ -161,7 +168,7 @@ export namespace CliUtils {
    * Gets the assignment description stored in the Resource Settings. This may or may not be defined.
    */
   export function getAssignmentDescription(): string | undefined {
-    let assignmentDescription: string | undefined = vscode.workspace.getConfiguration().get<string>('ispw.Assignment Description');
+    let assignmentDescription: string | undefined = vscode.workspace.getConfiguration().get<string>('ISPW.Assignment Description');
 
     return assignmentDescription;
   }
@@ -225,10 +232,10 @@ export namespace CliUtils {
     }
 
     let cliLocation: string | undefined = getCliLocation();
-    if (cliLocation === undefined || cliLocation === null) {
+    if (cliLocation === undefined || cliLocation === null || !fs.existsSync(cliLocation)) {
       validCli = false;
-      console.debug("An ISPW CLI path was not configured.");
-      MessageUtils.showWarningMessage('An ISPW CLI path was not configured. Please configure the CLI path in the ISPW user settings.');
+      console.debug("A valid ISPW CLI path was not configured.");
+      MessageUtils.showWarningMessage('A valid ISPW CLI path was not configured. Configure the CLI path in the ISPW user settings.');
     }
 
     let loadLevel: string | undefined = getLoadLevel();
