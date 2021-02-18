@@ -1,5 +1,5 @@
 {
-	"name": "ispw",
+	"name": "ISPW",
 	"displayName": "ISPW",
 	"description": "ISPW - Visual Studio Code Extension ",
 	"version": "0.0.1",
@@ -11,35 +11,35 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:ispw.buildExplorer",
-		"onCommand:ispw.generateExplorer",
-		"onCommand:ispw.loadExplorer",
-		"onCommand:ispw.buildEditor",
-		"onCommand:ispw.generateEditor",
-		"onCommand:ispw.loadEditor",
-		"onCommand:ispw.clearCreds"
+		"onCommand:ISPW.buildExplorer",
+		"onCommand:ISPW.generateExplorer",
+		"onCommand:ISPW.loadExplorer",
+		"onCommand:ISPW.buildEditor",
+		"onCommand:ISPW.generateEditor",
+		"onCommand:ISPW.loadEditor",
+		"onCommand:ISPW.clearCreds"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"configuration": {
 			"title": "ISPW",
 			"properties": {
-				"ispw.Assignment Description": {
+				"ISPW.Assignment Description": {
 					"type": "string",
 					"default": null,
 					"description": "The description to give assignments created by ISPW actions."
 				},
-				"ispw.Level": {
+				"ISPW.Level": {
 					"type": "string",
 					"default": null,
 					"description": "The level to use in the ISPW life cycle."
 				},
-				"ispw.Topaz CLI Installation Path": {
+				"ISPW.Topaz CLI Installation Path": {
 					"type": "string",
 					"default": null,
 					"description": "File path of the Topaz CLI Installation folder."
 				},
-				"ispw.YAML Mapping File": {
+				"ISPW.YAML Mapping File": {
 					"type": "string",
 					"default": "\\ispwconfig.yml",
 					"scope": "resource",
@@ -49,90 +49,90 @@
 		},
 		"commands": [
 			{
-				"command": "ispw.buildExplorer",
+				"command": "ISPW.buildExplorer",
 				"title": "ISPW: Build"
 			},
 			{
-				"command": "ispw.generateExplorer",
+				"command": "ISPW.generateExplorer",
 				"title": "ISPW: Generate"
 			},
 			{
-				"command": "ispw.loadExplorer",
+				"command": "ISPW.loadExplorer",
 				"title": "ISPW: Load"
 			},
 			{
-				"command": "ispw.buildEditor",
+				"command": "ISPW.buildEditor",
 				"title": "ISPW: Build"
 			},
 			{
-				"command": "ispw.generateEditor",
+				"command": "ISPW.generateEditor",
 				"title": "ISPW: Generate"
 			},
 			{
-				"command": "ispw.loadEditor",
+				"command": "ISPW.loadEditor",
 				"title": "ISPW: Load"
 			},
 			{
-				"command": "ispw.clearCreds",
+				"command": "ISPW.clearCreds",
 				"title": "ISPW: Clear Stored Credentials"
 			}
 		],
 		"menus": {
 			"commandPalette": [
 				{
-					"command": "ispw.buildExplorer",
+					"command": "ISPW.buildExplorer",
 					"when": "false"
 				},
 				{
-					"command": "ispw.generateExplorer",
+					"command": "ISPW.generateExplorer",
 					"when": "false"
 				},
 				{
-					"command": "ispw.loadExplorer",
+					"command": "ISPW.loadExplorer",
 					"when": "false"
 				},
 				{
-					"command": "ispw.buildEditor",
+					"command": "ISPW.buildEditor",
 					"when": "true"
 				},
 				{
-					"command": "ispw.generateEditor",
+					"command": "ISPW.generateEditor",
 					"when": "true"
 				},
 				{
-					"command": "ispw.loadEditor",
+					"command": "ISPW.loadEditor",
 					"when": "true"
 				},
 				{
-					"command": "ispw.clearCreds",
+					"command": "ISPW.clearCreds",
 					"when": "true"
 				}
 			],
 			"explorer/context": [
 				{
-					"command": "ispw.buildExplorer",
+					"command": "ISPW.buildExplorer",
 					"when": "!explorerResourceIsFolder"
 				},
 				{
-					"command": "ispw.generateExplorer",
+					"command": "ISPW.generateExplorer",
 					"when": "!explorerResourceIsFolder"
 				},
 				{
-					"command": "ispw.loadExplorer",
+					"command": "ISPW.loadExplorer",
 					"when": "!explorerResourceIsFolder"
 				}
 			],
 			"editor/context": [
 				{
-					"command": "ispw.buildEditor",
+					"command": "ISPW.buildEditor",
 					"when": "editorTextFocus && !editorReadonly"
 				},
 				{
-					"command": "ispw.generateEditor",
+					"command": "ISPW.generateEditor",
 					"when": "editorTextFocus && !editorReadonly"
 				},
 				{
-					"command": "ispw.loadEditor",
+					"command": "ISPW.loadEditor",
 					"when": "editorTextFocus && !editorReadonly"
 				}
 			]

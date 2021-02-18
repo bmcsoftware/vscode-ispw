@@ -276,7 +276,6 @@ suite('Extension Test Suite', function () {
  */
 async function testOperation(operation: string, program: string) {
 
-	const document = await vscode.workspace.openTextDocument('rjk2/COB/TPROG03.cbl');
 	//await vscode.window.showTextDocument(document);
 
 	let rjk2 = getRjk2();

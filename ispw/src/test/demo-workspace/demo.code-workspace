@@ -5,9 +5,9 @@
 		}
 	],
 	"settings": {
-		"ispw.Topaz CLI Installation Path": "C:\\tmp\\cli200502",
-		"ispw.Level": "DEV1",
-		"ispw.Assignment Description": "{user}-{project_name}",
-		"ispw.YAML Mapping File": "\\ispwconfig.yml"
+		"ISPW.Topaz CLI Installation Path": "C:\\Users\\keluskie\\git-cli\\topazworkbenchcli\\com.compuware.frameworks.hostservices.cli.product\\target\\products\\TopazCLI\\win32\\win32\\x86_64",
+		"ISPW.Level": "DEV1",
+		"ISPW.Assignment Description": "{user}-{project_name}",
+		"ISPW.YAML Mapping File": "\\ISPWconfig.yml"
 	}
 }

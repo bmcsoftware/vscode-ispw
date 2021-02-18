@@ -87,7 +87,7 @@ export namespace YamlUtils {
      * @param selectedFile The file to get the associated yaml for.
      */
     export function getYamlLocationAbsPath(selectedFile: vscode.Uri): string {
-        let yamlLocation: string = vscode.workspace.getConfiguration('ispw.YAML Mapping File', selectedFile).get<string>('ispw.YAML Mapping File', vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + "\\ispwconfig.yml");
+        let yamlLocation: string = vscode.workspace.getConfiguration('ISPW.YAML Mapping File', selectedFile).get<string>('ISPW.YAML Mapping File', vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + "\\ispwconfig.yml");
         if (!path.isAbsolute(yamlLocation)) {
             yamlLocation = vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + yamlLocation;
         }

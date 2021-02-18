@@ -6,49 +6,49 @@ import { MessageUtils } from './utils/MessageUtils';
 // this method is called once when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
 
-	console.log('Congratulations, your extension "ispw" is now active!');
+	console.log('Congratulations, your extension "ISPW" is now active!');
 
 	// build commands
-	let buildExplorer = vscode.commands.registerCommand('ispw.buildExplorer', async (selectedFile: vscode.Uri) => {
+	let buildExplorer = vscode.commands.registerCommand('ISPW.buildExplorer', async (selectedFile: vscode.Uri) => {
 		let selectedFileUris: vscode.Uri[] = await getSelectedFileUris();
 		if (validateSelectFilesWorkspaceFolder(selectedFileUris)) {
 			IspwCliCommand.runCommand('build', selectedFileUris);
 		}
 	});
 	context.subscriptions.push(buildExplorer);
-	let buildEditor = vscode.commands.registerCommand('ispw.buildEditor', (selectedFile: vscode.Uri) => {
+	let buildEditor = vscode.commands.registerCommand('ISPW.buildEditor', (selectedFile: vscode.Uri) => {
 		IspwCliCommand.runCommand('build', undefined);
 	});
 	context.subscriptions.push(buildEditor);
 
 	// generate commands
-	let generateExplorer = vscode.commands.registerCommand('ispw.generateExplorer', async (selectedFile: vscode.Uri) => {
+	let generateExplorer = vscode.commands.registerCommand('ISPW.generateExplorer', async (selectedFile: vscode.Uri) => {
 		let selectedFileUris: vscode.Uri[] = await getSelectedFileUris();
 		if (validateSelectFilesWorkspaceFolder(selectedFileUris)) {
 			IspwCliCommand.runCommand('generate', selectedFileUris);
 		}
 	});
 	context.subscriptions.push(generateExplorer);
-	let generateEditor = vscode.commands.registerCommand('ispw.generateEditor', (selectedFile: vscode.Uri) => {
+	let generateEditor = vscode.commands.registerCommand('ISPW.generateEditor', (selectedFile: vscode.Uri) => {
 		IspwCliCommand.runCommand('generate', undefined);
 	});
 	context.subscriptions.push(generateEditor);
 
 	// load commands
-	let loadExplorer = vscode.commands.registerCommand('ispw.loadExplorer', async (selectedFile: vscode.Uri) => {
+	let loadExplorer = vscode.commands.registerCommand('ISPW.loadExplorer', async (selectedFile: vscode.Uri) => {
 		let selectedFileUris: vscode.Uri[] = await getSelectedFileUris();
 		if (validateSelectFilesWorkspaceFolder(selectedFileUris) === true) {
 			IspwCliCommand.runCommand('load', selectedFileUris);
 		}
 	});
 	context.subscriptions.push(loadExplorer);
-	let loadEditor = vscode.commands.registerCommand('ispw.loadEditor', (selectedFile: vscode.Uri) => {
+	let loadEditor = vscode.commands.registerCommand('ISPW.loadEditor', (selectedFile: vscode.Uri) => {
 		IspwCliCommand.runCommand('load', undefined);
 	});
 	context.subscriptions.push(loadEditor);
 
 	// clear credentials
-	let clearCreds = vscode.commands.registerCommand('ispw.clearCreds', (e) => {
+	let clearCreds = vscode.commands.registerCommand('ISPW.clearCreds', (e) => {
 		clearCredentials();
 	});
 	context.subscriptions.push(clearCreds);
