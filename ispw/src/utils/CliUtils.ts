@@ -20,9 +20,12 @@ import { CredentialsUtils } from "./CredentialsUtils";
 import * as vscode from "vscode";
 import { YamlUtils } from "./YamlUtils";
 import { Credentials, CredentialsCache } from "../types/CredentialsCache";
+<<<<<<< Upstream, based on origin/master
 import { promises } from "fs";
 import { Constants } from './Constants';
 import { CommonUtils } from './CommonUtils';
+=======
+>>>>>>> 30e464b CWE-171932 - Review CLI return codes and related VSCode messages
 
 /**
  * Utility namespace for CLI operations.
@@ -88,9 +91,10 @@ export namespace CliUtils {
   export function addCloseListener(child: cp.ChildProcessWithoutNullStreams | undefined, operationToShow: string, fileNameToShow: string) {
     if (child !== undefined) {
       child.on('close', code => {
+        console.debug("The " + operationToShow + " process ended for " + fileNameToShow + ". CLI return code is " + code);
         if (code === 0) {
           // pass
-          MessageUtils.showInfoMessage("The " + operationToShow + " process completed for " + fileNameToShow);
+          MessageUtils.showInfoMessage("The " + operationToShow + " process was successful for " + fileNameToShow);
         }
         else {
           // fail
@@ -125,6 +129,7 @@ export namespace CliUtils {
     child.stderr.on('data', (stderr) => {
       OutputUtils.getOutputChannel().append(procNumString + ': ' + stderr.toString());
     });
+
     if (processNumber < 9999) {
       processNumber++;
     }
@@ -157,31 +162,36 @@ export namespace CliUtils {
   function createCommandLineArgs(args: CliArgs): string[] {
     let strArgs: Array<string> = [];
     if (args.codePage) { strArgs = strArgs.concat([' -code ', args.codePage]); }
-    if (args.componentFiles) { strArgs = strArgs.concat([' -componentFiles ', '"' + args.componentFiles + '"']); }
+    if (args.componentFiles) { strArgs = strArgs.concat([' -componentFiles ', '\"' + args.componentFiles + '\"']); }
     if (args.gitBranch) { strArgs = strArgs.concat([' -gitBranch ', args.gitBranch]); }
     if (args.gitCommit) { strArgs = strArgs.concat([' -gitCommit ', args.gitCommit]); }
-    if (args.gitCommitFile) { strArgs = strArgs.concat([' -gitCommitFile ', args.gitCommitFile]); }
+    if (args.gitCommitFile) { strArgs = strArgs.concat([' -gitCommitFile ', '\"' + args.gitCommitFile + '\"']); }
     if (args.gitFromHash) { strArgs = strArgs.concat([' -gitFromHash ', args.gitFromHash]); }
     if (args.gitLocalPath) { strArgs = strArgs.concat([' -gitLocalPath ', args.gitLocalPath]); }
-    if (args.gitPassword) { strArgs = strArgs.concat([' -gitPassword ', args.gitPassword]); }
-    if (args.gitRepoUrl) { strArgs = strArgs.concat([' -gitRepoUrl ', args.gitRepoUrl]); }
+    if (args.gitPassword) { strArgs = strArgs.concat([' -gitPassword ', '\"' + args.gitPassword] + '\"'); }
+    if (args.gitRepoUrl) { strArgs = strArgs.concat([' -gitRepoUrl ', '\"' + args.gitRepoUrl + '\"']); }
     if (args.gitUsername) { strArgs = strArgs.concat([' -gitUsername ', args.gitUsername]); }
-    if (args.host) { strArgs = strArgs.concat([' -host ', args.host]); }
+    if (args.host) { strArgs = strArgs.concat([' -host ', '\"' + args.host + '\"']); }
     if (args.username) { strArgs = strArgs.concat([' -id ', args.username]); }
-    if (args.ispwGitAssignDesc) { strArgs = strArgs.concat([' -ispwAssignDesc ', args.ispwGitAssignDesc]); }
+    if (args.ispwGitAssignDesc) { strArgs = strArgs.concat([' -ispwAssignDesc ', '\"' + args.ispwGitAssignDesc + '\"']); }
     if (args.checkoutLevel) { strArgs = strArgs.concat([' -ispwCheckoutLevel ', args.checkoutLevel]); }
-    if (args.ispwConfigPath) { strArgs = strArgs.concat([' -ispwConfigPath ', '"' + args.ispwConfigPath + '"']); }
+    if (args.ispwConfigPath) { strArgs = strArgs.concat([' -ispwConfigPath ', '\"' + args.ispwConfigPath + '\"']); }
     if (args.containerCreation) { strArgs = strArgs.concat([' -ispwContainerCreation ', args.containerCreation]); }
-    if (args.customDescription) { strArgs = strArgs.concat([' -ispwContainerDescription ', '"' + args.customDescription + '"']); }
+    if (args.customDescription) { strArgs = strArgs.concat([' -ispwContainerDescription ', '\"' + args.customDescription + '\"']); }
     if (args.ispwMappingLevel) { strArgs = strArgs.concat([' -ispwMappingLevel ', args.ispwMappingLevel]); }
     if (args.application) { strArgs = strArgs.concat([' -ispwServerApp ', args.application]); }
     if (args.serverConfig) { strArgs = strArgs.concat([' -ispwServerConfig ', args.serverConfig]); }
     if (args.stream) { strArgs = strArgs.concat([' -ispwServerStream ', args.stream]); }
     if (args.operation) { strArgs = strArgs.concat([' -operation ', args.operation]); }
+<<<<<<< Upstream, based on origin/master
     if (args.password) { strArgs = strArgs.concat([' -pass ', args.password]); }
     if (args.port) { strArgs = strArgs.concat([' -port ', args.port.toString()]); }
+=======
+    if (args.password) { strArgs = strArgs.concat([' -pass ', '\"' + args.password + '\"']); }
+    if (args.port) { strArgs = strArgs.concat([' -port ', args.port + '']); }
+>>>>>>> 30e464b CWE-171932 - Review CLI return codes and related VSCode messages
     if (args.protocol) { strArgs = strArgs.concat([' -protocol ', args.protocol]); }
-    if (args.targetFolder) { strArgs = strArgs.concat([' -targetFolder ', '"' + args.targetFolder + '"']); }
+    if (args.targetFolder) { strArgs = strArgs.concat([' -targetFolder ', '\"' + args.targetFolder + '\"']); }
     if (args.timeout) { strArgs = strArgs.concat([' -timeout ', args.timeout.toString()]); }
     if (args.typeOverride) { strArgs = strArgs.concat([' -typeOverride ', args.typeOverride]); }
     if (args.vscSetting) { strArgs = strArgs.concat([' -vscSetting ', args.vscSetting]); }

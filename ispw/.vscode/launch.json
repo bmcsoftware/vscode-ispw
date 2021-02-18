@@ -6,7 +6,23 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+<<<<<<< Upstream, based on origin/master
 			"name": "Run ISPW Extension with Demo",
+=======
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}"
+			],
+			"name": "Launch Extension",
+			"outFiles": [
+				"${workspaceFolder}/out/**/*.js"
+			],
+			"preLaunchTask": "${defaultBuildTask}",
+			"request": "launch",
+			"type": "pwa-extensionHost"
+		},
+		{
+			"name": "Run Extension with Demo",
+>>>>>>> 30e464b CWE-171932 - Review CLI return codes and related VSCode messages
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
