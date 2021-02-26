@@ -6,29 +6,33 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Run Extension with Demo",
+			"name": "Run ISPW Extension with Demo",
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-			  "${workspaceFolder}/src/test/demo-workspace/demo.code-workspace",
-			  "--extensionDevelopmentPath=${workspaceFolder}"
+				"${workspaceFolder}/src/test/demo-workspace/demo.code-workspace",
+				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
-			"outFiles": ["${workspaceFolder}/out/**/*.js"],
+			"outFiles": [
+				"${workspaceFolder}/out/**/*.js"
+			],
 			"preLaunchTask": "${defaultBuildTask}"
-		  },
-		  {
-			"name": "Extension Tests with Demo",
+		},
+		{
+			"name": "Test ISPW Extension with Demo",
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-			  "${workspaceFolder}/src/test/demo-workspace/demo.code-workspace",
-			  "--extensionDevelopmentPath=${workspaceFolder}",
-			  "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+				"${workspaceFolder}/src/test/demo-workspace/demo.code-workspace",
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
 			],
-			"outFiles": ["${workspaceFolder}/out/test/**/*.js"],
+			"outFiles": [
+				"${workspaceFolder}/out/test/**/*.js"
+			],
 			"preLaunchTask": "${defaultBuildTask}"
-		  }
+		}
 	]
 }

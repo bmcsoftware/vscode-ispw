@@ -14,7 +14,7 @@ import * as vscode from "vscode";
 
 /**
  * This function will call the CLI for the specified operation.
- * @param operation The cli operation to call ('build', 'generate', 'load')
+ * @param operation The cli operation to call (Constants.OP_BUILD, Constants.OP_GENERATE, Constants.OP_LOAD)
  * @param selectedFiles The file URI to pass to the CLI. This will be undefined if the command is issued from the command palette or the editor.
  */
 export async function runCommand(operation: string, selectedFiles: vscode.Uri[] | undefined) {

@@ -16,6 +16,9 @@ import { CliArgs } from '../../types/CliArgs';
 import { YamlUtils } from '../../utils/YamlUtils';
 import { MessageUtils } from "../../utils/MessageUtils";
 import { CliUtils } from '../../utils/CliUtils';
+import { SettingsUtils } from '../../utils/SettingsUtils';
+import { Constants } from '../../utils/Constants';
+import { CommonUtils } from '../../utils/CommonUtils';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
@@ -37,6 +40,23 @@ suite('Extension Test Suite', function () {
 	this.afterEach(() => {
 		let cc = CredentialsCache.getInstance();
 		cc.clearCredentials();
+	});
+
+	/**
+	 * Test common utils
+	 */
+	test('Test common utils', () => {
+		assert.strictEqual(CommonUtils.isBlank(' '), true);
+		assert.strictEqual(CommonUtils.isBlank(' ispw '), false);
+		assert.strictEqual(CommonUtils.isBlank(undefined), true);
+		assert.strictEqual(CommonUtils.isBlank(null), true);
+		assert.strictEqual(CommonUtils.isBlank(''), true);
+		assert.strictEqual(CommonUtils.isBlank([]), true);
+		assert.strictEqual(CommonUtils.isBlank({}), true);
+		assert.strictEqual(CommonUtils.isBlank(NaN), true);
+		assert.strictEqual(CommonUtils.isBlank(0), false);
+		assert.strictEqual(CommonUtils.isNotBlank([0, 1]), true);
+		assert.strictEqual(CommonUtils.isNotBlank('ispw'), true);
 	});
 
 	/**
@@ -203,7 +223,7 @@ suite('Extension Test Suite', function () {
 	/**
 	 * Test yaml utils, functions depreciated will not be tested
 	 */
-	test('Test YAML utils', () => {
+	test('Test YAML utils', async () => {
 		let rjk2 = getRjk2();
 
 		if (rjk2 === undefined) {
@@ -211,12 +231,12 @@ suite('Extension Test Suite', function () {
 		} else {
 			let tprog03 = vscode.Uri.file(rjk2.fsPath + '\\COB\\TPROG03.cbl');
 
-			let ispwConfigPath = YamlUtils.getYamlLocationAbsPath(tprog03);
+			let ispwConfigPath = await YamlUtils.getYamlLocationAbsPath(tprog03);
 			console.log('ispwConfigPath=', ispwConfigPath);
 			assert.strictEqual(ispwConfigPath.endsWith('demo-workspace\\rjk2\\ispwconfig.yml'), true);
 
-			assert.strictEqual(YamlUtils.hasYaml(tprog03), true);
-			assert.strictEqual(YamlUtils.getYamlLocationRelPath(tprog03), "ispwconfig.yml");
+			assert.strictEqual(await YamlUtils.hasYaml(false, tprog03), true);
+			assert.strictEqual(await YamlUtils.getYamlLocationRelPath(tprog03), "ispwconfig.yml");
 			
 			/*
 			let ispwRoot = YamlUtils.loadYaml(tprog03);
@@ -233,15 +253,15 @@ suite('Extension Test Suite', function () {
 	 * Test vscode settings
 	 */
 	test('Test vscode settings', () => {
-		let cliLocation: string | undefined = CliUtils.getCliLocation();
-		assert.strictEqual(cliLocation !== undefined && cliLocation !== '', true);
+		let cliLocation: string | undefined = SettingsUtils.getCliLocation();
+		assert.strictEqual(CommonUtils.isNotBlank(cliLocation), true);
 		console.log('cliLocation=', cliLocation);
 
-		let loadLevel: string | undefined = CliUtils.getLoadLevel();
+		let loadLevel: string | undefined = SettingsUtils.getLoadLevel();
 		assert.strictEqual(loadLevel, 'DEV1');
 		console.log('loadLevel=', loadLevel);
 
-		let assignmentDesc: string | undefined = CliUtils.getAssignmentDescription();
+		let assignmentDesc: string | undefined = SettingsUtils.getAssignmentDescription();
 		assert.strictEqual(assignmentDesc, '{user}-{project_name}');
 		console.log('assignmentDesc=', assignmentDesc);
 	});
@@ -250,21 +270,21 @@ suite('Extension Test Suite', function () {
 	 * Test load a specific cobol fle
 	 */
 	test('Test load', async () => {
-		return testOperation('load', 'TPROG01.cbl');
+		return testOperation(Constants.OP_LOAD, 'TPROG01.cbl');
 	}).timeout(60000);
 
 	/**
 	 * Test generate a specific cobol fle
 	 */
 	test('Test generate', async () => {
-		return testOperation('generate', 'TPROG03.cbl');
+		return testOperation(Constants.OP_GENERATE, 'TPROG03.cbl');
 	}).timeout(90000);
 
 	/**
 	 * Test build a specific cobol fle
 	 */
 	test('Test build', async () => {
-		return testOperation('build', 'TPROG01.cbl');
+		return testOperation(Constants.OP_BUILD, 'TPROG01.cbl');
 	}).timeout(90000);
 
 });

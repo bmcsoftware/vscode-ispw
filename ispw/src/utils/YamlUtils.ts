@@ -14,6 +14,8 @@ import * as path from 'path';
 import { IspwRoot } from '../types/IspwTypeMapping';
 import { IspwPath } from '../types/IspwTypeMapping';
 import { IspwType } from '../types/IspwTypeMapping';
+import { Constants } from '../utils/Constants';
+import { CommonUtils } from '../utils/CommonUtils';
 import * as vscode from "vscode";
 
 /**
@@ -25,10 +27,19 @@ export namespace YamlUtils {
      * Checks whether the yaml location is defined in the settings and whether the file exists on the file system.
      * If the location is not defined in settings, the path is defaulted to an ispwconfig.yml file at the root of the project.
      * This method will return false if the path is defined but the file does not exist locally.
+     * 
+     * @param prompt if true and config yaml cannot be found, we will popup to let user select yaml config location 
      * @param selectedFile The file selected to find an associated yaml for
      */
-    export function hasYaml(selectedFile: vscode.Uri): boolean {
-        let yamlLocation: string = getYamlLocationAbsPath(selectedFile);
+    export async function hasYaml(prompt: boolean = false, selectedFile: vscode.Uri): Promise<boolean> {
+        let yamlLocation: string = Constants.EMPTY_STRING;
+
+        if (prompt) {
+            yamlLocation = await getYamlLocationAbsPathWithPrompt(selectedFile);
+        } else {
+            yamlLocation = await getYamlLocationAbsPath(selectedFile);
+        }
+
         return fs.existsSync(yamlLocation);
     }
 
@@ -38,11 +49,11 @@ export namespace YamlUtils {
      * @param selectedFile 
      * @deprecated
      */
-    export function doesYamlHaveType(selectedFile: vscode.Uri): boolean {
-        let hasType: boolean = hasYaml(selectedFile);
+    export async function doesYamlHaveType(selectedFile: vscode.Uri): Promise<boolean> {
+        let hasType: boolean = await hasYaml(false, selectedFile);
 
         if (hasType) {
-            let returnType: IspwType | undefined = getTypeFromYaml(selectedFile);
+            let returnType: IspwType | undefined = await getTypeFromYaml(selectedFile);
             hasType = returnType !== undefined;
         }
         return hasType;
@@ -54,10 +65,10 @@ export namespace YamlUtils {
      * @param selectedFile 
      * @deprecated
      */
-    export function getTypeFromYaml(selectedFile: vscode.Uri): IspwType | undefined {
+    export async function getTypeFromYaml(selectedFile: vscode.Uri): Promise<IspwType | undefined> {
         let mostPathCount: number = 0;
         let returnType: IspwType | undefined = undefined;
-        let ispwRoot: IspwRoot | undefined = loadYaml(selectedFile);
+        let ispwRoot: IspwRoot | undefined = await loadYaml(selectedFile);
         if (ispwRoot) {
             let parentFolder: string = path.normalize(path.dirname(selectedFile.fsPath));
             let pathMappings: IspwPath[] = ispwRoot.ispwApplication.pathMappings;
@@ -84,14 +95,82 @@ export namespace YamlUtils {
     /**
      * Reads the yaml path from the workspace settings and returns the absolute path to the yaml. 
      * If no path is defined in the settings, the path is defaulted to a file named ispwconfig.yml at the root of the workspace folder.
+     * 
      * @param selectedFile The file to get the associated yaml for.
      */
-    export function getYamlLocationAbsPath(selectedFile: vscode.Uri): string {
-        let yamlLocation: string = vscode.workspace.getConfiguration('ISPW.YAML Mapping File', selectedFile).get<string>('ISPW.YAML Mapping File', vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + "\\ispwconfig.yml");
-        if (!path.isAbsolute(yamlLocation)) {
-            yamlLocation = vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath + yamlLocation;
+    export async function getYamlLocationAbsPath(selectedFile: vscode.Uri): Promise<string> {
+        let workspaceFolder = vscode.workspace.getWorkspaceFolder(selectedFile);
+        let workspaceLoc = vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath || Constants.EMPTY_STRING;
+
+        let defaultYamlLoc: string = workspaceLoc + path.sep + Constants.ISPW_CONFIG_YAML;
+        let yamlLocation: string = vscode.workspace.getConfiguration(Constants.EMPTY_STRING, workspaceFolder).get<string>(Constants.SETTING_KEY_YAML_LOC, Constants.EMPTY_STRING);
+        if (CommonUtils.isBlank(yamlLocation)) {
+            yamlLocation = defaultYamlLoc;
+            await vscode.workspace.getConfiguration(Constants.EMPTY_STRING, workspaceFolder).update(Constants.SETTING_KEY_YAML_LOC,
+                "ispwconfig.yml", vscode.ConfigurationTarget.WorkspaceFolder);
         }
+
+        if (!path.isAbsolute(yamlLocation)) {
+            //yaml location is alraedy defined
+            if (yamlLocation.startsWith(path.sep)) {
+                yamlLocation = workspaceLoc + yamlLocation;
+            } else {
+                yamlLocation = workspaceLoc + path.sep + yamlLocation;
+            }
+        }
+
         console.log("getYamlLocationAbsPath: " + yamlLocation);
+
+        return yamlLocation;
+    }
+
+    /**
+     * Reads the yaml path from the workspace settings and returns the absolute path to the yaml. 
+     * If no path is defined in the settings, the path is defaulted to a file named ispwconfig.yml at the root of the workspace folder.
+     * 
+     * If the yaml config doesn't exist, we will prompt to ask user to select a valid yaml config
+     * 
+     * @param selectedFile The file to get the associated yaml for.
+     */
+    export async function getYamlLocationAbsPathWithPrompt(selectedFile: vscode.Uri): Promise<string> {
+        let workspaceFolder = vscode.workspace.getWorkspaceFolder(selectedFile);
+        let workspaceUri = vscode.workspace.getWorkspaceFolder(selectedFile)?.uri;
+        let workspaceLoc = vscode.workspace.getWorkspaceFolder(selectedFile)?.uri.fsPath || Constants.EMPTY_STRING;
+
+        let yamlLocation = await getYamlLocationAbsPath(selectedFile);
+        if (!fs.existsSync(yamlLocation)) {
+
+            //if the YAML config does NOT exist, prompt for a selection
+            let selection = await vscode.window.showQuickPick(
+                [
+                    { label: 'Find...', description: 'Browse your file system to locate ISPW configuration YAML' },
+                ],
+                {
+                    placeHolder: 'Select ISPW config YAML'
+                });
+
+            if (selection?.label === 'Find...') {
+                const options: vscode.OpenDialogOptions = {
+                    canSelectFiles: true,
+                    canSelectFolders: false,
+                    filters: {
+                        'ISPW YAML Config': ['yml']
+                    },
+                    defaultUri: workspaceUri
+                };
+
+                let configSelected = await vscode.window.showOpenDialog(options);
+                if (configSelected) {
+                    yamlLocation = configSelected[0].fsPath;
+
+                    let relSelectedYamlLoc: string = path.relative(workspaceLoc, yamlLocation);
+                    await vscode.workspace.getConfiguration(Constants.EMPTY_STRING, workspaceFolder).update(Constants.SETTING_KEY_YAML_LOC,
+                        relSelectedYamlLoc, vscode.ConfigurationTarget.WorkspaceFolder);
+                }
+            }
+        }
+
+        console.log("getYamlLocationAbsPath with prompt: " + yamlLocation);
         return yamlLocation;
     }
 
@@ -101,8 +180,8 @@ export namespace YamlUtils {
      * The path returned will be relative to the workspace folder if it is in the folder, otherwise the absolute path will be returned.
      * @param selectedFile The file to get the associated yaml for.
      */
-    export function getYamlLocationRelPath(selectedFile: vscode.Uri): string {
-        let yamlLocationUri: string = getYamlLocationAbsPath(selectedFile);
+    export async function getYamlLocationRelPath(selectedFile: vscode.Uri): Promise<string> {
+        let yamlLocationUri: string = await getYamlLocationAbsPath(selectedFile);
         let yamlLocation = vscode.workspace.asRelativePath(yamlLocationUri);
         console.log("getYamlLocationRelPath: " + yamlLocation);
         return yamlLocation;
@@ -114,9 +193,9 @@ export namespace YamlUtils {
      * This function assumes that the yaml file exists! hasYaml should be called before this function.
      * @param selectedFile The file to get the associated yaml for.
      */
-    export function loadYaml(selectedFile: vscode.Uri): IspwRoot | undefined {
+    export async function loadYaml(selectedFile: vscode.Uri): Promise<IspwRoot | undefined> {
         let ispwRoot: IspwRoot | undefined = undefined;
-        let yamlLocation: string = getYamlLocationAbsPath(selectedFile);
+        let yamlLocation: string = await getYamlLocationAbsPath(selectedFile);
         let loadedData = yaml.load(fs.readFileSync(yamlLocation, 'utf8'));
         console.debug(loadedData);
         if (typeof loadedData !== 'object') { throw new Error(yamlLocation + ' does not contain valid yaml'); }
@@ -124,13 +203,4 @@ export namespace YamlUtils {
         return ispwRoot;
     }
 
-    /**
-     * Detect if running inside Mocha
-     */
-    export function isInMocha() {
-        var context = require('global-var');
-        return ['suite', 'test'].every(function (functionName) {
-            return context[functionName] instanceof Function;
-        });
-    }
 }
