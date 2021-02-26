@@ -13,13 +13,16 @@ import fs = require('fs');
 import { CliArgs } from "../types/CliArgs";
 import * as cp from "child_process";
 import * as path from 'path';
-import { OutputUtils } from "../Utils/OutputUtils";
+import { OutputUtils } from "../utils/OutputUtils";
+import { SettingsUtils } from "../utils/SettingsUtils";
 import { MessageUtils } from "./MessageUtils";
 import { CredentialsUtils } from "./CredentialsUtils";
 import * as vscode from "vscode";
 import { YamlUtils } from "./YamlUtils";
 import { Credentials, CredentialsCache } from "../types/CredentialsCache";
 import { promises } from "fs";
+import { Constants } from './Constants';
+import { CommonUtils } from './CommonUtils';
 
 /**
  * Utility namespace for CLI operations.
@@ -28,14 +31,14 @@ export namespace CliUtils {
 
   /**
    * Asynchronous function to assemble all the arguments for the CLI and call the CLI.
-   * @param operation The ISPW operation to be executed ('build', 'generate', 'load')
+   * @param operation The ISPW operation to be executed (Constants.OP_BUILD, Constants.OP_GENERATE, Constants.OP_LOAD)
    * @param selectedFiles The files selected to run the operation on
    */
   export async function runCliCommandForOperation(operation: string, selectedFiles: vscode.Uri[]) {
     console.debug("Starting runCliCommandForOperation for operation " + operation);
-    if (!validateSettings(selectedFiles)) { return; }
+    if (!await validateSettings(selectedFiles)) { return; }
 
-    let yamlLocation: string = YamlUtils.getYamlLocationRelPath(selectedFiles[0]);
+    let yamlLocation: string = await YamlUtils.getYamlLocationRelPath(selectedFiles[0]);
     let credCache = CredentialsCache.getInstance();
     let credentials: Credentials = credCache.getCredentials();
     if (!CredentialsUtils.validateCredentials(credentials)) {
@@ -51,18 +54,18 @@ export namespace CliUtils {
     }
 
     // assemble the arguments
-    let cliLocation: string = getCliLocation() || '';
+    let cliLocation: string = SettingsUtils.getCliLocation() || Constants.EMPTY_STRING;
     let args: string[] = createCommandLineArgs({
       operation: operation,
       ispwConfigPath: yamlLocation,
-      username: credentials.username || '',
-      password: credentials.password || '',
+      username: credentials.username || Constants.EMPTY_STRING,
+      password: credentials.password || Constants.EMPTY_STRING,
       componentFiles: getComponentFileNames(selectedFiles),
-      ispwMappingLevel: getLoadLevel() || '',
-      ispwGitAssignDesc: getAssignmentDescription() || ''
+      ispwMappingLevel: SettingsUtils.getLoadLevel() || Constants.EMPTY_STRING,
+      ispwGitAssignDesc: SettingsUtils.getAssignmentDescription() || Constants.EMPTY_STRING
     });
 
-    return executeCliCommand(cliLocation + '\\IspwCLI.bat', args, selectedFiles);
+    return executeCliCommand(cliLocation + path.sep + 'IspwCLI.bat', args, selectedFiles);
 
   }
 
@@ -105,7 +108,7 @@ export namespace CliUtils {
    */
   let processNumber: number = 1;
   async function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]) {
-    let procNumString: string = (processNumber + "").padStart(4, "0");
+    let procNumString: string = (processNumber.toString()).padStart(4, "0");
 
     // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
     const child = cp.spawn(command, args, {
@@ -125,7 +128,7 @@ export namespace CliUtils {
     if (processNumber < 9999) {
       processNumber++;
     }
-    else { 
+    else {
       processNumber = 1;
     }
 
@@ -137,40 +140,13 @@ export namespace CliUtils {
     * @param selectedFiles The selected file URIs to get paths for
     */
   function getComponentFileNames(selectedFiles: vscode.Uri[]): string {
-    let componentNameStr: string = "";
+    let componentNameStr: string = Constants.EMPTY_STRING;
     selectedFiles.forEach(componentUri => {
       componentNameStr = componentNameStr + ":" + vscode.workspace.asRelativePath(componentUri);
     });
     componentNameStr = componentNameStr.substring(1);
 
     return componentNameStr;
-  }
-
-  /**
-   * Gets the CLI location saved in the User Settings. This may or may not be defined.
-   */
-  export function getCliLocation(): string | undefined {
-    let cliLocation: string | undefined = vscode.workspace.getConfiguration().get<string>('ISPW.Topaz CLI Installation Path');
-    console.debug("CLI location: " + cliLocation);
-    return cliLocation;
-  }
-
-  /**
-   * Gets the build level stored in the Resource Settings. This may or may not be defined.
-   */
-  export function getLoadLevel(): string | undefined {
-    let loadLevel: string | undefined = vscode.workspace.getConfiguration().get<string>('ISPW.Level');
-
-    return loadLevel;
-  }
-
-  /**
-   * Gets the assignment description stored in the Resource Settings. This may or may not be defined.
-   */
-  export function getAssignmentDescription(): string | undefined {
-    let assignmentDescription: string | undefined = vscode.workspace.getConfiguration().get<string>('ISPW.Assignment Description');
-
-    return assignmentDescription;
   }
 
   /**
@@ -203,7 +179,7 @@ export namespace CliUtils {
     if (args.stream) { strArgs = strArgs.concat([' -ispwServerStream ', args.stream]); }
     if (args.operation) { strArgs = strArgs.concat([' -operation ', args.operation]); }
     if (args.password) { strArgs = strArgs.concat([' -pass ', args.password]); }
-    if (args.port) { strArgs = strArgs.concat([' -port ', args.port + '']); }
+    if (args.port) { strArgs = strArgs.concat([' -port ', args.port.toString()]); }
     if (args.protocol) { strArgs = strArgs.concat([' -protocol ', args.protocol]); }
     if (args.targetFolder) { strArgs = strArgs.concat([' -targetFolder ', '"' + args.targetFolder + '"']); }
     if (args.timeout) { strArgs = strArgs.concat([' -timeout ', args.timeout.toString()]); }
@@ -219,10 +195,10 @@ export namespace CliUtils {
    * that all the given file URIs are part of the same workspace folder.
    * @param selectedFiles The selected files to check for settings for.
    */
-  function validateSettings(selectedFiles: vscode.Uri[]): boolean {
+  async function validateSettings(selectedFiles: vscode.Uri[]): Promise<boolean> {
 
     let workspaceFolder: string | undefined = vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.name;
-    let validYaml: boolean = YamlUtils.hasYaml(selectedFiles[0]);
+    let validYaml: boolean = await YamlUtils.hasYaml(true, selectedFiles[0]);
     let validCli: boolean = true;
     let validLevel: boolean = true;
 
@@ -231,20 +207,27 @@ export namespace CliUtils {
       MessageUtils.showWarningMessage("The ISPW YAML mapping file cannot be found for " + workspaceFolder + ". Update the YAML Mapping File location in the Settings for the ISPW extension.");
     }
 
-    let cliLocation: string | undefined = getCliLocation();
-    if (cliLocation === undefined || cliLocation === null || !fs.existsSync(cliLocation)) {
-      validCli = false;
-      console.debug("A valid ISPW CLI path was not configured.");
-      MessageUtils.showWarningMessage('A valid ISPW CLI path was not configured. Configure the CLI path in the ISPW user settings.');
+    if (validYaml) {
+      let cliLocation: string | undefined = await SettingsUtils.getCliLocationWithPrompt();
+      if (CommonUtils.isBlank(cliLocation) || cliLocation === undefined || !fs.existsSync(cliLocation)) {
+        validCli = false;
+        console.debug("A valid ISPW CLI path was not configured.");
+        MessageUtils.showWarningMessage('A valid ISPW CLI path was not configured. Configure the CLI path in the ISPW user settings.');
+      }
     }
 
-    let loadLevel: string | undefined = getLoadLevel();
-    if (loadLevel === undefined || cliLocation === null) {
-      validLevel = false;
-      console.debug("The ISPW build level cannot be found for " + workspaceFolder);
-      MessageUtils.showWarningMessage("The ISPW build level cannot be found for " + workspaceFolder + ". Update the build level in the Settings for the ISPW extension.");
+    if (validYaml && validCli) {
+      let loadLevel: string | undefined = await SettingsUtils.getLoadLevelWithPrompt();
+      if (CommonUtils.isBlank(loadLevel)) {
+        validLevel = false;
+        console.debug("The ISPW build level cannot be found for " + workspaceFolder);
+        MessageUtils.showWarningMessage("The ISPW build level cannot be found for " + workspaceFolder + ". Update the build level in the Settings for the ISPW extension.");
+      }
     }
 
+    if (validYaml && validCli && validLevel) {
+      await SettingsUtils.getAssignmentDescriptionWithPrompt();
+    }
     return validYaml && validCli && validLevel;
   }
 
