@@ -5,8 +5,5 @@
 		}
 	],
 	"settings": {
-		"ISPW.Topaz CLI Installation Path": "c:\\tmp\\cli200502",
-		"ISPW.Level": "DEV1",
-		"ISPW.Assignment Description": "{user}-{project_name}"
 	}
 }

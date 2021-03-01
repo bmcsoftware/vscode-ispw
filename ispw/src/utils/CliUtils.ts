@@ -181,7 +181,7 @@ export namespace CliUtils {
     if (args.stream) { strArgs = strArgs.concat([' -ispwServerStream ', args.stream]); }
     if (args.operation) { strArgs = strArgs.concat([' -operation ', args.operation]); }
     if (args.password) { strArgs = strArgs.concat([' -pass ', '\"' + args.password + '\"']); }
-    if (args.port) { strArgs = strArgs.concat([' -port ', args.port + '']); }
+    if (args.port) { strArgs = strArgs.concat([' -port ', args.port.toString()]); }
     if (args.protocol) { strArgs = strArgs.concat([' -protocol ', args.protocol]); }
     if (args.targetFolder) { strArgs = strArgs.concat([' -targetFolder ', '\"' + args.targetFolder + '\"']); }
     if (args.timeout) { strArgs = strArgs.concat([' -timeout ', args.timeout.toString()]); }
@@ -226,10 +226,11 @@ export namespace CliUtils {
         MessageUtils.showWarningMessage("The ISPW build level cannot be found for " + workspaceFolder + ". Update the build level in the Settings for the ISPW extension.");
       }
     }
-
+    
     if (validYaml && validCli && validLevel) {
       await SettingsUtils.getAssignmentDescriptionWithPrompt();
     }
+
     return validYaml && validCli && validLevel;
   }
 
