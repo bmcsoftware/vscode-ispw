@@ -20,12 +20,9 @@ import { CredentialsUtils } from "./CredentialsUtils";
 import * as vscode from "vscode";
 import { YamlUtils } from "./YamlUtils";
 import { Credentials, CredentialsCache } from "../types/CredentialsCache";
-<<<<<<< Upstream, based on origin/master
 import { promises } from "fs";
 import { Constants } from './Constants';
 import { CommonUtils } from './CommonUtils';
-=======
->>>>>>> 30e464b CWE-171932 - Review CLI return codes and related VSCode messages
 
 /**
  * Utility namespace for CLI operations.
@@ -183,13 +180,8 @@ export namespace CliUtils {
     if (args.serverConfig) { strArgs = strArgs.concat([' -ispwServerConfig ', args.serverConfig]); }
     if (args.stream) { strArgs = strArgs.concat([' -ispwServerStream ', args.stream]); }
     if (args.operation) { strArgs = strArgs.concat([' -operation ', args.operation]); }
-<<<<<<< Upstream, based on origin/master
-    if (args.password) { strArgs = strArgs.concat([' -pass ', args.password]); }
-    if (args.port) { strArgs = strArgs.concat([' -port ', args.port.toString()]); }
-=======
     if (args.password) { strArgs = strArgs.concat([' -pass ', '\"' + args.password + '\"']); }
     if (args.port) { strArgs = strArgs.concat([' -port ', args.port + '']); }
->>>>>>> 30e464b CWE-171932 - Review CLI return codes and related VSCode messages
     if (args.protocol) { strArgs = strArgs.concat([' -protocol ', args.protocol]); }
     if (args.targetFolder) { strArgs = strArgs.concat([' -targetFolder ', '\"' + args.targetFolder + '\"']); }
     if (args.timeout) { strArgs = strArgs.concat([' -timeout ', args.timeout.toString()]); }
