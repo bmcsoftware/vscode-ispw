@@ -18,7 +18,7 @@ export namespace SettingsUtils {
 
     export async function getLoadLevelWithPrompt(): Promise<string | undefined> {
 
-        let loadLevel: string | undefined = getLoadLevel();
+        let loadLevel = getLoadLevel();
 
         if (CommonUtils.isBlank(loadLevel)) {
             await vscode.window.showInputBox({
@@ -27,7 +27,7 @@ export namespace SettingsUtils {
                 value: Constants.EMPTY_STRING
             }).then(async newLoadLevel => {
                 if (CommonUtils.isNotBlank(newLoadLevel)) {
-                    await vscode.workspace.getConfiguration().update(Constants.SETTING_KEY_LOAD_LEVEL, newLoadLevel, vscode.ConfigurationTarget.Workspace);
+                    await vscode.workspace.getConfiguration().update(Constants.SETTING_KEY_LOAD_LEVEL, newLoadLevel, vscode.ConfigurationTarget.Global);
                     loadLevel = newLoadLevel;
                 }
             });
@@ -37,7 +37,7 @@ export namespace SettingsUtils {
     }
 
     export async function getCliLocationWithPrompt(): Promise<string | undefined> {
-        let cliLocation: string | undefined = getCliLocation() || Constants.EMPTY_STRING;
+        let cliLocation = getCliLocation() || Constants.EMPTY_STRING;
 
         if (CommonUtils.isBlank(cliLocation) || !fs.existsSync(cliLocation)) {
             await vscode.window.showQuickPick(
@@ -60,9 +60,9 @@ export namespace SettingsUtils {
                             await vscode.window.showOpenDialog(options).then(async selection => {
                                 if (selection) {
                                     cliLocation = selection[0].fsPath;
-
+                                    
                                     if (CommonUtils.isNotBlank(cliLocation)) {
-                                        await vscode.workspace.getConfiguration().update(Constants.SETTING_KEY_CLI_LOC, cliLocation, vscode.ConfigurationTarget.Workspace);
+                                        await vscode.workspace.getConfiguration().update(Constants.SETTING_KEY_CLI_LOC, cliLocation, vscode.ConfigurationTarget.Global);
                                     }
                                 }
                             });
@@ -79,7 +79,7 @@ export namespace SettingsUtils {
     }
 
     export async function getAssignmentDescriptionWithPrompt(): Promise<string | undefined> {
-        let assignDesc : string | undefined = getAssignmentDescription();
+        let assignDesc = getAssignmentDescription();
 
         if (CommonUtils.isBlank(assignDesc)) {
             await vscode.window.showInputBox({
@@ -88,7 +88,7 @@ export namespace SettingsUtils {
                 value: "{user}-{project_name}"
             }).then(async newAssignDesc => {
                 if (CommonUtils.isNotBlank(newAssignDesc)) {
-                    await vscode.workspace.getConfiguration().update(Constants.SETTING_KEY_ASSIGN_DESC, newAssignDesc, vscode.ConfigurationTarget.Workspace);
+                    await vscode.workspace.getConfiguration().update(Constants.SETTING_KEY_ASSIGN_DESC, newAssignDesc, vscode.ConfigurationTarget.Global);
                     assignDesc = newAssignDesc;
                 }
             });
@@ -103,7 +103,7 @@ export namespace SettingsUtils {
     export function getCliLocation(): string | undefined {
         let cliLocation: string | undefined = vscode.workspace.getConfiguration().get<string>(Constants.SETTING_KEY_CLI_LOC);
         console.debug("CLI location: " + cliLocation);
-
+        
         return cliLocation;
     }
 

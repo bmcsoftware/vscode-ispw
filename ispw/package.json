@@ -27,21 +27,24 @@
 				"ISPW.Assignment Description": {
 					"type": "string",
 					"default": null,
+					"scope": "application",
 					"description": "The description to give assignments created by ISPW actions."
 				},
 				"ISPW.Level": {
 					"type": "string",
 					"default": null,
+					"scope": "application",
 					"description": "The level to use in the ISPW life cycle."
 				},
 				"ISPW.Topaz CLI Installation Path": {
 					"type": "string",
 					"default": null,
+					"scope": "machine",
 					"description": "File path of the Topaz CLI Installation folder."
 				},
 				"ISPW.YAML Mapping File": {
 					"type": "string",
-					"default": "\\ispwconfig.yml",
+					"default": null,
 					"scope": "resource",
 					"description": "File path of the .yml mapping file."
 				}
