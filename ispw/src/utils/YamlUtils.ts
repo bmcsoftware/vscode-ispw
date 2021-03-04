@@ -143,10 +143,10 @@ export namespace YamlUtils {
             //if the YAML config does NOT exist, prompt for a selection
             let selection = await vscode.window.showQuickPick(
                 [
-                    { label: 'Find...', description: 'Browse your file system to locate ISPW configuration YAML' },
+                    { label: 'Find...', description: 'Browse your file system for the YAML mapping file' },
                 ],
                 {
-                    placeHolder: 'Select ISPW config YAML'
+                    placeHolder: 'Select ISPW YAML Mapping File'
                 });
 
             if (selection?.label === 'Find...') {
