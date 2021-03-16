@@ -52,4 +52,13 @@ export namespace CommonUtils {
         });
     }
 
+    /**
+     * Adds escaped quotation marks around the given string
+     * @param value a string to add quotes around
+     */
+    export function escapeString(value: any): string {
+        let escapedString: string = '\"' + (value || '') + '\"';
+        return escapedString;
+    }
+
 }

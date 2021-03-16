@@ -64,8 +64,8 @@ export namespace CliUtils {
       ispwMappingLevel: SettingsUtils.getLoadLevel() || Constants.EMPTY_STRING,
       ispwGitAssignDesc: SettingsUtils.getAssignmentDescription() || Constants.EMPTY_STRING
     });
-
-    return executeCliCommand(cliLocation + path.sep + 'IspwCLI.bat', args, selectedFiles);
+    let batFileLocation: string = CommonUtils.escapeString(cliLocation + path.sep + 'IspwCLI.bat');
+    return executeCliCommand(batFileLocation, args, selectedFiles);
 
   }
 
@@ -159,34 +159,34 @@ export namespace CliUtils {
   function createCommandLineArgs(args: CliArgs): string[] {
     let strArgs: Array<string> = [];
     if (args.codePage) { strArgs = strArgs.concat([' -code ', args.codePage]); }
-    if (args.componentFiles) { strArgs = strArgs.concat([' -componentFiles ', '\"' + args.componentFiles + '\"']); }
-    if (args.gitBranch) { strArgs = strArgs.concat([' -gitBranch ', args.gitBranch]); }
+    if (args.componentFiles) { strArgs = strArgs.concat([' -componentFiles ', CommonUtils.escapeString(args.componentFiles)]); }
+    if (args.gitBranch) { strArgs = strArgs.concat([' -gitBranch ', CommonUtils.escapeString(args.gitBranch)]); }
     if (args.gitCommit) { strArgs = strArgs.concat([' -gitCommit ', args.gitCommit]); }
-    if (args.gitCommitFile) { strArgs = strArgs.concat([' -gitCommitFile ', '\"' + args.gitCommitFile + '\"']); }
+    if (args.gitCommitFile) { strArgs = strArgs.concat([' -gitCommitFile ', CommonUtils.escapeString(args.gitCommitFile)]); }
     if (args.gitFromHash) { strArgs = strArgs.concat([' -gitFromHash ', args.gitFromHash]); }
-    if (args.gitLocalPath) { strArgs = strArgs.concat([' -gitLocalPath ', args.gitLocalPath]); }
-    if (args.gitPassword) { strArgs = strArgs.concat([' -gitPassword ', '\"' + args.gitPassword] + '\"'); }
-    if (args.gitRepoUrl) { strArgs = strArgs.concat([' -gitRepoUrl ', '\"' + args.gitRepoUrl + '\"']); }
+    if (args.gitLocalPath) { strArgs = strArgs.concat([' -gitLocalPath ', CommonUtils.escapeString(args.gitLocalPath)]); }
+    if (args.gitPassword) { strArgs = strArgs.concat([' -gitPassword ', CommonUtils.escapeString(args.gitPassword)]); }
+    if (args.gitRepoUrl) { strArgs = strArgs.concat([' -gitRepoUrl ', CommonUtils.escapeString(args.gitRepoUrl)]); }
     if (args.gitUsername) { strArgs = strArgs.concat([' -gitUsername ', args.gitUsername]); }
-    if (args.host) { strArgs = strArgs.concat([' -host ', '\"' + args.host + '\"']); }
+    if (args.host) { strArgs = strArgs.concat([' -host ', CommonUtils.escapeString(args.host)]); }
     if (args.username) { strArgs = strArgs.concat([' -id ', args.username]); }
-    if (args.ispwGitAssignDesc) { strArgs = strArgs.concat([' -ispwAssignDesc ', '\"' + args.ispwGitAssignDesc + '\"']); }
+    if (args.ispwGitAssignDesc) { strArgs = strArgs.concat([' -ispwAssignDesc ', CommonUtils.escapeString(args.ispwGitAssignDesc)]); }
     if (args.checkoutLevel) { strArgs = strArgs.concat([' -ispwCheckoutLevel ', args.checkoutLevel]); }
-    if (args.ispwConfigPath) { strArgs = strArgs.concat([' -ispwConfigPath ', '\"' + args.ispwConfigPath + '\"']); }
+    if (args.ispwConfigPath) { strArgs = strArgs.concat([' -ispwConfigPath ', CommonUtils.escapeString(args.ispwConfigPath)]); }
     if (args.containerCreation) { strArgs = strArgs.concat([' -ispwContainerCreation ', args.containerCreation]); }
-    if (args.customDescription) { strArgs = strArgs.concat([' -ispwContainerDescription ', '\"' + args.customDescription + '\"']); }
+    if (args.customDescription) { strArgs = strArgs.concat([' -ispwContainerDescription ', CommonUtils.escapeString(args.customDescription)]); }
     if (args.ispwMappingLevel) { strArgs = strArgs.concat([' -ispwMappingLevel ', args.ispwMappingLevel]); }
-    if (args.application) { strArgs = strArgs.concat([' -ispwServerApp ', args.application]); }
+    if (args.application) { strArgs = strArgs.concat([' -ispwServerApp ', CommonUtils.escapeString(args.application)]); }
     if (args.serverConfig) { strArgs = strArgs.concat([' -ispwServerConfig ', args.serverConfig]); }
-    if (args.stream) { strArgs = strArgs.concat([' -ispwServerStream ', args.stream]); }
+    if (args.stream) { strArgs = strArgs.concat([' -ispwServerStream ', CommonUtils.escapeString(args.stream)]); }
     if (args.operation) { strArgs = strArgs.concat([' -operation ', args.operation]); }
-    if (args.password) { strArgs = strArgs.concat([' -pass ', '\"' + args.password + '\"']); }
+    if (args.password) { strArgs = strArgs.concat([' -pass ', CommonUtils.escapeString(args.password)]); }
     if (args.port) { strArgs = strArgs.concat([' -port ', args.port.toString()]); }
     if (args.protocol) { strArgs = strArgs.concat([' -protocol ', args.protocol]); }
-    if (args.targetFolder) { strArgs = strArgs.concat([' -targetFolder ', '\"' + args.targetFolder + '\"']); }
+    if (args.targetFolder) { strArgs = strArgs.concat([' -targetFolder ', CommonUtils.escapeString(args.targetFolder)]); }
     if (args.timeout) { strArgs = strArgs.concat([' -timeout ', args.timeout.toString()]); }
     if (args.typeOverride) { strArgs = strArgs.concat([' -typeOverride ', args.typeOverride]); }
-    if (args.vscSetting) { strArgs = strArgs.concat([' -vscSetting ', args.vscSetting]); }
+    if (args.vscSetting) { strArgs = strArgs.concat([' -vscSetting ', CommonUtils.escapeString(args.vscSetting)]); }
 
     return strArgs;
   }
