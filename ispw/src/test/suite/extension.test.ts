@@ -57,6 +57,10 @@ suite('Extension Test Suite', function () {
 		assert.strictEqual(CommonUtils.isBlank(0), false);
 		assert.strictEqual(CommonUtils.isNotBlank([0, 1]), true);
 		assert.strictEqual(CommonUtils.isNotBlank('ispw'), true);
+		assert.strictEqual(CommonUtils.escapeString(' '), '\" \"');
+		assert.strictEqual(CommonUtils.escapeString('this\\is a\\path\\string'), '\"this\\is a\\path\\string\"');
+		assert.strictEqual(CommonUtils.escapeString(undefined), '\"\"');
+		assert.strictEqual(CommonUtils.escapeString(1234), '\"1234\"');
 	});
 
 	/**
