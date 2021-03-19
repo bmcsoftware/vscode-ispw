@@ -24,7 +24,7 @@ This extension contributes the following settings:
 
 ## Command Descriptions
 
-![ISPW commands](media/ISPW-commands.png)
+![ISPW commands](ispw/media/ISPW-commands.png)
 
 #### ISPW Build
 
@@ -72,17 +72,17 @@ It is advised to set the root folder of your Git repository to be the primary wo
 
 See [Extension Settings](#extension-settings) for descriptions of each of the settings. The assignment description, level, and Topaz CLI installation path are all stored at the User settings level. The YAML mapping file location can be configured at the Workspace settings level.
 
-![example settings](media/example-settings.png)
+![example settings](ispw/media/example-settings.png)
 
 #### Using ISPW Commands
 
 The File Explorer has the ISPW build, generate, and load commands available in the right-click menu. To use the commands, select the file(s), right click, and select the ISPW command you want to execute. The first time you use any command, you will be prompted for any settings values that have not been filled it. You will also be prompted for your mainframe username and password. The username and password are saved for the session so you will not be prompted for them again unless you clear the stored credentials or restart Visual Studio Code.
 
-![building from file explorer](media/file-explorer-action.gif)
+![building from file explorer](ispw/media/file-explorer-action.gif)
 
 The command palette has the ISPW clear stored credentials, build, generate, and load commands available. To use the commands, open a file in the editor, open the command palette and select the command. The first time you use a command, you will be prompted for any settings values that have not been filled it. You will also be prompted for your mainframe username and password. The username and password are saved for the session so you will not be prompted for them again unless you clear the stored credentials or restart Visual Studio Code.
 
-![generating from command palette](media/command-palette-action.gif)
+![generating from command palette](ispw/media/command-palette-action.gif)
 
 ## Known Issues
 
@@ -95,7 +95,7 @@ The command palette has the ISPW clear stored credentials, build, generate, and 
 
 Initial release of the ISPW extension. The extension supports Build, Generate, and Load commands.
 
-[//]: # ( Visual Studio Code's Markdown Support : http://code.visualstudio.com/docs/languages/markdown)
-[//]: # (Markdown Syntax Reference: https://help.github.com/articles/markdown-basics/)
+[//]: # " Visual Studio Code's Markdown Support : http://code.visualstudio.com/docs/languages/markdown"
+[//]: # "Markdown Syntax Reference: https://help.github.com/articles/markdown-basics/"
 
 \-
