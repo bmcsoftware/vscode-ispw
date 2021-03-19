@@ -1,12 +1,29 @@
 {
 	"name": "ISPW",
-	"displayName": "ISPW",
-	"description": "ISPW - Visual Studio Code Extension ",
-	"version": "0.0.1",
-	"publisher": "BMC",
+	"icon": "media/ISPW_marble.png",
+	"displayName": "BMC Compuware ISPW",
+	"description": "BMC Compuware ISPW - Visual Studio Code Extension",
+	"version": "1.0.0",
+	"publisher": "BMCCompuware",
+	"repository": {
+		"type": "git",
+		"url": "https://evolve.compuware.com/scm/ie/vscode-ispw.git"
+	},
+	"bugs": {
+		"url": "https://www.bmc.com/support/support-central.html"
+	},
 	"engines": {
 		"vscode": "^1.52.0"
 	},
+	"keywords": [
+		"ISPW",
+		"BMC",
+		"Compuware",
+		"SCM",
+		"mainframe",
+		"build",
+		"Topaz"
+	],
 	"categories": [
 		"Other"
 	],
