@@ -160,9 +160,9 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
+		"compile": "npm run lint && tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
+		"pretest": "npm run compile",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
 		"coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"

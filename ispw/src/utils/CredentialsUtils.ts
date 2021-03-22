@@ -20,7 +20,10 @@ export namespace CredentialsUtils {
      * The password will not be encrypted.
      */
     export async function promptForCredentials(): Promise<Credentials> {
-        let credentials: Credentials = { username: undefined, password: undefined };
+        let credentials: Credentials = { 
+            username: undefined, 
+            password: undefined 
+        };
         // prompt for username
         await vscode.window.showInputBox({
             prompt: "Enter username"

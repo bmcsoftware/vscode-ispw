@@ -43,7 +43,10 @@ export class CredentialsCache {
      * Retrieves the stored username and password and returns a Credentials object. The username and password are not guaranteed to be defined. The password will not be encrypted.
      */
     public getCredentials(): Credentials {
-        return { username: this.username, password: this.password };
+        return { 
+            username: this.username, 
+            password: this.password 
+        };
     }
 
     /**

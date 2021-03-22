@@ -95,29 +95,53 @@ suite('Extension Test Suite', function () {
 	 */
 	test('Test ispw yaml type', () => {
 		let ispwTypeCob: IspwType = {
-			ispwType: 'COB', fileExtension: 'cbl', genSeq: 'V', progType: 'Yes',
-			sql: 'No', cics: 'No', ims: 'No', flag1: 'N', flag2: 'I', flag3: 'C', flag4: 'E', genParms: 'ISPWCUTE'
+			ispwType: 'COB', 
+			fileExtension: 'cbl', 
+			genSeq: 'V', 
+			progType: 'Yes',
+			sql: 'No', 
+			cics: 'No', 
+			ims: 'No', 
+			flag1: 'N', 
+			flag2: 'I', 
+			flag3: 'C', 
+			flag4: 'E', 
+			genParms: 'ISPWCUTE'
 		};
 
 		let ispwTypeCobExpect: IspwType = {
-			ispwType: 'COB', fileExtension: 'cbl', genSeq: 'V', progType: 'Yes',
-			sql: 'No', cics: 'No', ims: 'No', flag1: 'N', flag2: 'I', flag3: 'C', flag4: 'E', genParms: 'ISPWCUTE'
+			ispwType: 'COB', 
+			fileExtension: 'cbl', 
+			genSeq: 'V', 
+			progType: 'Yes',
+			sql: 'No', 
+			cics: 'No', 
+			ims: 'No', 
+			flag1: 'N', 
+			flag2: 'I', 
+			flag3: 'C', 
+			flag4: 'E', 
+			genParms: 'ISPWCUTE'
 		};
 
 		let ispwTypeClst: IspwType = {
-			ispwType: 'CLST', fileExtension: 'clst'
+			ispwType: 'CLST', 
+			fileExtension: 'clst'
 		};
 
 		let ispwTypeClstExpect: IspwType = {
-			ispwType: 'CLST', fileExtension: 'clst'
+			ispwType: 'CLST', 
+			fileExtension: 'clst'
 		};
 
 		let ispwPathCob: IspwPath = {
-			path: '\\COB', types: [ispwTypeCob]
+			path: '\\COB', 
+			types: [ispwTypeCob]
 		};
 
 		let ispwPathClst: IspwPath = {
-			path: '\\CLST', types: [ispwTypeClst]
+			path: '\\CLST', 
+			types: [ispwTypeClst]
 		};
 
 		let ispwApplication: IspwApplication = {
