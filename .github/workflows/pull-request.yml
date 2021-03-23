@@ -12,7 +12,7 @@ jobs:
         uses: actions/setup-node@v2
 
       - name: Change directory
-        run: cd ispw
+        run: cd "D:\a\vscode-ispw\vscode-ispw\ispw"
 
       - name: Install dependencies
         run: npm ci
