@@ -39,7 +39,10 @@ export namespace SettingsUtils {
         if (CommonUtils.isBlank(cliLocation) || !fs.existsSync(cliLocation)) {
             await vscode.window.showQuickPick(
                 [
-                    { label: 'Find...', description: 'Browse your file system to locate the Topaz CLI installation folder' },
+                    { 
+                        label: 'Find...', 
+                        description: 'Browse your file system to locate the Topaz CLI installation folder' 
+                    },
                 ],
                 {
                     placeHolder: 'Select Topaz CLI Installation Path'

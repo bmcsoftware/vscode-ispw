@@ -106,7 +106,7 @@ export namespace CliUtils {
    */
   let processNumber: number = 1;
   async function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]) {
-    let procNumString: string = (processNumber.toString()).padStart(4, "0");
+    let procNumString: string = processNumber.toString().padStart(4, "0");
 
     // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
     const child = cp.spawn(command, args, {

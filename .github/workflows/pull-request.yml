@@ -4,6 +4,10 @@ jobs:
   compile:
     name: Compiling Source
     runs-on: windows-latest
+    defaults:
+      run:
+        # working directory does not apply to "uses" steps
+        working-directory: D:/a/vscode-ispw/vscode-ispw/ispw
     steps:
       - name: Checkout Source
         uses: actions/checkout@v2
@@ -11,11 +15,11 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v2
 
-      - name: Change directory
-        run: cd ispw
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Run Linter
+        run: npm run lint
 
       - name: Run compile
         run: npm run compile

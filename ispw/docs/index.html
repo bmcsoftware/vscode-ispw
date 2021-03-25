@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ispw</title>
-	<meta name="description" content="Documentation for ispw">
+	<title>ISPW</title>
+	<meta name="description" content="Documentation for ISPW">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 	<script async src="assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">ispw</a>
+					<a href="index.html" class="title">ISPW</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -50,7 +50,7 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<h1>ispw</h1>
+			<h1>ISPW</h1>
 		</div>
 	</div>
 </header>
@@ -58,54 +58,107 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#ispw-readme" id="ispw-readme" style="color: inherit; text-decoration: none;">
-					<h1>ISPW README</h1>
+				<a href="#bmc-compuware-ispw-readme" id="bmc-compuware-ispw-readme" style="color: inherit; text-decoration: none;">
+					<h1>BMC Compuware ISPW README</h1>
 				</a>
-				<a href="#features" id="features" style="color: inherit; text-decoration: none;">
-					<h2>Features</h2>
+				<a href="#overview" id="overview" style="color: inherit; text-decoration: none;">
+					<h2>Overview</h2>
 				</a>
-				<p>This extension enables key features from BMC&#39;s ISPW product that will allow users to integrate their ISPW, Git, and VSCode development processes.</p>
-				<p>Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.</p>
-				<p>For example if there is an image subfolder under your extension project workspace:</p>
-				<p>![feature X](images/feature-x.png)</p>
-				<blockquote>
-					<p>Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.</p>
-				</blockquote>
+				<p>This extension enables key features from BMC Compwuare&#39;s ISPW product that will allow users to integrate their ISPW, Git, and Visual Studio Code development processes.</p>
+				<p>With the ISPW Visual Studio Code extension, you are able to load source from your Git repository into ISPW and also perform generate and build operations. The extension works by sending requests from Visual Studio Code to your Topaz Workbench CLI installation which connects to ISPW on the mainframe.</p>
 				<a href="#requirements" id="requirements" style="color: inherit; text-decoration: none;">
 					<h2>Requirements</h2>
 				</a>
-				<p>ISPW license and credentials
-				A local Topaz Workbench CLI installation</p>
+				<ul>
+					<li>Visual Studio Code version 1.52.0 or higher</li>
+					<li>ISPW mainframe version 18.02 license and credentials</li>
+					<li>A local Topaz Workbench CLI installation version 20.06.01 or higher</li>
+					<li>A local folder containing mainframe source code</li>
+				</ul>
 				<a href="#extension-settings" id="extension-settings" style="color: inherit; text-decoration: none;">
 					<h2>Extension Settings</h2>
 				</a>
-				<p>Include if your extension adds any VS Code settings through the <code>contributes.configuration</code> extension point.</p>
-				<p>For example:</p>
 				<p>This extension contributes the following settings:</p>
 				<ul>
-					<li><code>myExtension.enable</code>: enable/disable this extension</li>
-					<li><code>myExtension.thing</code>: set to <code>blah</code> to do something</li>
+					<li><code>ISPW.Assignment Description</code>: the ISPW assignment description or description pattern to use when a new assignment is created to load tasks. There are four pattern variables that can be used in the assignment description and they are <code>{user}</code>, <code>{branch_name}</code>, <code>{project_name}</code>, and <code>{date}</code>. The values of the variables will be set dynamically when an ISPW command is run.</li>
+					<li><code>ISPW.Level</code>: the ISPW level to use when loading tasks</li>
+					<li><code>ISPW.Topaz CLI Installation Path</code>: the absolute path to the local Topaz Workbench CLI installation</li>
+					<li><code>ISPW.YAML Mapping File</code>: the path to the ISPW configuration yaml file. This path may be relative to the workspace folder or absolute. If a relative file path is used, the yaml file must exist in the workspace. The path must contain the file name of the ISPW configuration mapping file.</li>
 				</ul>
+				<a href="#command-descriptions" id="command-descriptions" style="color: inherit; text-decoration: none;">
+					<h2>Command Descriptions</h2>
+				</a>
+				<p><img src="ispw/media/ISPW-commands.png" alt="ISPW commands"></p>
+				<a href="#ispw-build" id="ispw-build" style="color: inherit; text-decoration: none;">
+					<h4>ISPW Build</h4>
+				</a>
+				<p>Executes an ISPW CLI command to load the selected files into ISPW and immediately build them. In File Explorer this command is available in the context menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor. After the task is loaded, the ISPW build request will find any other impacting tasks and add them to the generate set. This is to ensure that changes in one program did not cause compile errors in another impacting program.</p>
+				<a href="#ispw-clear-stored-credentials" id="ispw-clear-stored-credentials" style="color: inherit; text-decoration: none;">
+					<h4>ISPW Clear Stored Credentials</h4>
+				</a>
+				<p>Clears the stored mainframe username and password. After using this command, you will be prompted for your username and password the next time you use an ISPW command. Use this command if you need to change the username and password that is used when connecting to ISPW on the mainframe.</p>
+				<a href="#ispw-generate" id="ispw-generate" style="color: inherit; text-decoration: none;">
+					<h4>ISPW Generate</h4>
+				</a>
+				<p>Executes an ISPW CLI command to load the selected files into ISPW and immediately generate them. In File Explorer this command is available in the context menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor.</p>
+				<a href="#ispw-load" id="ispw-load" style="color: inherit; text-decoration: none;">
+					<h4>ISPW Load</h4>
+				</a>
+				<p>Executes an ISPW CLI command to load the selected files into ISPW. In File Explorer this command is available in the context menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor.</p>
+				<a href="#complete-setup-guide" id="complete-setup-guide" style="color: inherit; text-decoration: none;">
+					<h2>Complete Setup Guide</h2>
+				</a>
+				<a href="#install-the-topaz-workbench-cli" id="install-the-topaz-workbench-cli" style="color: inherit; text-decoration: none;">
+					<h4>Install the Topaz Workbench CLI</h4>
+				</a>
+				<p>This extension sends requests to the Topaz Workbench CLI. Information about installation and use of the Topaz Workbench CLI can be found <a href="https://devops.api.compuware.com/apis/topaz_cli.html#workspace">here</a>.</p>
+				<a href="#download-mainframe-source-from-ispw" id="download-mainframe-source-from-ispw" style="color: inherit; text-decoration: none;">
+					<h4>Download mainframe source from ISPW</h4>
+				</a>
+				<p>If your current source is stored in ISPW and you need to move it to Git, follow the first part of <a href="https://devops.api.compuware.com/guidelines/ispw/GIT_to_ISPW_Integration_Tutorial.html#set-up-a-git-project-with-the-source-yaml-file-and-jenkinsfile-and-set-up-a-jenkins-multibranch-pipeline-2">this guide</a> to download source from ISPW into a local folder.</p>
+				<a href="#configure-the-yaml-file" id="configure-the-yaml-file" style="color: inherit; text-decoration: none;">
+					<h4>Configure the yaml file</h4>
+				</a>
+				<p>In order for the integration between ISPW, Git, and Visual Studio Code to work you need to have a yaml file which specifies the configuration. See <a href="https://devops.api.compuware.com/guidelines/ispw/Git%20to%20ISPW%20Integration%20-%20The%20ISPW%20YAML%20Configuration%20File.html#git-to-ispw-integration-the-ispw-yaml-configuration-file">this guide</a> for more information on the yaml file structure.</p>
+				<a href="#create-a-git-repository-to-hold-the-mainframe-source" id="create-a-git-repository-to-hold-the-mainframe-source" style="color: inherit; text-decoration: none;">
+					<h4>Create a Git repository to hold the mainframe source</h4>
+				</a>
+				<p>The Git repository will be the one source of truth for your source code. The steps for setting up a git repository will vary depending on which Git client you plan to use. A guide for GitHub can be found <a href="https://docs.github.com/en/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line">here</a> and a guide for BitBucket can be found <a href="https://www.atlassian.com/git/tutorials/setting-up-a-repository">here</a>.</p>
+				<a href="#install-the-ispw-visual-studio-code-extension" id="install-the-ispw-visual-studio-code-extension" style="color: inherit; text-decoration: none;">
+					<h4>Install the ISPW Visual Studio Code extension</h4>
+				</a>
+				<p>The ISPW extension can be found in the Visual Studio Code Extension Marketplace. More information on adding extensions to Visual Studio Code can be found <a href="https://code.visualstudio.com/docs/introvideos/extend">here</a>.</p>
+				<a href="#configure-the-visual-studio-code-workspace" id="configure-the-visual-studio-code-workspace" style="color: inherit; text-decoration: none;">
+					<h4>Configure the Visual Studio Code workspace</h4>
+				</a>
+				<p>It is advised to set the root folder of your Git repository to be the primary workspace folder in Visual Studio Code.</p>
+				<a href="#configure-the-settings-for-the-ispw-extension" id="configure-the-settings-for-the-ispw-extension" style="color: inherit; text-decoration: none;">
+					<h4>Configure the settings for the ISPW extension</h4>
+				</a>
+				<p>See <a href="#extension-settings">Extension Settings</a> for descriptions of each of the settings. The assignment description, level, and Topaz CLI installation path are all stored at the User settings level. The YAML mapping file location can be configured at the Workspace settings level.</p>
+				<p><img src="ispw/media/example-settings.png" alt="example settings"></p>
+				<a href="#using-ispw-commands" id="using-ispw-commands" style="color: inherit; text-decoration: none;">
+					<h4>Using ISPW Commands</h4>
+				</a>
+				<p>The File Explorer has the ISPW build, generate, and load commands available in the context menu. To use the commands, select the file(s), right click, and select the ISPW command you want to execute. The first time you use any command, you will be prompted for any settings values that have not been filled it. You will also be prompted for your mainframe username and password. The username and password are saved for the session so you will not be prompted for them again unless you clear the stored credentials or restart Visual Studio Code.</p>
+				<p><img src="ispw/media/file-explorer-action.gif" alt="building from file explorer"></p>
+				<p>The command palette has the ISPW clear stored credentials, build, generate, and load commands available. To use the commands, open a file in the editor, open the command palette and select the command. The first time you use a command, you will be prompted for any settings values that have not been filled it. You will also be prompted for your mainframe username and password. The username and password are saved for the session so you will not be prompted for them again unless you clear the stored credentials or restart Visual Studio Code.</p>
+				<p><img src="ispw/media/command-palette-action.gif" alt="generating from command palette"></p>
 				<a href="#known-issues" id="known-issues" style="color: inherit; text-decoration: none;">
 					<h2>Known Issues</h2>
 				</a>
-				<p>Version 1.0.0 of the extension only support storing a single set of credentials. If a user needs to use a different host and port requiring different credentials, they must use the Update Stored Credentials command.</p>
+				<ol>
+					<li>The extension only supports storing a single set of credentials. If a user needs to use a different host and port, requiring different credentials, they must use the Clear Stored Credentials command.</li>
+					<li>ISPW commands will always appear in the File Explorer menu, even if they are not applicable to the file selected.</li>
+				</ol>
 				<a href="#release-notes" id="release-notes" style="color: inherit; text-decoration: none;">
 					<h2>Release Notes</h2>
 				</a>
-				<p>Users appreciate release notes as you update your extension.</p>
 				<a href="#100" id="100" style="color: inherit; text-decoration: none;">
 					<h3>1.0.0</h3>
 				</a>
-				<p>Initial release of the ISPW extension. The extension supports Build, Generate, and Load actions.</p>
-				<a href="#for-more-information" id="for-more-information" style="color: inherit; text-decoration: none;">
-					<h3>For more information</h3>
-				</a>
-				<ul>
-					<li><a href="http://code.visualstudio.com/docs/languages/markdown">Visual Studio Code&#39;s Markdown Support</a></li>
-					<li><a href="https://help.github.com/articles/markdown-basics/">Markdown Syntax Reference</a></li>
-				</ul>
-				<p><strong>Enjoy!</strong></p>
+				<p>Initial release of the ISPW extension. The extension supports Build, Generate, and Load commands.</p>
+				<p>-</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -124,7 +177,13 @@
 						<a href="modules/extension.html">extension</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/test_utils_yamlutils_test.html">test/utils/<wbr>Yaml<wbr>Utils.test</a>
+						<a href="modules/test_runtest.html">test/run<wbr>Test</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/test_suite.html">test/suite</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/test_suite_extension_test.html">test/suite/extension.test</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/types_cliargs.html">types/<wbr>Cli<wbr>Args</a>
@@ -139,6 +198,12 @@
 						<a href="modules/utils_cliutils.html">utils/<wbr>Cli<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="modules/utils_commonutils.html">utils/<wbr>Common<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/utils_constants.html">utils/<wbr>Constants</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="modules/utils_credentialsutils.html">utils/<wbr>Credentials<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -146,6 +211,9 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/utils_outpututils.html">utils/<wbr>Output<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/utils_settingsutils.html">utils/<wbr>Settings<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/utils_yamlutils.html">utils/<wbr>Yaml<wbr>Utils</a>
