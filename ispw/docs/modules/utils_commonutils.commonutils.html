@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CliUtils | ISPW</title>
+	<title>CommonUtils | ISPW</title>
 	<meta name="description" content="Documentation for ISPW">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">ISPW</a>
 				</li>
 				<li>
-					<a href="utils_cliutils.html">utils/CliUtils</a>
+					<a href="utils_commonutils.html">utils/CommonUtils</a>
 				</li>
 				<li>
-					<a href="utils_cliutils.cliutils.html">CliUtils</a>
+					<a href="utils_commonutils.commonutils.html">CommonUtils</a>
 				</li>
 			</ul>
-			<h1>Namespace CliUtils</h1>
+			<h1>Namespace CommonUtils</h1>
 		</div>
 	</div>
 </header>
@@ -71,7 +71,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Utility namespace for CLI operations.</p>
+						<p>Utility namespace for functions related to VSCode output channels</p>
 					</div>
 				</div>
 			</section>
@@ -82,9 +82,10 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_cliutils.cliutils.html#addcloselistener" class="tsd-kind-icon">add<wbr>Close<wbr>Listener</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_cliutils.cliutils.html#getfilenametoshow" class="tsd-kind-icon">get<wbr>File<wbr>Name<wbr>ToShow</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_cliutils.cliutils.html#runclicommandforoperation" class="tsd-kind-icon">run<wbr>Cli<wbr>Command<wbr>For<wbr>Operation</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_commonutils.commonutils.html#escapestring" class="tsd-kind-icon">escape<wbr>String</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_commonutils.commonutils.html#isblank" class="tsd-kind-icon">is<wbr>Blank</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_commonutils.commonutils.html#isinmocha" class="tsd-kind-icon">is<wbr>InMocha</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="utils_commonutils.commonutils.html#isnotblank" class="tsd-kind-icon">is<wbr>Not<wbr>Blank</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,72 +94,29 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="addcloselistener" class="tsd-anchor"></a>
-					<h3>add<wbr>Close<wbr>Listener</h3>
+					<a name="escapestring" class="tsd-anchor"></a>
+					<h3>escape<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Close<wbr>Listener<span class="tsd-signature-symbol">(</span>child<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">cp.ChildProcessWithoutNullStreams</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span>, operationToShow<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fileNameToShow<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">escape<wbr>String<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/bmcsoftware/vscode-ispw/blob/440cf30/ispw/src/utils/CliUtils.ts#L85">utils/CliUtils.ts:85</a></li>
+									<li>Defined in <a href="https://github.com/bmcsoftware/vscode-ispw/blob/440cf30/ispw/src/utils/CommonUtils.ts#L56">utils/CommonUtils.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Add close listener to the spawn child process</p>
+									<p>Adds escaped quotation marks around the given string</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>child: <span class="tsd-signature-type">cp.ChildProcessWithoutNullStreams</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
+									<h5>value: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>the child process</p>
-									</div>
-								</li>
-								<li>
-									<h5>operationToShow: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>the operation message</p>
-									</div>
-								</li>
-								<li>
-									<h5>fileNameToShow: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>the file list</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="getfilenametoshow" class="tsd-anchor"></a>
-					<h3>get<wbr>File<wbr>Name<wbr>ToShow</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>File<wbr>Name<wbr>ToShow<span class="tsd-signature-symbol">(</span>selectedFiles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/bmcsoftware/vscode-ispw/blob/440cf30/ispw/src/utils/CliUtils.ts#L73">utils/CliUtils.ts:73</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Constructor a string representation of files to operate on</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>selectedFiles: <span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">[]</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>the selected files to operate on</p>
+										<p>a string to add quotes around</p>
 									</div>
 								</li>
 							</ul>
@@ -167,39 +125,86 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="runclicommandforoperation" class="tsd-anchor"></a>
-					<h3>run<wbr>Cli<wbr>Command<wbr>For<wbr>Operation</h3>
+					<a name="isblank" class="tsd-anchor"></a>
+					<h3>is<wbr>Blank</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">run<wbr>Cli<wbr>Command<wbr>For<wbr>Operation<span class="tsd-signature-symbol">(</span>operation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, selectedFiles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ChildProcessWithoutNullStreams</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Blank<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/bmcsoftware/vscode-ispw/blob/440cf30/ispw/src/utils/CliUtils.ts#L34">utils/CliUtils.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/bmcsoftware/vscode-ispw/blob/440cf30/ispw/src/utils/CommonUtils.ts#L23">utils/CommonUtils.ts:23</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Asynchronous function to assemble all the arguments for the CLI and call the CLI.</p>
+									<p>Test if the input value is blank</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>operation: <span class="tsd-signature-type">string</span></h5>
+									<h5>value: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The ISPW operation to be executed (Constants.OP_BUILD, Constants.OP_GENERATE, Constants.OP_LOAD)</p>
-									</div>
-								</li>
-								<li>
-									<h5>selectedFiles: <span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">[]</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The files selected to run the operation on</p>
+										<p>the value to be tested</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ChildProcessWithoutNullStreams</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
+					<a name="isinmocha" class="tsd-anchor"></a>
+					<h3>is<wbr>InMocha</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>InMocha<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/bmcsoftware/vscode-ispw/blob/440cf30/ispw/src/utils/CommonUtils.ts#L45">utils/CommonUtils.ts:45</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Detect if running inside Mocha</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
+					<a name="isnotblank" class="tsd-anchor"></a>
+					<h3>is<wbr>Not<wbr>Blank</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Not<wbr>Blank<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/bmcsoftware/vscode-ispw/blob/440cf30/ispw/src/utils/CommonUtils.ts#L38">utils/CommonUtils.ts:38</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Test if the input value is not blank</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the value to be tested</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -238,16 +243,16 @@
 					<li class=" tsd-kind-module">
 						<a href="types_ispwtypemapping.html">types/<wbr>Ispw<wbr>Type<wbr>Mapping</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="utils_cliutils.html">utils/<wbr>Cli<wbr>Utils</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="utils_commonutils.html">utils/<wbr>Common<wbr>Utils</a>
 						<ul>
 							<li class="current tsd-kind-namespace tsd-parent-kind-module">
-								<a href="utils_cliutils.cliutils.html">Cli<wbr>Utils</a>
+								<a href="utils_commonutils.commonutils.html">Common<wbr>Utils</a>
 							</li>
 						</ul>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="utils_commonutils.html">utils/<wbr>Common<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="utils_constants.html">utils/<wbr>Constants</a>
@@ -272,13 +277,16 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="utils_cliutils.cliutils.html#addcloselistener" class="tsd-kind-icon">add<wbr>Close<wbr>Listener</a>
+						<a href="utils_commonutils.commonutils.html#escapestring" class="tsd-kind-icon">escape<wbr>String</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="utils_cliutils.cliutils.html#getfilenametoshow" class="tsd-kind-icon">get<wbr>File<wbr>Name<wbr>ToShow</a>
+						<a href="utils_commonutils.commonutils.html#isblank" class="tsd-kind-icon">is<wbr>Blank</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="utils_cliutils.cliutils.html#runclicommandforoperation" class="tsd-kind-icon">run<wbr>Cli<wbr>Command<wbr>For<wbr>Operation</a>
+						<a href="utils_commonutils.commonutils.html#isinmocha" class="tsd-kind-icon">is<wbr>InMocha</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-namespace">
+						<a href="utils_commonutils.commonutils.html#isnotblank" class="tsd-kind-icon">is<wbr>Not<wbr>Blank</a>
 					</li>
 				</ul>
 			</nav>

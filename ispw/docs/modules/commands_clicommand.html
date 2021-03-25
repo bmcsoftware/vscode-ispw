@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>commands/CliCommand | ispw</title>
-	<meta name="description" content="Documentation for ispw">
+	<title>commands/CliCommand | ISPW</title>
+	<meta name="description" content="Documentation for ISPW">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">ispw</a>
+					<a href="../index.html" class="title">ISPW</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">ispw</a>
+					<a href="../modules.html">ISPW</a>
 				</li>
 				<li>
 					<a href="commands_clicommand.html">commands/CliCommand</a>
@@ -84,13 +84,13 @@
 					<a name="runcommand" class="tsd-anchor"></a>
 					<h3>run<wbr>Command</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">run<wbr>Command<span class="tsd-signature-symbol">(</span>operation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, selectedFile<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">run<wbr>Command<span class="tsd-signature-symbol">(</span>operation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, selectedFiles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in commands/CliCommand.ts:20</li>
+									<li>Defined in <a href="https://github.com/bmcsoftware/vscode-ispw/blob/440cf30/ispw/src/commands/CliCommand.ts#L17">commands/CliCommand.ts:17</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -103,17 +103,17 @@
 								<li>
 									<h5>operation: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The cli operation to call (&#39;build&#39;, &#39;generate&#39;, &#39;load&#39;)</p>
+										<p>The cli operation to call (Constants.OP_BUILD, Constants.OP_GENERATE, Constants.OP_LOAD)</p>
 									</div>
 								</li>
 								<li>
-									<h5>selectedFile: <span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
+									<h5>selectedFiles: <span class="tsd-signature-type">vscode.Uri</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The file URI to pass to the CLI. This will be undefined if the command is issued from the command palette or the editor.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -135,7 +135,13 @@
 						<a href="extension.html">extension</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="test_utils_yamlutils_test.html">test/utils/<wbr>Yaml<wbr>Utils.test</a>
+						<a href="test_runtest.html">test/run<wbr>Test</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="test_suite.html">test/suite</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="test_suite_extension_test.html">test/suite/extension.test</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="types_cliargs.html">types/<wbr>Cli<wbr>Args</a>
@@ -150,6 +156,12 @@
 						<a href="utils_cliutils.html">utils/<wbr>Cli<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="utils_commonutils.html">utils/<wbr>Common<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="utils_constants.html">utils/<wbr>Constants</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="utils_credentialsutils.html">utils/<wbr>Credentials<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -157,6 +169,9 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="utils_outpututils.html">utils/<wbr>Output<wbr>Utils</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="utils_settingsutils.html">utils/<wbr>Settings<wbr>Utils</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="utils_yamlutils.html">utils/<wbr>Yaml<wbr>Utils</a>
