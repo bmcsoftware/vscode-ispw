@@ -23,6 +23,3 @@ jobs:
 
       - name: Run compile
         run: npm run compile
-
-      - name: Check Dependencies
-        run: npm run dependency-check

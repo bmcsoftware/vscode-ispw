@@ -25,6 +25,7 @@
 		"Topaz"
 	],
 	"categories": [
+		"SCM Providers",
 		"Other"
 	],
 	"activationEvents": [
@@ -165,8 +166,7 @@
 		"pretest": "npm run lint && npm run compile",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
-		"coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
-		"dependency-check": "dependency-check ./package.json --missing --ignore-module vscode"
+		"coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.2.14",
@@ -178,8 +178,7 @@
 		"@typescript-eslint/eslint-plugin": "^4.15.0",
 		"@typescript-eslint/parser": "^4.15.0",
 		"chai": "^4.3.0",
-		"dependency-check": "^4.1.0",
-		"eslint": "^7.19.0",
+		"eslint": "^7.22.0",
 		"glob": "^7.1.6",
 		"global-var": "^0.1.0",
 		"js-yaml": "^4.0.0",
@@ -189,7 +188,7 @@
 		"tape": "^5.1.1",
 		"ts-node": "^9.1.1",
 		"typedoc": "^0.20.23",
-		"typescript": "^4.1.3",
+		"typescript": "^4.2.3",
 		"utf-8-validate": "^5.0.4",
 		"vsce": "^1.85.0",
 		"vscode-test": "^1.5.0",

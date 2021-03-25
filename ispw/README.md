@@ -28,7 +28,7 @@ This extension contributes the following settings:
 
 #### ISPW Build
 
-Executes an ISPW CLI command to load the selected files into ISPW and immediately run a build on them. In File Explorer this command will show up in the right-click menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor. After the task is loaded, the ISPW build request will find any other impacting tasks and add them to the generate set. This is to ensure that changes in one program did not cause compile errors in another impacting program.
+Executes an ISPW CLI command to load the selected files into ISPW and immediately build them. In File Explorer this command is available in the context menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor. After the task is loaded, the ISPW build request will find any other impacting tasks and add them to the generate set. This is to ensure that changes in one program did not cause compile errors in another impacting program.
 
 #### ISPW Clear Stored Credentials
 
@@ -36,11 +36,11 @@ Clears the stored mainframe username and password. After using this command, you
 
 #### ISPW Generate
 
-Executes an ISPW CLI command to load the selected files into ISPW and immediately run a generate on them. In File Explorer this command will show up in the right-click menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor.
+Executes an ISPW CLI command to load the selected files into ISPW and immediately generate them. In File Explorer this command is available in the context menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor.
 
 #### ISPW Load
 
-Executes an ISPW CLI command to load the selected files into ISPW. In File Explorer this command will show up in the right-click menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor.
+Executes an ISPW CLI command to load the selected files into ISPW. In File Explorer this command is available in the context menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor.
 
 ## Complete Setup Guide
 
@@ -76,7 +76,7 @@ See [Extension Settings](#extension-settings) for descriptions of each of the se
 
 #### Using ISPW Commands
 
-The File Explorer has the ISPW build, generate, and load commands available in the right-click menu. To use the commands, select the file(s), right click, and select the ISPW command you want to execute. The first time you use any command, you will be prompted for any settings values that have not been filled it. You will also be prompted for your mainframe username and password. The username and password are saved for the session so you will not be prompted for them again unless you clear the stored credentials or restart Visual Studio Code.
+The File Explorer has the ISPW build, generate, and load commands available in the context menu. To use the commands, select the file(s), right click, and select the ISPW command you want to execute. The first time you use any command, you will be prompted for any settings values that have not been filled it. You will also be prompted for your mainframe username and password. The username and password are saved for the session so you will not be prompted for them again unless you clear the stored credentials or restart Visual Studio Code.
 
 ![building from file explorer](ispw/media/file-explorer-action.gif)
 
