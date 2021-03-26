@@ -132,15 +132,18 @@
 			"explorer/context": [
 				{
 					"command": "ISPW.buildExplorer",
-					"when": "!explorerResourceIsFolder"
+					"when": "!explorerResourceIsFolder",
+					"group": "ispw@1"
 				},
 				{
 					"command": "ISPW.generateExplorer",
-					"when": "!explorerResourceIsFolder"
+					"when": "!explorerResourceIsFolder",
+					"group": "ispw@2"
 				},
 				{
 					"command": "ISPW.loadExplorer",
-					"when": "!explorerResourceIsFolder"
+					"when": "!explorerResourceIsFolder",
+					"group": "ispw@3"
 				}
 			],
 			"editor/context": [
