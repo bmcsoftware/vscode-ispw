@@ -2,9 +2,9 @@
 
 ## Overview
 
-This extension enables key features from BMC Compwuare's ISPW product that will allow users to integrate their ISPW, Git, and Visual Studio Code development processes.
+This extension enables key features from BMC Compuware's ISPW product that will allow users to integrate their ISPW, Git, and Visual Studio Code development processes.
 
-With the ISPW Visual Studio Code extension, you are able to load source from your Git repository into ISPW and also perform generate and build operations. The extension works by sending requests from Visual Studio Code to your Topaz Workbench CLI installation which connects to ISPW on the mainframe.
+With the ISPW Visual Studio Code extension, you can load source from your Git repository into ISPW and also perform generate and build operations. The extension works by sending requests from Visual Studio Code to your Topaz Workbench CLI installation which connects to ISPW on the mainframe.
 
 ## Requirements
 
@@ -54,7 +54,7 @@ If your current source is stored in ISPW and you need to move it to Git, follow 
 
 #### Configure the yaml file
 
-In order for the integration between ISPW, Git, and Visual Studio Code to work you need to have a yaml file which specifies the configuration. See [this guide](https://devops.api.compuware.com/guidelines/ispw/Git%20to%20ISPW%20Integration%20-%20The%20ISPW%20YAML%20Configuration%20File.html#git-to-ispw-integration-the-ispw-yaml-configuration-file) for more information on the yaml file structure.
+For the integration between ISPW, Git, and Visual Studio Code to work you need to have a yaml file which specifies the configuration. See [this guide](https://devops.api.compuware.com/guidelines/ispw/Git%20to%20ISPW%20Integration%20-%20The%20ISPW%20YAML%20Configuration%20File.html#git-to-ispw-integration-the-ispw-yaml-configuration-file) for more information on the yaml file structure.
 
 #### Create a Git repository to hold the mainframe source
 
