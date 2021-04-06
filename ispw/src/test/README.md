@@ -1,8 +1,19 @@
 # To run command 'npm run test':
 
-### 1. Modify global vscode setting at location - ``%APPDATA%\Code\User\settings.json``
+### 1. Add a credentials file to this folder
 
-### 2. Add the following values (modify '/path/to/your/ispw/cli' to your own path):
+The file should contain the credentials to be used to log on to ISPW when running the tests.
+> **credentials.json**
+> ``` json
+> {
+>     "username": "myUsername",
+>     "password": "myPassword"
+> }
+> ```
+
+### 2. Modify global vscode setting at location - ``%APPDATA%\Code\User\settings.json``
+
+### 3. Add the following values (modify '/path/to/your/ispw/cli' to your own path):
 
 > **%APPDATA%\Code\User\settings.json**
 > ``` json

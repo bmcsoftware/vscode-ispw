@@ -1,4 +1,4 @@
-# BMC Compuware ISPW README
+# BMC Compuware ISPW
 
 ## Overview
 

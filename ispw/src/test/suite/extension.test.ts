@@ -8,6 +8,7 @@
 
 import * as assert from 'assert';
 import { CredentialsCache } from '../../types/CredentialsCache';
+import { Credentials } from "../../types/CredentialsCache";
 import { IspwType, IspwRoot, IspwPath, IspwApplication } from '../../types/IspwTypeMapping';
 import { CliArgs } from '../../types/CliArgs';
 import { YamlUtils } from '../../utils/YamlUtils';
@@ -16,6 +17,7 @@ import { CliUtils } from '../../utils/CliUtils';
 import { SettingsUtils } from '../../utils/SettingsUtils';
 import { Constants } from '../../utils/Constants';
 import { CommonUtils } from '../../utils/CommonUtils';
+import path from 'path';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
@@ -28,8 +30,15 @@ suite('Extension Test Suite', function () {
 	this.beforeAll(() => { });
 
 	this.beforeEach(() => {
+
+		const fs = require('fs');
+		let rawdata = fs.readFileSync(path.resolve(__dirname, '../../../src/test/credentials.json'));
+		let credentials : Credentials = JSON.parse(rawdata);
+
+		console.log("username: " + credentials.username);
+		console.log("password: " + credentials.password);
 		let cc = CredentialsCache.getInstance();
-		cc.saveCredentials('xdevreg', 'regress');
+		cc.saveCredentials(credentials.username, credentials.password);
 	});
 
 	this.afterAll(() => { });
@@ -95,52 +104,52 @@ suite('Extension Test Suite', function () {
 	 */
 	test('Test ispw yaml type', () => {
 		let ispwTypeCob: IspwType = {
-			ispwType: 'COB', 
-			fileExtension: 'cbl', 
-			genSeq: 'V', 
+			ispwType: 'COB',
+			fileExtension: 'cbl',
+			genSeq: 'V',
 			progType: 'Yes',
-			sql: 'No', 
-			cics: 'No', 
-			ims: 'No', 
-			flag1: 'N', 
-			flag2: 'I', 
-			flag3: 'C', 
-			flag4: 'E', 
+			sql: 'No',
+			cics: 'No',
+			ims: 'No',
+			flag1: 'N',
+			flag2: 'I',
+			flag3: 'C',
+			flag4: 'E',
 			genParms: 'ISPWCUTE'
 		};
 
 		let ispwTypeCobExpect: IspwType = {
-			ispwType: 'COB', 
-			fileExtension: 'cbl', 
-			genSeq: 'V', 
+			ispwType: 'COB',
+			fileExtension: 'cbl',
+			genSeq: 'V',
 			progType: 'Yes',
-			sql: 'No', 
-			cics: 'No', 
-			ims: 'No', 
-			flag1: 'N', 
-			flag2: 'I', 
-			flag3: 'C', 
-			flag4: 'E', 
+			sql: 'No',
+			cics: 'No',
+			ims: 'No',
+			flag1: 'N',
+			flag2: 'I',
+			flag3: 'C',
+			flag4: 'E',
 			genParms: 'ISPWCUTE'
 		};
 
 		let ispwTypeClst: IspwType = {
-			ispwType: 'CLST', 
+			ispwType: 'CLST',
 			fileExtension: 'clst'
 		};
 
 		let ispwTypeClstExpect: IspwType = {
-			ispwType: 'CLST', 
+			ispwType: 'CLST',
 			fileExtension: 'clst'
 		};
 
 		let ispwPathCob: IspwPath = {
-			path: '\\COB', 
+			path: '\\COB',
 			types: [ispwTypeCob]
 		};
 
 		let ispwPathClst: IspwPath = {
-			path: '\\CLST', 
+			path: '\\CLST',
 			types: [ispwTypeClst]
 		};
 
@@ -262,7 +271,7 @@ suite('Extension Test Suite', function () {
 
 			assert.strictEqual(await YamlUtils.hasYaml(false, tprog03), true);
 			assert.strictEqual(await YamlUtils.getYamlLocationRelPath(tprog03), "ispwconfig.yml");
-			
+
 			/*
 			let ispwRoot = YamlUtils.loadYaml(tprog03);
 			assert.strictEqual(ispwRoot !== undefined, true);
