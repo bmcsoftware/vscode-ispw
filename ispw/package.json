@@ -153,6 +153,10 @@
 				{
 					"command": "ISPW.generateWithParmsEditor",
 					"when": "true"
+				},
+				{
+					"command": "ISPW.generateWithParmsExplorer",
+					"when": "false"
 				}
 			],
 			"explorer/context": [

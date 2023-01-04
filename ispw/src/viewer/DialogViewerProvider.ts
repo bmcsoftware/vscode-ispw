@@ -37,7 +37,7 @@ export class WebViewUIComponentViewerProvider implements IViewerProvider {
   getListHTML(field: CommonElement): string {
 
     //TODO need to add check for option: multiple or single.
-    const html = ""
+    const html = "";
 
     /*if (option == "multiple") {
         html = this.getComboHTML(field);

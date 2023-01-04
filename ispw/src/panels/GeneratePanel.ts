@@ -109,8 +109,10 @@ export class GeneratePanel {
         console.log('Started loading ' + selectedFiles[0].toString() + ' into ISPW...');
         
         await IspwCliCommand.runCommand(Constants.OP_LOAD, selectedFiles);
+        let counter =0 ;
         GeneratePanel._onLoadComplete.on('load_done', async function(code) {
-          if(code === 0) {
+          if(code === 0 && counter ===0) {
+            counter ++;
             console.log(selectedFiles[0] + ' loaded successfuly in ISPW.');
             const partition = selectedFiles[0].path.split('/');
             const component = partition[partition.length - 1];
