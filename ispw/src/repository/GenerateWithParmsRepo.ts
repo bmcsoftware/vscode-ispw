@@ -64,7 +64,6 @@ export class GenerateWithParmsRepo {
     const response = await axiosObj
       .post(url, JSON.stringify(generateDialogModel), requestHeader)
       .then(function (response: AxiosResponse) {
-        console.debug(response.data);
         var apiResponse: XmlResponse = JSON.parse(response.data);
         apiResponse.status = response.status;
         return apiResponse;

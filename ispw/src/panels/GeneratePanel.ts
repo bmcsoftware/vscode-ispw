@@ -10,10 +10,8 @@ import {
 import { WebViewUtils } from "../utils/WebViewUtils";
 import { GenerateWithParmsController } from "../controllers/GenerateWithParmsController";
 import { HtmlFormData } from "../models/GenerateWithParmsModel";
-import * as parser from "htmlparser2";
+import {load} from "cheerio";
 import fs from "fs";
-import { Element } from "domhandler";
-import { render } from "dom-serializer";
 import * as path from 'path';
 import { YamlUtils } from "../utils/YamlUtils";
 import { MessageUtils } from "../utils/MessageUtils";
@@ -100,20 +98,17 @@ export class GeneratePanel {
       return;
     }
     console.log("Loading config YAML...");
-    YamlUtils.loadYaml(selectedFiles[0]).then(async  (configYaml) => {
+    YamlUtils.loadYaml(selectedFiles[0]).then(async function (configYaml) {
       if (configYaml) {
         console.log('Config YAML loaded successfully.');
         const lpar = configYaml.ispwApplication.host + '-' + configYaml.ispwApplication.port;
 
         //load Selected file into ISPW
-        console.log('Started loading ' + selectedFiles[0].toString() + ' into ISPW...');
-        
         await IspwCliCommand.runCommand(Constants.OP_LOAD, selectedFiles);
-        let counter =0 ;
-        GeneratePanel._onLoadComplete.on('load_done', async function(code) {
-          if(code === 0 && counter ===0) {
-            counter ++;
-            console.log(selectedFiles[0] + ' loaded successfuly in ISPW.');
+        let counter = 0;
+        GeneratePanel._onLoadComplete.on('load_done', async (code) => {
+          if (code === 0 && counter === 0 && selectedFiles !== undefined) {
+            counter++;
             const partition = selectedFiles[0].path.split('/');
             const component = partition[partition.length - 1];
 
@@ -156,7 +151,8 @@ export class GeneratePanel {
                   // Panel view type
                   'showGeneratePanel',
                   // Panel title
-                  htmlResponse.title, //TODO sub variables for component name and type
+                  htmlResponse.title,
+
                   // The editor column the panel should be displayed in
                   ViewColumn.One,
                   // Extra panel configurations
@@ -270,10 +266,9 @@ export class GeneratePanel {
     htmlContent = WebViewUtils.addLibUri("${styleUri}", styleUri, htmlContent);
     htmlContent = WebViewUtils.resolveValues("${componentName}", formData.componentName as string, htmlContent);
     htmlContent = WebViewUtils.resolveValues("${componentType}", formData.componentType as string, htmlContent);
-    const doc = parser.parseDocument(htmlContent);
-    const childNodes = parser.parseDocument(formData.html);
-    parser.DomUtils.appendChild(parser.DomUtils.getElementById("genparmform", doc.childNodes) as Element, childNodes);
-    webView.html = render(doc);
+    let $ = load(htmlContent);
+    $('#genparmform').append(formData.html);
+    webView.html = $.html();
   }
 
   /**
