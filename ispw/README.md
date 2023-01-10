@@ -4,13 +4,14 @@
 
 This extension enables key features from BMC Compuware's ISPW product that will allow users to integrate their ISPW, Git, and Visual Studio Code development processes.
 
-With the ISPW Visual Studio Code extension, you can load source from your Git repository into ISPW and also perform generate and build operations. The extension works by sending requests from Visual Studio Code to your Topaz Workbench CLI installation which connects to ISPW on the mainframe.
+With the ISPW Visual Studio Code extension, you can load source from your Git repository into ISPW and also perform generate, generate with parms and build operations. The extension works by sending requests from Visual Studio Code to your Topaz Workbench CLI installation and to Compuware Enterprise Services which connects to ISPW on the mainframe.
 
 ## Requirements
 
 - Visual Studio Code version 1.52.0 or higher
 - ISPW mainframe version 18.02 license and credentials
 - A local Topaz Workbench CLI installation version 20.06.01 or higher
+- A running instance of Compuware Enterprise Services (CES) version 20.13.02 or higher
 - A local folder containing mainframe source code
 
 ## Extension Settings
@@ -21,7 +22,8 @@ This extension contributes the following settings:
 - `ISPW.Level`: the ISPW level to use when loading tasks
 - `ISPW.Topaz CLI Installation Path`: the absolute path to the local Topaz Workbench CLI installation
 - `ISPW.YAML Mapping File`: the path to the ISPW configuration yaml file. This path may be relative to the workspace folder or absolute. If a relative file path is used, the yaml file must exist in the workspace. The path must contain the file name of the ISPW configuration mapping file.
-
+- `ISPW.CES URL`: The URL to access running instance of CES.
+- `ISPW.Security Token`: The CES Personal Access Token generated from CES security settings. 
 ## Command Descriptions
 
 ![ISPW commands](ispw/media/ISPW-commands.png)
@@ -37,6 +39,10 @@ Clears the stored mainframe username and password. After using this command, you
 #### ISPW Generate
 
 Executes an ISPW CLI command to load the selected files into ISPW and immediately generate them. In File Explorer this command is available in the context menu and will work on single and multiple selections. From the command palette or editor menu, this command will execute against the file currently open in the editor.
+
+#### ISPW Generate with Parms
+
+Executes an ISPW CLI command to load the selected files into ISPW and displays a webview to input parms to generate a task. In File Explorer this command is available in the context menu and will work on single selection. From the command palette or editor menu, this command will execute against the file currently open in the editor.
 
 #### ISPW Load
 
@@ -94,6 +100,10 @@ The command palette has the ISPW clear stored credentials, build, generate, and 
 ### 1.0.0
 
 Initial release of the ISPW extension. The extension supports Build, Generate, and Load commands.
+
+### 1.1.0
+
+Extended support to perform a Generate with Parms operation on task.
 
 [//]: # " Visual Studio Code's Markdown Support : http://code.visualstudio.com/docs/languages/markdown"
 [//]: # "Markdown Syntax Reference: https://help.github.com/articles/markdown-basics/"
