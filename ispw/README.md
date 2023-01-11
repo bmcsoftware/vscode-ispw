@@ -80,6 +80,10 @@ See [Extension Settings](#extension-settings) for descriptions of each of the se
 
 ![example settings](ispw/media/example-settings.png)
 
+#### Install BMC Compuware CES
+
+This extension makes REST API calls to ISPW. Information about installation and use of the BMC Compuware CES can be found [here](https://devops.api.bmc.com/apis/rest_api_ispw.html).
+
 #### Using ISPW Commands
 
 The File Explorer has the ISPW build, generate, and load commands available in the context menu. To use the commands, select the file(s), right click, and select the ISPW command you want to execute. The first time you use any command, you will be prompted for any settings values that have not been filled it. You will also be prompted for your mainframe username and password. The username and password are saved for the session so you will not be prompted for them again unless you clear the stored credentials or restart Visual Studio Code.
