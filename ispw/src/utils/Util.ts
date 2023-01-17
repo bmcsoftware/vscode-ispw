@@ -72,7 +72,7 @@ export function createField(data: any, defaultArr: KeyVal[]): model.CommonElemen
   let typeData: any = data.$.type;
   const size: number = data.$.size;
   const options: any = data.$.options;
-  
+  const target: any = data.$.target;
   
   let propStr = '{ "nodeType": "FieldNode", ';
 
@@ -102,6 +102,10 @@ export function createField(data: any, defaultArr: KeyVal[]): model.CommonElemen
 
   if (size > 0) {
     propStr = propStr.concat('"size": ' + size + ",");
+  }
+
+  if(target) {
+    propStr = propStr.concat('"target":"' + target + '",');
   }
 
   if (options) {

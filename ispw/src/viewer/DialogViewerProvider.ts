@@ -12,6 +12,7 @@ export class WebViewUIComponentViewerProvider implements IViewerProvider {
     const label = field.node?.label ?? "";
     const id = field.node?.id ?? "id";
     const value = field.getFieldNodeValue();
+    const target = (<FieldNode>field.node).target;
 
     let maxSize = "";
     if (field.node && (<FieldNode>field.node).size) {
@@ -21,7 +22,7 @@ export class WebViewUIComponentViewerProvider implements IViewerProvider {
     const html = `
     <div class="component">
       <p>${label}</p>
-      <vscode-text-field id="${id}" ${maxSize} value="${value}"></vscode-text-field>
+      <vscode-text-field id="${id}" ${maxSize} value="${value}" target="${target}"></vscode-text-field>
     </div>
     `;
 
@@ -82,11 +83,12 @@ export class WebViewUIComponentViewerProvider implements IViewerProvider {
     const label = field.node?.label ?? "";
     const id = field.node?.id ?? "id";
     const value = (<FieldNode>field.node)?.value ?? "value";
+    const target = (<FieldNode>field.node)?.target ?? "";
 
     //FIX the checked property was always being set to true... fixed
     const html = `
       <div class="component">
-        <vscode-checkbox id="${id}" checked="${value}">${label}</vscode-checkbox>
+        <vscode-checkbox id="${id}" checked="${value}" target="${target}">${label}</vscode-checkbox>
       </div>
     `;
     return html;
@@ -99,11 +101,12 @@ export class WebViewUIComponentViewerProvider implements IViewerProvider {
    */
   getRadioHTML(field: CommonElement): string {
     const label = field.node?.label ?? "";
+    const target = (<FieldNode>field.node).target;
 
     let html = `
       <div class="component">
         <p>${label}</p>
-        <vscode-radio-group orientation="vertical" id="${field.node?.id}">
+        <vscode-radio-group orientation="vertical" id="${field.node?.id}" target="${target}">
         <!-- <label slot="label">${label}</label> -->
        `;
     const children = field.getChildren();

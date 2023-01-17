@@ -36,6 +36,7 @@ export interface ItemNode {
   readonly return?: string;
   checked?: boolean;
   nodeType: "ItemNode";
+  target: string;
 }
 
 export interface FieldNode {
