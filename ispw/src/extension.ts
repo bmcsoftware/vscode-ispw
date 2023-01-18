@@ -3,6 +3,7 @@ import * as IspwCliCommand from "./commands/CliCommand";
 import { clearCredentials } from './commands/CredentialModifier';
 import { MessageUtils } from './utils/MessageUtils';
 import { Constants } from './utils/Constants';
+import { GeneratePanel } from './panels/GeneratePanel';
 
 // this method is called once when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
@@ -53,6 +54,20 @@ export function activate(context: vscode.ExtensionContext) {
 		clearCredentials();
 	});
 	context.subscriptions.push(clearCreds);
+
+	// generate with Parms
+	let generateWithParmsExplorer = vscode.commands.registerCommand(Constants.CMD_GENERATE_WITH_PARMS_EXPLORER, async (selectedFile: vscode.Uri) => {
+		let selectedFileUris: vscode.Uri[] = await getSelectedFileUris();
+		if (validateSelectFilesWorkspaceFolder(selectedFileUris) === true) {
+			GeneratePanel.render(context.extensionUri, selectedFileUris);
+		}
+	});
+	context.subscriptions.push(generateWithParmsExplorer);
+
+	let generateWithParmsEditor = vscode.commands.registerCommand(Constants.CMD_GENERATE_WITH_PARMS_EDITOR, (selectedFile: vscode.Uri) => {
+		GeneratePanel.render(context.extensionUri, undefined);
+	});
+	context.subscriptions.push(generateWithParmsEditor);
 }
 
 /**

@@ -1,0 +1,57 @@
+/* .area-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+} */
+
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: flex-start;
+}
+
+.area-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: 0 1rem 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--divider-background);
+  border-radius: 5px;
+}
+
+.area-container > * {
+  margin: 0.25rem 0;
+} 
+
+.component {
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+
+.component > p {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.option-container {
+  display: flex;
+  /* Default flex-direction */
+  flex-direction: column;
+}
+
+.button-footer {
+  margin-bottom: 1rem;
+}
+
+vscode-data-grid,
+vscode-panels {
+  border: 1px solid var(--divider-background);
+  border-radius: 5px;
+}

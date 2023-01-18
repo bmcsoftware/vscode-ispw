@@ -97,6 +97,37 @@ export namespace SettingsUtils {
         return assignDesc;
     }
 
+    export async function getCesUrlWithPrompt(): Promise<string | undefined> {
+        let cesUrl = getCesUrl();
+
+        if (CommonUtils.isBlank(cesUrl)) {
+            await vscode.window.showInputBox(
+                {
+                    prompt: 'Enter CES URL'
+                }).then(async function (response) {
+                    await vscode.workspace.getConfiguration().update(Constants.SETTING_KEY_CES_URL, response, vscode.ConfigurationTarget.Global);
+                    cesUrl = response;
+                });
+        }
+        return cesUrl;
+    }
+
+    
+    export async function getCesTokenWithPrompt(): Promise<string | undefined> {
+        let cesToken = getCesToken();
+
+        if (CommonUtils.isBlank(cesToken)) {
+            await vscode.window.showInputBox(
+                {
+                    prompt: 'Enter CES Token'
+                }).then(async function (response) {
+                    await vscode.workspace.getConfiguration().update(Constants.SETTING_KEY_CES_TOKEN, response, vscode.ConfigurationTarget.Global);
+                    cesToken = response;
+                });
+        }
+        return cesToken;
+    }
+
     /**
      * Gets the CLI location saved in the User Settings. This may or may not be defined.
      */
@@ -123,5 +154,25 @@ export namespace SettingsUtils {
         let assignmentDescription: string | undefined = vscode.workspace.getConfiguration().get<string>(Constants.SETTING_KEY_ASSIGN_DESC);
 
         return assignmentDescription;
+    }
+
+    /**
+     * Gets the CES URL
+     * @returns 
+     */
+    export function getCesUrl(): string | undefined {
+        let cesUrl: string | undefined = vscode.workspace.getConfiguration().get<string>(Constants.SETTING_KEY_CES_URL);
+
+        return cesUrl;
+    }
+
+    /**
+     * Gets the CES Token
+     * @returns 
+     */
+    export function getCesToken(): string | undefined {
+        let cesToken: string | undefined = vscode.workspace.getConfiguration().get<string>(Constants.SETTING_KEY_CES_TOKEN);
+
+        return cesToken;
     }
 }

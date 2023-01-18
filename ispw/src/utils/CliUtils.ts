@@ -20,6 +20,7 @@ import { Credentials, CredentialsCache } from "../types/CredentialsCache";
 import { promises } from "fs";
 import { Constants } from './Constants';
 import { CommonUtils } from './CommonUtils';
+import { GeneratePanel } from '../panels/GeneratePanel';
 
 /**
  * Utility namespace for CLI operations.
@@ -88,6 +89,7 @@ export namespace CliUtils {
         console.debug("The " + operationToShow + " process ended for " + fileNameToShow + ". CLI return code is " + code);
         if (code === 0) {
           // pass
+          GeneratePanel._onLoadComplete.emit('load_done', code); // this will work only for generate with parms
           MessageUtils.showInfoMessage("The " + operationToShow + " process was successful for " + fileNameToShow);
         }
         else {
