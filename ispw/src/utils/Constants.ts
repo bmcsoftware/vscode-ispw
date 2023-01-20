@@ -23,6 +23,7 @@ export abstract class Constants {
     static readonly CMD_LOAD_EDITOR : string = 'ISPW.loadEditor';
     static readonly CMD_CLEAR_CREDS : string = 'ISPW.clearCreds';
     static readonly CMD_GENERATE_WITH_PARMS_EXPLORER = 'ISPW.generateWithParmsExplorer';
+    static readonly CMD_GENERATE_WITH_PARMS_COMMAND_PALETTE = 'ISPW.generateWithParmsCP';
 
     static readonly OP_BUILD : string = 'build';
     static readonly OP_LOAD : string = 'load';
@@ -43,4 +44,7 @@ export abstract class Constants {
     static readonly URL_TASK_CLEANUP = Constants.FORWARD_SLASH + 'tasks' + Constants.FORWARD_SLASH;
 
     static readonly CONTENT_TYPE_APPLICATION_JSON = 'application/json';
+
+    static readonly NO_ACTIVE_FILE_IN_EDITOR = "Generate could not be performed. No editor is active.";
+    static readonly SAVE_CONFIRMATION = "Save changes to ${fileName} before generating?";
 }
