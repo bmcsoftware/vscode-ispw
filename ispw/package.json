@@ -37,7 +37,8 @@
 		"onCommand:ISPW.generateEditor",
 		"onCommand:ISPW.loadEditor",
 		"onCommand:ISPW.clearCreds",
-		"onCommand:ISPW.generateWithParmsEditor"
+		"onCommand:ISPW.generateWithParmsEditor",
+		"onCommand:ISPW.generateWithParmsCP"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -118,6 +119,10 @@
 			{
 				"command": "ISPW.generateWithParmsEditor",
 				"title": "ISPW: Generate with Parms"
+			},
+			{
+				"command": "ISPW.generateWithParmsCP",
+				"title": "ISPW: Generate with Parms from Active Editor"
 			}
 		],
 		"menus": {
@@ -151,8 +156,12 @@
 					"when": "true"
 				},
 				{
-					"command": "ISPW.generateWithParmsEditor",
+					"command": "ISPW.generateWithParmsCP",
 					"when": "true"
+				},
+				{
+					"command": "ISPW.generateWithParmsEditor",
+					"when": "false"
 				},
 				{
 					"command": "ISPW.generateWithParmsExplorer",

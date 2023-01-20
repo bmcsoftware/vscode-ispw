@@ -68,6 +68,11 @@ export function activate(context: vscode.ExtensionContext) {
 		GeneratePanel.render(context.extensionUri, undefined);
 	});
 	context.subscriptions.push(generateWithParmsEditor);
+
+	let generateWithParmsCP = vscode.commands.registerCommand(Constants.CMD_GENERATE_WITH_PARMS_COMMAND_PALETTE, (selectedFile: vscode.Uri) => {
+		GeneratePanel.render(context.extensionUri, undefined);
+	});
+	context.subscriptions.push(generateWithParmsCP);
 }
 
 /**
