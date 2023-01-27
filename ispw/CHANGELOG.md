@@ -9,5 +9,8 @@ Initial Release
 - Command to load a file into ISPW and immediately build it from the File Explorer, Command Palette, or Editor.
 - Logging is sent to ISPW channel in the Output view.
 
+## 1.1.0 - 2023-01-25
+### Added
+- Command to load a file into ISPW and immediately generate with compile parameters from the File Explorer, Command Palette,or Editor.
 
 [//]: # (See https://keepachangelog.com/en/1.0.0/ for more details on structuring a change log)

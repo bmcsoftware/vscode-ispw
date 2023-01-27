@@ -197,9 +197,9 @@ export namespace YamlUtils {
     export async function loadYaml(selectedFile: vscode.Uri): Promise<IspwRoot | undefined> {
         let ispwRoot: IspwRoot | undefined = undefined;
         let yamlLocation: string = await getYamlLocationAbsPath(selectedFile);
-        let loadedData = yaml.load(fs.readFileSync(yamlLocation, 'utf8'));
+        let loadedData = yaml.load(fs.readFileSync(yamlLocation, 'utf8').replace("!!com.compuware.ispw.cli.model.IspwRoot",""));
         console.debug(loadedData);
-        if (typeof loadedData !== 'object') { throw new Error(yamlLocation + ' does not contain valid yaml'); }
+        if(typeof loadedData !== 'object') { throw new Error(yamlLocation + ' does not contain valid yaml'); }
         ispwRoot = (loadedData as unknown) as IspwRoot;
         return ispwRoot;
     }
