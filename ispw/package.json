@@ -3,7 +3,7 @@
 	"icon": "media/ISPW_marble.png",
 	"displayName": "BMC Compuware ISPW",
 	"author": "BMC",
-    "license": "LICENSE.txt",
+        "license": "LICENSE.txt",
 	"description": "BMC Compuware ISPW - Visual Studio Code Extension",
 	"version": "1.1.0",
 	"publisher": "BMC",
