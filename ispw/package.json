@@ -1,10 +1,12 @@
 {
-	"name": "ISPW",
+	"name": "IspwVsCode",
 	"icon": "media/ISPW_marble.png",
 	"displayName": "BMC Compuware ISPW",
+	"author": "BMC",
+        "license": "LICENSE.txt",
 	"description": "BMC Compuware ISPW - Visual Studio Code Extension",
-	"version": "1.0.1",
-	"publisher": "BMCCompuware",
+	"version": "1.1.0",
+	"publisher": "BMC",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/bmcsoftware/vscode-ispw.git"
