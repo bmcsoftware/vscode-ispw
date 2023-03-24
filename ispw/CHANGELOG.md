@@ -15,6 +15,6 @@ Initial Release
 
 ## 1.2.0 - 
 ### Updated
-Renamed BMC Compuware ISPW to BMC AMI DevX Workbench Code Pipeline (Code Pipeline)
+Renamed BMC Compuware ISPW to BMC AMI DevX Workbench Code Pipeline for Git (Code Pipeline)
 
 [//]: # (See https://keepachangelog.com/en/1.0.0/ for more details on structuring a change log)

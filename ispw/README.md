@@ -1,8 +1,8 @@
-# BMC AMI DevX Workbench Code Pipeline (Code Pipeline for Git)
+# BMC AMI DevX Workbench Code Pipeline for Git (Code Pipeline for Git)
 
 ## Overview
 
-This extension enables key features from BMC AMI DevX Workbench Code Pipeline product that will allow users to integrate their Code Pipeline, Git, and Visual Studio Code development processes.
+This extension enables key features from BMC AMI DevX Workbench Code Pipeline for Git product that will allow users to integrate their Code Pipeline, Git, and Visual Studio Code development processes.
 
 With the Code Pipeline for Git Visual Studio Code extension, you can load source from your Git repository into Code Pipeline and also perform generate, generate with parms and build operations. The extension works by sending requests from Visual Studio Code to your Workbench for Eclipse CLI installation and to BMC AMI Products for Web which connects to Code Pipeline on the mainframe.
 

@@ -1,7 +1,7 @@
 {
 	"name": "IspwVsCode",
 	"icon": "media/ISPW_marble.png",
-	"displayName": "BMC AMI DevX Workbench Code Pipeline",
+	"displayName": "BMC AMI DevX Workbench Code Pipeline for Git",
 	"author": "BMC",
         "license": "LICENSE.txt",
 	"description": "BMC AMI DevX Workbench Code Pipeline for Git - Visual Studio Code Extension",
