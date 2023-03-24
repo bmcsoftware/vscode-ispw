@@ -147,7 +147,7 @@ export namespace YamlUtils {
                     },
                 ],
                 {
-                    placeHolder: 'Select ISPW YAML Mapping File'
+                    placeHolder: 'Select Code Pipeline for Git YAML Mapping File'
                 });
 
             if (selection?.label === 'Find...') {

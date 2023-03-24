@@ -14,12 +14,12 @@ import * as vscode from "vscode";
 export namespace OutputUtils {
 
     /**
-     * Returns the instance of the ISPW output channel. If no output channel exists, one is created and it is shown.
+     * Returns the instance of the Code Pipeline for Git output channel. If no output channel exists, one is created and it is shown.
      */
     let _channel: vscode.OutputChannel;
     export function getOutputChannel(): vscode.OutputChannel {
         if (!_channel) {
-            _channel = vscode.window.createOutputChannel("ISPW");
+            _channel = vscode.window.createOutputChannel("Code Pipeline for Git");
             _channel.show(true);
         }
         return _channel;
