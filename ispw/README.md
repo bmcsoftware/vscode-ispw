@@ -26,7 +26,7 @@ This extension contributes the following settings:
 - `Code Pipeline for Git.Security Token`: The BMC AMI Products for Web Personal Access Token generated from its security settings. 
 ## Command Descriptions
 
-![Code Pipeline for Git commands](ispw/media/ISPW-commands.png)
+![Code Pipeline for Git commands](media/ISPW-commands.png)
 
 #### Code Pipeline for Git Build
 
@@ -78,7 +78,7 @@ It is advised to set the root folder of your Git repository to be the primary wo
 
 See [Extension Settings](#extension-settings) for descriptions of each of the settings. The assignment description, level, and Topaz CLI installation path are all stored at the User settings level. The YAML mapping file location can be configured at the Workspace settings level.
 
-![example settings](ispw/media/example-settings.png)
+![example settings](media/example-settings.png)
 
 #### Install BMC AMI Products for Web
 
@@ -92,7 +92,7 @@ The File Explorer has the Code Pipeline for Git build, generate, and load comman
 
 The command palette has the Code Pipeline for Git clear stored credentials, build, generate, and load commands available. To use the commands, open a file in the editor, open the command palette and select the command. The first time you use a command, you will be prompted for any settings values that have not been filled it. You will also be prompted for your mainframe username and password. The username and password are saved for the session so you will not be prompted for them again unless you clear the stored credentials or restart Visual Studio Code.
 
-![generating from command palette](ispw/media/command-palette-action.gif)
+![generating from command palette](media/command-palette-action.gif)
 
 ## Known Issues
 
