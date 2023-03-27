@@ -9,9 +9,9 @@
 export abstract class Constants {
     static readonly SETTING_KEY_ASSIGN_DESC: string = 'Code Pipeline for Git.Assignment Description';
     static readonly SETTING_KEY_LOAD_LEVEL: string = 'Code Pipeline for Git.Level';
-    static readonly SETTING_KEY_CLI_LOC: string = 'Code Pipeline for Git.Topaz CLI Installation Path';
+    static readonly SETTING_KEY_CLI_LOC: string = 'Code Pipeline for Git.Workbench CLI Installation Path';
     static readonly SETTING_KEY_YAML_LOC: string = 'Code Pipeline for Git.YAML Mapping File';
-    static readonly SETTING_KEY_CES_URL: string = 'Code Pipeline for Git.Products for Web URL';
+    static readonly SETTING_KEY_CES_URL: string = 'Code Pipeline for Git.CES URL';
     static readonly SETTING_KEY_CES_TOKEN: string = 'Code Pipeline for Git.Security Token';
 
     static readonly CMD_BUILD_EXPLORER : string = 'ISPW.buildExplorer';

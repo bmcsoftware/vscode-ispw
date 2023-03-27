@@ -65,15 +65,15 @@
 					<h2>Overview</h2>
 				</a>
 				<p>This extension enables key features from BMC AMI DevX Workbench Code Pipeline for Git product that will allow users to integrate their Code Pipeline, Git, and Visual Studio Code development processes.</p>
-				<p>With the Code Pipeline for Git Visual Studio Code extension, you are able to load source from your Git repository into Code Pipeline and also perform generate, generate with parms and build operations. The extension works by sending requests from Visual Studio Code to your Workbench for Eclipse CLI installation and to BMC AMI Products for Web which connects to Code Pipeline on the mainframe.</p>
+				<p>With the Code Pipeline for Git Visual Studio Code extension, you are able to load source from your Git repository into Code Pipeline and also perform generate, generate with parms and build operations. The extension works by sending requests from Visual Studio Code to your Workbench CLI installation and to CES which connects to Code Pipeline on the mainframe.</p>
 				<a href="#requirements" id="requirements" style="color: inherit; text-decoration: none;">
 					<h2>Requirements</h2>
 				</a>
 				<ul>
 					<li>Visual Studio Code version 1.52.0 or higher</li>
 					<li>Code Pipeline mainframe version 18.02 license and credentials</li>
-					<li>A local Workbench for Eclipse CLI installation version 20.06.01 or higher</li>
-					<li>A running instance of BMC AMI Products for Web version 20.13.02 or higher</li>
+					<li>A local Workbench CLI installation version 20.06.01 or higher</li>
+					<li>A running instance of CES version 20.13.02 or higher</li>
 					<li>A local folder containing mainframe source code</li>
 				</ul>
 				<a href="#extension-settings" id="extension-settings" style="color: inherit; text-decoration: none;">
@@ -83,10 +83,10 @@
 				<ul>
 					<li><code>Code Pipeline for Git.Assignment Description</code>: the Code Pipeline for Git assignment description or description pattern to use when a new assignment is created to load tasks. There are four pattern variables that can be used in the assignment description and they are <code>{user}</code>, <code>{branch_name}</code>, <code>{project_name}</code>, and <code>{date}</code>. The values of the variables will be set dynamically when an Code Pipeline for Git command is run.</li>
 					<li><code>Code Pipeline for Git.Level</code>: the Code Pipeline for Git level to use when loading tasks</li>
-					<li><code>Code Pipeline for Git.Workbench for Eclipse CLI Installation Path</code>: the absolute path to the local Workbench for Eclipse CLI installation</li>
+					<li><code>Code Pipeline for Git.Workbench CLI Installation Path</code>: the absolute path to the local Workbench CLI installation</li>
 					<li><code>Code Pipeline for Git.YAML Mapping File</code>: the path to the Code Pipeline configuration yaml file. This path may be relative to the workspace folder or absolute. If a relative file path is used, the yaml file must exist in the workspace. The path must contain the file name of the Code Pipeline configuration mapping file.</li>
-					<li><code>Code Pipeline for Git.Products for Web URL</code>: The URL to access running instance of BMC AMI Products for Web.</li>
-					<li><code>Code Pipeline for Git.Security Token</code>: The BMC AMI Products for Web Personal Access Token generated from its security settings.</li>
+					<li><code>Code Pipeline for Git.CES URL</code>: The URL to access running instance of CES.</li>
+					<li><code>Code Pipeline for Git.Security Token</code>: The CES Personal Access Token generated from its security settings.</li>
 				</ul>
 				<a href="#command-descriptions" id="command-descriptions" style="color: inherit; text-decoration: none;">
 					<h2>Command Descriptions</h2>
@@ -112,9 +112,9 @@
 					<h2>Complete Setup Guide</h2>
 				</a>
 				<a href="#install-the-topaz-workbench-cli" id="install-the-topaz-workbench-cli" style="color: inherit; text-decoration: none;">
-					<h4>Install the Workbench for Eclipse CLI</h4>
+					<h4>Install the Workbench CLI</h4>
 				</a>
-				<p>This extension sends requests to the Workbench for Eclipse CLI. Information about installation and use of the Workbench for Eclipse CLI can be found <a href="https://devops.api.compuware.com/apis/topaz_cli.html#workspace">here</a>.</p>
+				<p>This extension sends requests to the Workbench CLI. Information about installation and use of the Workbench CLI can be found <a href="https://devops.api.compuware.com/apis/topaz_cli.html#workspace">here</a>.</p>
 				<a href="#download-mainframe-source-from-ispw" id="download-mainframe-source-from-ispw" style="color: inherit; text-decoration: none;">
 					<h4>Download mainframe source from Code Pipeline</h4>
 				</a>
@@ -138,7 +138,7 @@
 				<a href="#configure-the-settings-for-the-ispw-extension" id="configure-the-settings-for-the-ispw-extension" style="color: inherit; text-decoration: none;">
 					<h4>Configure the settings for the Code Pipeline for Git extension</h4>
 				</a>
-				<p>See <a href="#extension-settings">Extension Settings</a> for descriptions of each of the settings. The assignment description, level, and Workbench for Eclipse CLI installation path are all stored at the User settings level. The YAML mapping file location can be configured at the Workspace settings level.</p>
+				<p>See <a href="#extension-settings">Extension Settings</a> for descriptions of each of the settings. The assignment description, level, and Workbench CLI installation path are all stored at the User settings level. The YAML mapping file location can be configured at the Workspace settings level.</p>
 				<p><img src="ispw/media/example-settings.png" alt="example settings"></p>
 				<a href="#using-ispw-commands" id="using-ispw-commands" style="color: inherit; text-decoration: none;">
 					<h4>Using Code Pipeline for Git Commands</h4>

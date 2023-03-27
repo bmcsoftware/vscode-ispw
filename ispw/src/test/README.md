@@ -20,7 +20,7 @@ The file should contain the credentials to be used to log on to ISPW when runnin
 > {
 >     "ISPW.Assignment Description": "{user}-{project_name}",
 >     "ISPW.Level": "DEV1",
->     "ISPW.Topaz CLI Installation Path": "/path/to/your/ispw/cli",
+>     "ISPW.Workbench CLI Installation Path": "/path/to/your/ispw/cli",
 > }
 > ```
 

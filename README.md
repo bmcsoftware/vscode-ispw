@@ -18,7 +18,7 @@ Before attempting to run tests, update the settings file at `%APPDATA%\Code\User
 ``` json
     "Code Pipeline for Git.Assignment Description": "${user}-${project_name}",
     "Code Pipeline for Git.Level": "DEV1",
-    "Code Pipeline for Git.Workbench for Eclipse CLI Installation Path": "your cli path",
+    "Code Pipeline for Git.Workbench CLI Installation Path": "your cli path",
 ```
 
 Then, add a file to your ispw/src/test folder called `credentials.json` and add the following:

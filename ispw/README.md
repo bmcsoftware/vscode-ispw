@@ -4,14 +4,14 @@
 
 This extension enables key features from BMC AMI DevX Workbench Code Pipeline for Git product that will allow users to integrate their Code Pipeline, Git, and Visual Studio Code development processes.
 
-With the Code Pipeline for Git Visual Studio Code extension, you can load source from your Git repository into Code Pipeline and also perform generate, generate with parms and build operations. The extension works by sending requests from Visual Studio Code to your Workbench for Eclipse CLI installation and to BMC AMI Products for Web which connects to Code Pipeline on the mainframe.
+With the Code Pipeline for Git Visual Studio Code extension, you can load source from your Git repository into Code Pipeline and also perform generate, generate with parms and build operations. The extension works by sending requests from Visual Studio Code to your Workbench CLI installation and to CES which connects to Code Pipeline on the mainframe.
 
 ## Requirements
 
 - Visual Studio Code version 1.52.0 or higher
 - Code Pipeline mainframe version 18.02 license and credentials
-- A local Workbench for Eclipse CLI installation version 20.06.01 or higher
-- A running instance of BMC AMI Products for Web version 20.13.02 or higher
+- A local Workbench CLI installation version 20.06.01 or higher
+- A running instance of Common Enterprise Services version 20.13.02 or higher
 - A local folder containing mainframe source code
 
 ## Extension Settings
@@ -20,10 +20,10 @@ This extension contributes the following settings:
 
 - `Code Pipeline for Git.Assignment Description`: the Code Pipeline for Git assignment description or description pattern to use when a new assignment is created to load tasks. There are four pattern variables that can be used in the assignment description and they are `{user}`, `{branch_name}`, `{project_name}`, and `{date}`. The values of the variables will be set dynamically when a Code Pipeline for Git command is run.
 - `Code Pipeline for Git.Level`: the Code Pipeline for Git level to use when loading tasks
-- `Code Pipeline for Git.Workbench for Eclipse CLI Installation Path`: the absolute path to the local Workbench for Eclipse CLI installation
+- `Code Pipeline for Git.Workbench CLI Installation Path`: the absolute path to the local Workbench CLI installation
 - `Code Pipeline for Git.YAML Mapping File`: the path to the Code Pipeline for Git configuration yaml file. This path may be relative to the workspace folder or absolute. If a relative file path is used, the yaml file must exist in the workspace. The path must contain the file name of the Code Pipeline configuration mapping file.
-- `Code Pipeline for Git.Products for Web URL`: The URL to access running instance of BMC AMI Products for Web.
-- `Code Pipeline for Git.Security Token`: The BMC AMI Products for Web Personal Access Token generated from its security settings. 
+- `Code Pipeline for Git.CES URL`: The URL to access running instance of CES.
+- `Code Pipeline for Git.Security Token`: The CES Personal Access Token generated from its security settings. 
 ## Command Descriptions
 
 ![Code Pipeline for Git commands](media/ISPW-commands.png)
@@ -50,9 +50,9 @@ Executes a Code Pipeline CLI command to load the selected files into Code Pipeli
 
 ## Complete Setup Guide
 
-#### Install the Workbench for Eclipse CLI
+#### Install the Workbench CLI
 
-This extension sends requests to the Workbench for Eclipse CLI. Information about installation and use of the Workbench for Eclipse CLI can be found [here](https://devops.api.compuware.com/apis/topaz_cli.html#workspace).
+This extension sends requests to the Workbench CLI. Information about installation and use of the Workbench CLI can be found [here](https://devops.api.compuware.com/apis/topaz_cli.html#workspace).
 
 #### Download mainframe source from Code Pipeline
 
@@ -76,13 +76,13 @@ It is advised to set the root folder of your Git repository to be the primary wo
 
 #### Configure the settings for the Code Pipeline for Git extension
 
-See [Extension Settings](#extension-settings) for descriptions of each of the settings. The assignment description, level, and Topaz CLI installation path are all stored at the User settings level. The YAML mapping file location can be configured at the Workspace settings level.
+See [Extension Settings](#extension-settings) for descriptions of each of the settings. The assignment description, level, and Workbench CLI installation path are all stored at the User settings level. The YAML mapping file location can be configured at the Workspace settings level.
 
 ![example settings](media/example-settings.png)
 
-#### Install BMC AMI Products for Web
+#### Install CES
 
-This extension makes REST API calls to Code Pipeline. Information about installation and use of the BMC AMI Products for Web can be found [here](https://devops.api.bmc.com/apis/rest_api_ispw.html).
+This extension makes REST API calls to Code Pipeline. Information about installation and use of the CES can be found [here](https://devops.api.bmc.com/apis/rest_api_ispw.html).
 
 #### Using Code Pipeline for Git Commands
 
