@@ -1,10 +1,10 @@
 {
 	"name": "IspwVsCode",
 	"icon": "media/ISPW_marble.png",
-	"displayName": "BMC Compuware ISPW",
+	"displayName": "BMC AMI DevX Workbench Code Pipeline for Git",
 	"author": "BMC",
         "license": "LICENSE.txt",
-	"description": "BMC Compuware ISPW - Visual Studio Code Extension",
+	"description": "BMC AMI DevX Workbench Code Pipeline for Git - Visual Studio Code Extension",
 	"version": "1.1.1",
 	"publisher": "BMC",
 	"repository": {
@@ -20,6 +20,10 @@
 	"keywords": [
 		"ISPW",
 		"BMC",
+		"AMI",
+		"DevX",
+		"Code Pipeline",
+		"Workbench",
 		"Compuware",
 		"SCM",
 		"mainframe",
@@ -45,86 +49,86 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"configuration": {
-			"title": "ISPW",
+			"title": "Code Pipeline for Git",
 			"properties": {
-				"ISPW.Assignment Description": {
+				"Code Pipeline for Git.Assignment Description": {
 					"type": "string",
 					"default": null,
 					"scope": "application",
-					"description": "The description to give assignments created by ISPW actions."
+					"description": "The description to give assignments created by Code Pipeline actions."
 				},
-				"ISPW.Level": {
+				"Code Pipeline for Git.Level": {
 					"type": "string",
 					"default": null,
 					"scope": "application",
-					"description": "The level to use in the ISPW life cycle."
+					"description": "The level to use in the Code Pipeline life cycle."
 				},
-				"ISPW.Topaz CLI Installation Path": {
+				"Code Pipeline for Git.Workbench CLI Installation Path": {
 					"type": "string",
 					"default": null,
 					"scope": "machine",
-					"description": "File path of the Topaz CLI Installation folder."
+					"description": "File path of the Workbench CLI Installation folder."
 				},
-				"ISPW.YAML Mapping File": {
+				"Code Pipeline for Git.YAML Mapping File": {
 					"type": "string",
 					"default": null,
 					"scope": "resource",
 					"description": "File path of the .yml mapping file."
 				},
-				"ISPW.CES URL": {
+				"Code Pipeline for Git.CES URL": {
 					"type": "string",
 					"default": null,
 					"scope": "resource",
-					"description": "The URL for Compuware Enterprise Services."
+					"description": "The URL for CES."
 				},
-				"ISPW.Security Token": {
+				"Code Pipeline for Git.Security Token": {
 					"type": "string",
 					"default": null,
 					"scope": "resource",
-					"description": "The Compuware Enterprise Services authentication token."
+					"description": "The CES authentication token."
 				}
 			}
 		},
 		"commands": [
 			{
 				"command": "ISPW.buildExplorer",
-				"title": "ISPW: Build"
+				"title": "Code Pipeline for Git: Build"
 			},
 			{
 				"command": "ISPW.generateExplorer",
-				"title": "ISPW: Generate"
+				"title": "Code Pipeline for Git: Generate"
 			},
 			{
 				"command": "ISPW.loadExplorer",
-				"title": "ISPW: Load"
+				"title": "Code Pipeline for Git: Load"
 			},
 			{
 				"command": "ISPW.generateWithParmsExplorer",
-				"title": "ISPW: Generate with Parms"
+				"title": "Code Pipeline for Git: Generate with Parms"
 			},
 			{
 				"command": "ISPW.buildEditor",
-				"title": "ISPW: Build"
+				"title": "Code Pipeline for Git: Build"
 			},
 			{
 				"command": "ISPW.generateEditor",
-				"title": "ISPW: Generate"
+				"title": "Code Pipeline for Git: Generate"
 			},
 			{
 				"command": "ISPW.loadEditor",
-				"title": "ISPW: Load"
+				"title": "Code Pipeline for Git: Load"
 			},
 			{
 				"command": "ISPW.clearCreds",
-				"title": "ISPW: Clear Stored Credentials"
+				"title": "Code Pipeline for Git: Clear Stored Credentials"
 			},
 			{
 				"command": "ISPW.generateWithParmsEditor",
-				"title": "ISPW: Generate with Parms"
+				"title": "Code Pipeline for Git: Generate with Parms"
 			},
 			{
 				"command": "ISPW.generateWithParmsCP",
-				"title": "ISPW: Generate with Parms from Active Editor"
+				"title": "Code Pipeline for Git: Generate with Parms from Active Editor"
 			}
 		],
 		"menus": {

@@ -8,7 +8,7 @@ import { GeneratePanel } from './panels/GeneratePanel';
 // this method is called once when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
 
-	console.log('Congratulations, your extension "ISPW" is now active!');
+	console.log('Congratulations, your extension "Code Pipeline for Git" is now active!');
 
 	// build commands
 	let buildExplorer = vscode.commands.registerCommand(Constants.CMD_BUILD_EXPLORER, async (selectedFile: vscode.Uri) => {
@@ -107,7 +107,7 @@ function validateSelectFilesWorkspaceFolder(selectedFiles: vscode.Uri[]): boolea
 
 	for (let i = 0; i < selectedFiles.length; i++) {
 		if (folder !== vscode.workspace.getWorkspaceFolder(selectedFiles[i])) {
-			MessageUtils.showErrorMessage("ISPW commands can only be executed on files within the same workspace folder.");
+			MessageUtils.showErrorMessage("Code Pipeline for Git commands can only be executed on files within the same workspace folder.");
 			return false;
 		}
 		folder = vscode.workspace.getWorkspaceFolder(selectedFiles[i]);

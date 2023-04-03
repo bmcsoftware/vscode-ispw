@@ -41,11 +41,11 @@ export namespace SettingsUtils {
                 [
                     { 
                         label: 'Find...', 
-                        description: 'Browse your file system to locate the Topaz CLI installation folder' 
+                        description: 'Browse your file system to locate the Workbench CLI installation folder' 
                     },
                 ],
                 {
-                    placeHolder: 'Select Topaz CLI Installation Path'
+                    placeHolder: 'Select Workbench CLI Installation Path'
                 }).then(async selection => {
                     if (!selection) {
                         return;

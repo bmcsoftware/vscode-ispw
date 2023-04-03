@@ -204,16 +204,16 @@ export namespace CliUtils {
     let validLevel: boolean = true;
 
     if (!validYaml) {
-      console.debug("The ISPW YAML mapping file cannot be found for " + workspaceFolder);
-      MessageUtils.showWarningMessage("The ISPW YAML mapping file cannot be found for " + workspaceFolder + ". Update the YAML Mapping File location in the Settings for the ISPW extension.");
+      console.debug("The Code Pipeline for Git YAML mapping file cannot be found for " + workspaceFolder);
+      MessageUtils.showWarningMessage("The Code Pipeline for Git YAML mapping file cannot be found for " + workspaceFolder + ". Update the YAML Mapping File location in the Settings for the ISPW extension.");
     }
 
     if (validYaml) {
       let cliLocation: string | undefined = await SettingsUtils.getCliLocationWithPrompt();
       if (CommonUtils.isBlank(cliLocation) || cliLocation === undefined || !fs.existsSync(cliLocation)) {
         validCli = false;
-        console.debug("A valid ISPW CLI path was not configured.");
-        MessageUtils.showWarningMessage('A valid ISPW CLI path was not configured. Configure the CLI path in the ISPW user settings.');
+        console.debug("A valid Code Pipeline for Git CLI path was not configured.");
+        MessageUtils.showWarningMessage('A valid Code Pipeline for Git CLI path was not configured. Configure the CLI path in the Code Pipeline for Git user settings.');
       }
     }
 
@@ -221,8 +221,8 @@ export namespace CliUtils {
       let loadLevel: string | undefined = await SettingsUtils.getLoadLevelWithPrompt();
       if (CommonUtils.isBlank(loadLevel)) {
         validLevel = false;
-        console.debug("The ISPW build level cannot be found for " + workspaceFolder);
-        MessageUtils.showWarningMessage("The ISPW build level cannot be found for " + workspaceFolder + ". Update the build level in the Settings for the ISPW extension.");
+        console.debug("The Code Pipeline for Git build level cannot be found for " + workspaceFolder);
+        MessageUtils.showWarningMessage("The Code Pipeline for Git build level cannot be found for " + workspaceFolder + ". Update the build level in the Settings for the Code Pipeline for Git extension.");
       }
     }
     
