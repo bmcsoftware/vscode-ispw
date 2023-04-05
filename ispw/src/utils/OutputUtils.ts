@@ -19,7 +19,7 @@ export namespace OutputUtils {
     let _channel: vscode.OutputChannel;
     export function getOutputChannel(): vscode.OutputChannel {
         if (!_channel) {
-            _channel = vscode.window.createOutputChannel("Code Pipeline for Git");
+            _channel = vscode.window.createOutputChannel("Workbench Code Pipeline for Git");
             _channel.show(true);
         }
         return _channel;
