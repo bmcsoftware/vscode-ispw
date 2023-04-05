@@ -94,7 +94,7 @@ export namespace CliUtils {
         }
         else {
           // fail
-          MessageUtils.showErrorMessage("The " + operationToShow + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
+          MessageUtils.showErrorMessage("The " + operationToShow + " process failed for " + fileNameToShow + ". Check the Code Pipeline for Git Output channel for more information.");
         }
       });
     }
@@ -205,7 +205,7 @@ export namespace CliUtils {
 
     if (!validYaml) {
       console.debug("The Code Pipeline for Git YAML mapping file cannot be found for " + workspaceFolder);
-      MessageUtils.showWarningMessage("The Code Pipeline for Git YAML mapping file cannot be found for " + workspaceFolder + ". Update the YAML Mapping File location in the Settings for the ISPW extension.");
+      MessageUtils.showWarningMessage("The Code Pipeline for Git YAML mapping file cannot be found for " + workspaceFolder + ". Update the YAML Mapping File location in the Settings for the Code Pipeline for Git extension.");
     }
 
     if (validYaml) {

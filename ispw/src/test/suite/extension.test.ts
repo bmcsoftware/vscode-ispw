@@ -355,7 +355,7 @@ async function testOperation(operation: string, program: string) {
 				}
 				else {
 					// fail
-					MessageUtils.showErrorMessage("The " + operation + " process failed for " + fileNameToShow + ". Check the ISPW Output channel for more information.");
+					MessageUtils.showErrorMessage("The " + operation + " process failed for " + fileNameToShow + ". Check the Code Pipeline for Git Output channel for more information.");
 					assert.fail(operation + ' failed');
 				}
 
