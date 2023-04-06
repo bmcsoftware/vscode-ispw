@@ -5,7 +5,7 @@
 	"author": "BMC",
         "license": "LICENSE.txt",
 	"description": "BMC AMI DevX Workbench Code Pipeline for Git - Visual Studio Code Extension",
-	"version": "1.2.1",
+	"version": "1.2.0",
 	"publisher": "BMC",
 	"repository": {
 		"type": "git",
