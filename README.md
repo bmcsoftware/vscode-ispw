@@ -7,9 +7,9 @@ This repository contains the source for BMC AMI DevX Workbench Code Pipeline for
 1. Install nodejs
 2. Clone this repository
 3. From the ispw folder, run `npm install`
-4. Open VSCode, set the ispw folder as your workspace root
+4. Open VS Code, set the ispw folder as your workspace root
 5. To compile your changes, in the terminal view run `npm run compile`
-6. To launch a new VSCode window that is running with your changes, go to the Run view, then select "Launch Code Pipeline for Git Extension" and press the play button.
+6. To launch a new VS Code window that is running with your changes, go to the Run view, then select "Launch Code Pipeline for Git Extension" and press the play button.
 
 ## Running tests
 
