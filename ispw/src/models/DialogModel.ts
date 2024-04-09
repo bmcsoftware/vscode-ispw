@@ -90,7 +90,6 @@ export class CommonElement {
         case "FieldNode":
           return true;
         default:
-          console.log('isFieldNode default case.');
           return false;
       }
     }
@@ -104,7 +103,6 @@ export class CommonElement {
         case "FieldNode":
           typeData = this.node.type;
         default:
-          console.log('getFieldNodeType default case.');
       }
     }
 
@@ -118,7 +116,6 @@ export class CommonElement {
         case "FieldNode":
           valueData = this.node.value;
         default:
-          console.log('getFieldNodeValue default case.');
       }
     }
 

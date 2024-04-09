@@ -222,7 +222,7 @@ export class GeneratePanel {
         console.log('Generate with parms complete with ' + generateResponse.message);
         window.showErrorMessage(generateResponse.message);
       } else {
-        console.log('Generate with parms completed successfuly.');
+        console.log('Generate with parms completed successfully.');
         window.showInformationMessage('Generate for task is successful.');
       }
       this.dispose();
