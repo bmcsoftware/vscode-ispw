@@ -36,12 +36,11 @@ export abstract class Constants {
 
     static readonly FORWARD_SLASH = '/';
     static readonly URL_ISPW = 'ispw' + Constants.FORWARD_SLASH;
-    static readonly URL_GENERATE_WITH_PARM = Constants.FORWARD_SLASH + 'generateWithParam';
-    static readonly URL_UPDATE_GENERATE_WITH_PARM = Constants.FORWARD_SLASH + 'updateGenerateWithParam';
+    static readonly URL_GENERATE_WITH_PARM = Constants.FORWARD_SLASH + 'generateWithParms';
     static readonly URL_CREATE_ASSIGNMENT_CONTAINER = Constants.FORWARD_SLASH + 'assignments';
-    //static readonly URL_ADD_TASK = Constants.FORWARD_SLASH + 'task/add?checkout=true';
     static readonly URL_GET_TASK_DETAILS = Constants.FORWARD_SLASH + 'tasks' + Constants.FORWARD_SLASH;
     static readonly URL_TASK_CLEANUP = Constants.FORWARD_SLASH + 'tasks' + Constants.FORWARD_SLASH;
+    static readonly URL_TASK_CLEANUP_URI = Constants.FORWARD_SLASH + 'cleanup';
 
     static readonly CONTENT_TYPE_APPLICATION_JSON = 'application/json';
 

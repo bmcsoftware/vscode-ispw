@@ -27,6 +27,7 @@ export class GenerateWithParmsRepo {
       },
       'params': {
         'application':taskDetails.application,
+        'subAppl': taskDetails.application,
         'level': taskDetails.checkoutToLevel,
         'type':taskDetails.moduleType
       }
@@ -52,7 +53,7 @@ export class GenerateWithParmsRepo {
     if (!url.endsWith(Constants.FORWARD_SLASH)) {
       url = url.concat(Constants.FORWARD_SLASH);
     }
-    url = url + Constants.URL_ISPW + lpar + Constants.URL_GENERATE_WITH_PARM;
+    url = url + Constants.URL_ISPW + lpar + Constants.FORWARD_SLASH + "tasks" + generateDialogModel.taskId + Constants.URL_GENERATE_WITH_PARM;
     console.debug('url : ' + url);
     const token: string = workspace.getConfiguration().get(Constants.SETTING_KEY_CES_TOKEN) as string;
     const requestHeader = {
@@ -85,7 +86,7 @@ export class GenerateWithParmsRepo {
     if (!url.endsWith(Constants.FORWARD_SLASH)) {
       url = url.concat(Constants.FORWARD_SLASH);
     }
-    url = url + Constants.URL_ISPW + lpar + Constants.URL_UPDATE_GENERATE_WITH_PARM;
+    url = url + Constants.URL_ISPW + lpar + Constants.FORWARD_SLASH + "tasks" + generateDetails.taskId + Constants.URL_GENERATE_WITH_PARM;
     const token: string = workspace.getConfiguration().get(Constants.SETTING_KEY_CES_TOKEN) as string;
     const requestHeader = {
       'headers': {
@@ -93,7 +94,7 @@ export class GenerateWithParmsRepo {
         'Authorization': token
       }
     };
-    const response = await axiosObj.post(url,
+    const response = await axiosObj.put(url,
       JSON.stringify(generateDetails), requestHeader).then(function (response : AxiosResponse) {
         const generateResponse: GenerateResponse = JSON.parse(response.data);
         generateResponse.status = response.status;
@@ -111,7 +112,7 @@ export class GenerateWithParmsRepo {
     if (!url.endsWith(Constants.FORWARD_SLASH)) {
       url = url.concat(Constants.FORWARD_SLASH);
     }
-    url = url + Constants.URL_ISPW + lpar + Constants.URL_TASK_CLEANUP + taskCleanup.taskId;
+    url = url + Constants.URL_ISPW + lpar + Constants.URL_TASK_CLEANUP + taskCleanup.taskId + Constants.URL_TASK_CLEANUP_URI;
     const token: string = workspace.getConfiguration().get(Constants.SETTING_KEY_CES_TOKEN) as string;
     const requestHeader = {
       'headers': {
