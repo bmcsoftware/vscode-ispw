@@ -59,10 +59,14 @@ export class GenerateWithParmsRepo {
       'headers': {
         'Content-Type': Constants.CONTENT_TYPE_APPLICATION_JSON,
         'Authorization': token
+      },
+      'params': {
+        'containerId': generateDialogModel.containerId,
+        'containerType': generateDialogModel.containerType
       }
     };
     const response = await axiosObj
-      .post(url, JSON.stringify(generateDialogModel), requestHeader)
+      .get(url, requestHeader)
       .then(function (response: AxiosResponse) {
         var apiResponse: XmlResponse = JSON.parse(response.data);
         apiResponse.status = response.status;
@@ -94,7 +98,7 @@ export class GenerateWithParmsRepo {
         'Authorization': token
       }
     };
-    const response = await axiosObj.put(url,
+    const response = await axiosObj.post(url,
       JSON.stringify(generateDetails), requestHeader).then(function (response : AxiosResponse) {
         const generateResponse: GenerateResponse = JSON.parse(response.data);
         generateResponse.status = response.status;
