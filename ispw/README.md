@@ -84,6 +84,8 @@ See [Extension Settings](#extension-settings) for descriptions of each of the se
 
 This extension makes REST API calls to Code Pipeline. Information about installation and use of the CES can be found [here](https://devops.api.bmc.com/apis/rest_api_ispw.html).
 
+>**Note:** Code Pipeline for Git Visual Studio Code extension version 2.0.0 is compatible with CES 23.04.01 onwards.
+
 #### Using Code Pipeline for Git Commands
 
 The File Explorer has the Code Pipeline for Git build, generate, and load commands available in the context menu. To use the commands, select the file(s), right click, and select the Code Pipeline for Git command you want to execute. The first time you use any command, you will be prompted for any settings values that have not been filled it. You will also be prompted for your mainframe username and password. The username and password are saved for the session so you will not be prompted for them again unless you clear the stored credentials or restart Visual Studio Code.

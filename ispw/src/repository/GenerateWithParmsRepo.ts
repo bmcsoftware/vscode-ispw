@@ -12,13 +12,12 @@ const axiosObj = new Axios({});
 export class GenerateWithParmsRepo {
 
   public async getTaskInfo(taskDetails: TaskModel, lpar: string): Promise<TaskResponse> {
-    console.log('Fetching details for task : ' + taskDetails.moduleName);
     let url: string = SettingsUtils.getCesUrl() as string;
     if (!url.endsWith(Constants.FORWARD_SLASH)) {
       url = url.concat(Constants.FORWARD_SLASH);
     }
-    url = url + Constants.URL_ISPW + lpar + Constants.URL_GET_TASK_DETAILS+taskDetails.moduleName;
-    console.log('gettaskdetails : ' + url);
+    url = url + Constants.URL_ISPW + lpar + Constants.URL_GET_TASK_DETAILS + taskDetails.moduleName;
+    console.debug('get task details url : ' + url);
     const token: string = SettingsUtils.getCesToken() as string;
     const requestHeader = {
       'headers': {
@@ -27,6 +26,7 @@ export class GenerateWithParmsRepo {
       },
       'params': {
         'application':taskDetails.application,
+        'subAppl': taskDetails.application,
         'level': taskDetails.checkoutToLevel,
         'type':taskDetails.moduleType
       }
@@ -52,17 +52,21 @@ export class GenerateWithParmsRepo {
     if (!url.endsWith(Constants.FORWARD_SLASH)) {
       url = url.concat(Constants.FORWARD_SLASH);
     }
-    url = url + Constants.URL_ISPW + lpar + Constants.URL_GENERATE_WITH_PARM;
-    console.debug('url : ' + url);
+    url = url + Constants.URL_ISPW + lpar + Constants.FORWARD_SLASH + "tasks" + Constants.FORWARD_SLASH + generateDialogModel.taskId + Constants.URL_GENERATE_WITH_PARM;
+    console.debug('get generate with parms xml url : ' + url);
     const token: string = workspace.getConfiguration().get(Constants.SETTING_KEY_CES_TOKEN) as string;
     const requestHeader = {
       'headers': {
         'Content-Type': Constants.CONTENT_TYPE_APPLICATION_JSON,
         'Authorization': token
+      },
+      'params': {
+        'containerId': generateDialogModel.containerId,
+        'containerType': generateDialogModel.containerType
       }
     };
     const response = await axiosObj
-      .post(url, JSON.stringify(generateDialogModel), requestHeader)
+      .get(url, requestHeader)
       .then(function (response: AxiosResponse) {
         var apiResponse: XmlResponse = JSON.parse(response.data);
         apiResponse.status = response.status;
@@ -85,7 +89,8 @@ export class GenerateWithParmsRepo {
     if (!url.endsWith(Constants.FORWARD_SLASH)) {
       url = url.concat(Constants.FORWARD_SLASH);
     }
-    url = url + Constants.URL_ISPW + lpar + Constants.URL_UPDATE_GENERATE_WITH_PARM;
+    url = url + Constants.URL_ISPW + lpar + Constants.FORWARD_SLASH + "tasks" + Constants.FORWARD_SLASH + generateDetails.taskId + Constants.URL_GENERATE_WITH_PARM;
+    console.debug('submit generate with parms url : ' + url);
     const token: string = workspace.getConfiguration().get(Constants.SETTING_KEY_CES_TOKEN) as string;
     const requestHeader = {
       'headers': {
@@ -111,7 +116,8 @@ export class GenerateWithParmsRepo {
     if (!url.endsWith(Constants.FORWARD_SLASH)) {
       url = url.concat(Constants.FORWARD_SLASH);
     }
-    url = url + Constants.URL_ISPW + lpar + Constants.URL_TASK_CLEANUP + taskCleanup.taskId;
+    url = url + Constants.URL_ISPW + lpar + Constants.URL_TASK_CLEANUP + taskCleanup.taskId + Constants.URL_TASK_CLEANUP_URI;
+    console.debug('task cleanup url : ' + url);
     const token: string = workspace.getConfiguration().get(Constants.SETTING_KEY_CES_TOKEN) as string;
     const requestHeader = {
       'headers': {
