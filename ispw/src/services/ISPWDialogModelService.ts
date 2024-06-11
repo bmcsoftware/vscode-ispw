@@ -46,7 +46,7 @@ export class ISPWDialogModelService implements IDialogModelService {
       if(response.status !== 200) {
         return new Error(response.message);
       }
-      const dialogModel =  util.createDialogModel(response.xml, response.defaults.entry);
+      const dialogModel =  util.createDialogModel(response.xml, response.datagroupInfo.entry);
       if (dialogModel) {
         const children: model.ISPWNode[] = dialogModel.getChildren();
         let html = "";
