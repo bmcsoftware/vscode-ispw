@@ -29,7 +29,7 @@ export function createDialogModel(xmlString: string, defaultsArr: KeyVal[]): mod
     const areaNodes: any[] = dialogData["tns:area"];
     areaNodes.forEach((area) => {
       const areaModel = createArea(area, defaultsArr);
-      commonElement.addChild(areaModel);
+      commonElement.addChild(areaModel);    
     });
 
     //return commonElement;
@@ -73,7 +73,7 @@ export function createField(data: any, defaultArr: KeyVal[]): model.CommonElemen
   const size: number = data.$.size;
   const options: any = data.$.options;
   const target: any = data.$.target;
-
+  
   let propStr = '{ "nodeType": "FieldNode", ';
 
   if (id) {
