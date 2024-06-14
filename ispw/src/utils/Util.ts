@@ -29,7 +29,7 @@ export function createDialogModel(xmlString: string, defaultsArr: KeyVal[]): mod
     const areaNodes: any[] = dialogData["tns:area"];
     areaNodes.forEach((area) => {
       const areaModel = createArea(area, defaultsArr);
-      commonElement.addChild(areaModel);      
+      commonElement.addChild(areaModel);    
     });
 
     //return commonElement;
@@ -86,9 +86,22 @@ export function createField(data: any, defaultArr: KeyVal[]): model.CommonElemen
 
   if (defaultArr) {
     defaultArr.forEach(function (a) {
-      if (a.key === id) {
-        propStr = propStr.concat('"value":"' + a.value + '",');
-        return;
+      let datagroup = value.slice(1, -1).split(".");
+
+      if (datagroup[0] === a.key) {
+        a.value.forEach(element => {
+          var stringElement = JSON.stringify(element);
+          let keyValuePairs = stringElement.slice(2, -2) //remove first and last character
+            .split(/\s*,\s*/)                     //split with optional spaces around the comma
+            .map(chunk => chunk.split(":"));      //split key:value
+
+          var fieldPair = keyValuePairs[0];
+          var defaultValPair = keyValuePairs[2];
+          if (fieldPair[1] === id) {
+            propStr = propStr.concat('"value":"' + defaultValPair[1] + '",');
+            return;
+          }
+        });
       }
     });
   } else if (value) {

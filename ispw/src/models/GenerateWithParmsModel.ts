@@ -1,9 +1,8 @@
 export interface XmlResponse {
-    dataGroups: DataGroupsEntry;
+    datagroupInfo: DataGroupsEntry;
     setId: string;
     xml: string;
     message: string;
-    defaults: DataGroupsEntry;
     status: number;
     htmlFormData: HtmlFormData;
 }
@@ -14,7 +13,13 @@ export interface DataGroupsEntry {
 
 export interface KeyVal {
     key: string;
-    value: string;
+    value: dgInfo[];
+}
+
+export interface dgInfo {
+    field: string;
+    type: string;
+    defaultVal: string;
 }
 
 export interface HtmlFormData {
