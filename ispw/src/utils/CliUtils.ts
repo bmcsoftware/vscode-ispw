@@ -101,6 +101,42 @@ export namespace CliUtils {
   }
 
   /**
+   * Function to validate and sanitize command and arguments
+   * @param command 
+   * @param args 
+   * @returns 
+   */
+  export function validateAndSanitize(command: string, args: string[]): { valid: boolean, sanitizedArgs?: string[] } {
+
+    // Define the substrings to check for
+    const validFilenames = ['IspwCLI.bat', 'IspwCLI.sh'];
+    
+    // Check if the command contains any of the valid filenames
+    const containsValidFile = validFilenames.some(filename => command.includes(filename));
+    
+    if (containsValidFile) {
+      //return { valid: true };
+    } else {
+      return { valid: false };
+    }
+
+  // Sanitize each argument
+  const sanitizedArgs = args.map(arg => {
+    return arg.replace(/[\r\n]/g, ''); // Remove newlines to prevent command injection
+  });
+
+  // Basic validation of sanitized arguments
+  for (const arg of sanitizedArgs) {
+    if (typeof arg !== 'string') {
+      console.error(`Invalid argument: ${arg}`);
+      return { valid: false };
+    }
+  }
+
+  return { valid: true, sanitizedArgs };
+  }
+
+  /**
    * Creates a child process and calls the CLI
    * @param command The string CLI command to execute (the path to the ISpwCLI.bat file)
    * @param args The arguments passed to the CLI (operation, username, password, componentFiles, etc)
@@ -110,21 +146,33 @@ export namespace CliUtils {
   async function executeCliCommand(command: string, args: string[], selectedFiles: vscode.Uri[]) {
     let procNumString: string = processNumber.toString().padStart(4, "0");
 
-    // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
-    const child = cp.spawn(command, args, {
-      shell: true,
-      cwd: vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.uri.fsPath
-    });
+    //validate and santize 
+    const { valid, sanitizedArgs } = validateAndSanitize(command, args);
 
-    // add listener for when data is written to stdout
-    child.stdout.on('data', (stdout) => {
-      OutputUtils.getOutputChannel().append(procNumString + ': ' + stdout.toString());
-    });
+    let child = undefined
 
-    // add listener for when data is written to stderr
-    child.stderr.on('data', (stderr) => {
-      OutputUtils.getOutputChannel().append(procNumString + ': ' + stderr.toString());
-    });
+    if(valid)
+    {
+      // The spawn function runs asynchronously so that the CLI output is immediately written to the output stream.
+      child = cp.spawn(command, args, {
+        shell: true,
+        cwd: vscode.workspace.getWorkspaceFolder(selectedFiles[0])?.uri.fsPath
+      });
+
+      // add listener for when data is written to stdout
+      child.stdout.on('data', (stdout) => {
+        OutputUtils.getOutputChannel().append(procNumString + ': ' + stdout.toString());
+      });
+
+      // add listener for when data is written to stderr
+      child.stderr.on('data', (stderr) => {
+        OutputUtils.getOutputChannel().append(procNumString + ': ' + stderr.toString());
+      });
+    }
+    else {
+      console.error('Invalid command or arguments');
+    }
+    
 
     if (processNumber < 9999) {
       processNumber++;
