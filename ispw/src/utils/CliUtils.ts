@@ -133,7 +133,11 @@ export namespace CliUtils {
     }
   }
 
-  return { valid: true, sanitizedArgs };
+  return { 
+    valid: true, 
+    sanitizedArgs 
+  };
+
   }
 
   /**
@@ -149,7 +153,7 @@ export namespace CliUtils {
     //validate and santize 
     const { valid, sanitizedArgs } = validateAndSanitize(command, args);
 
-    let child = undefined
+    let child = undefined;
 
     if(valid)
     {
